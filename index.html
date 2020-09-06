@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- the next three lines try to discourage browser from keeping page in cache -->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="cache-control" content="no-store">
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+    <title id="title">  A Coder's Game </title>
+</head>
+
+<link href="style.css" type="text/css" rel="stylesheet" />
+
+<body style="background-color: rgb(226, 113, 147);">
+    <h1 id= "header"> A Coder's Game </h1>
+    <button id= "play">Start the Game!</button>
+    <button id= "code">Code the Game!</button>
+    <p1 id= "time">Time Survived: 0 s</p1>
+    <p1 id= "health">Health:</p1>
+    <div id= "progress">
+    </div>
+    <div id= "bar"></div>
+    
+
+    <canvas id="canvas"></canvas>
+
+    <script type="module">
+
+        // Initialize the canvas.
+        var canvas = document.getElementById("canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var ctx = canvas.getContext("2d");
+
+        // Initialize the hero.
+        var hero_x = 10;
+        var hero_y = canvas.height/12 + 200;
+        var hero = new Image();
+        hero.src = "tiger5.png";
+
+        // Initialize the background:
+        var background = new Image();
+        background.src = "Background.png";
+        var background_x = -700;
+        var background_y = 0;
+
+        // Initialize other variables.
+        var enemyList = [];
+        var gameStart = false;
+        var seconds = 0;
+        let movingLeft = false;
+        let movingRight = false;
+        let start = false;
+        let walkFrame = 0;
+        var walkingInterval;
+
+        // Update the canvas every 20 milliseconds.
+        var interval = setInterval(update, 10);
+
+        // Button functions:
+        var play = document.getElementById("play");
+        var code = document.getElementById("code");
+        var title = document.getElementById("header");
+        play.addEventListener('click', function() { title.style.display = "none";
+                                                    play.style.display = "none";
+                                                    code.style.display = "none";
+                                                    startGame(); });
+
+
+        function startGame() {
+        // Respond to different keyboard presses.
+        window.addEventListener('keydown', moveObject, false);
+        window.addEventListener('keyup', stopMoveObject, false);
+
+        // The amount of time that the user has survived.
+        var clock = setInterval(function() { var time = document.getElementById("time");
+                                             seconds++;
+                                             time.innerHTML = "Time Survived:      " + seconds + " s";
+                                           }, 1000);
+
+        // Add an enemy every 20 seconds.
+        var enemyClock = setInterval(enemyInit, 20000);
+
+        gameStart = true;
+        }
+
+        function enemyInit() {
+            // Only have 20 images in the array at a time.
+            if (enemyList.length < 20) {
+                var enemy = new Image();
+                enemy.src = "enemy5.png";
+                
+
+                // Put the enemy in a random place off the canvas.
+                var random = Math.random()*100;
+                var enemy_x = canvas.width + random; 
+                var enemy_y = hero_y;  
+                var enemyFrame = 1;
+                var enemyWalk = setInterval(function() { var imgNum = (enemyFrame % 4) + 1;
+                                                        enemy.src = "enemy" + imgNum.toString() + ".png";
+                                                        enemyFrame++; 
+                                                    }, 200);
+                enemyList.push({enemy: enemy, enemy_x: enemy_x});
+            }
+
+            // If we have 20 images in the array, make visible a defeated enemy.
+            else {
+                for (let i = 0; i < enemyList.length; i++) {
+                    if (enemyList[i].enemy.hidden) {
+                        enemyList[i].enemy.hidden = false;
+                        var random = Math.random()*100;
+                        enemyList[i].enemy_x = canvas.width + random;
+                        break;
+                    }
+                }
+            }
+        }
+
+        function moveObject() {
+            const LEFT = 37;
+            const RIGHT = 39;
+            const UP = 87;
+
+            if (event.keyCode == LEFT) {
+                movingLeft = true;
+                runLeft();
+            }
+            else if (event.keyCode == RIGHT) {
+                movingRight = true;
+                runRight();
+            }
+        }
+
+        function runLeft() {
+            // Change image every 0.5 second when button is first pressed down.
+            if (!start) { 
+                walkingInterval = setInterval(function(){   var imgNum = (walkFrame % 4) + 1;
+                                                            hero.src = "tiger" + imgNum.toString() + ".png";
+                                                            walkFrame++;
+                                                        }, 150);
+                start = true;
+            }
+        }
+
+        function runRight() {
+            // Change image every 0.5 second when button is first pressed down.
+            if (!start) { 
+                walkingInterval = setInterval(function(){   var imgNum = (walkFrame % 4) + 7;
+                                                            hero.src = "tiger" + imgNum.toString() + ".png";
+                                                            walkFrame++;
+                                                        }, 150);
+                start = true;
+            } 
+        }
+
+        // Stops moving if keyup.
+        function stopMoveObject() {
+            const LEFT = 37;
+            const RIGHT = 39;
+            if (event.keyCode == LEFT) {
+                movingLeft = false;
+                start = false;
+                clearInterval(walkingInterval); // Stop walking animation
+                walkFrame = 1;
+                hero.src = "tiger5.png"; // Stationary avatar looking left
+            }
+            else if (event.keyCode == RIGHT) {
+                movingRight = false;
+                start = false;
+                clearInterval(walkingInterval); // Stop walking animation
+                walkFrame = 1;
+                hero.src = "tiger6.png"; // Stationary avatar looking right
+            }
+        }
+    
+        function update() {
+            // Clear the canvas.
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Move the enemy.
+            if (gameStart) {
+                for (let i = 0; i < enemyList.length; i++) {
+                    if (!enemyList[i].enemy.hidden) {
+                        enemyList[i].enemy_x-=7;
+                        var random = Math.random()*1000;
+                        if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
+                        if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;
+                    }
+                }
+            }
+
+            if (movingLeft) {
+                hero_x-=6;
+                background_x+=6;
+                if (hero_x < 0) hero_x = 0; // Keep avatar in bounds
+                if (background_x > 0) background_x = -1275; // Scroll background.
+                for (let i = 0; i < enemyList.length; i++) {
+                    if (!enemyList[i].enemy.hidden) {
+                        enemyList[i].enemy_x+=6;
+                        var random = Math.random()*1000;
+                        if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
+                        if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;
+                    }
+                }
+            }
+            if (movingRight) {
+                hero_x+=6;
+                background_x-=6;
+                if (hero_x > canvas.width - 400) hero_x = canvas.width - 400;
+                if (background_x < -1275) background_x = 0; // Scroll background.
+                for (let i = 0; i < enemyList.length; i++) {
+                    if (!enemyList[i].enemy.hidden) {
+                        enemyList[i].enemy_x-=6;
+                        var random = Math.random()*1000;
+                        if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
+                        if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;
+                    }
+                }
+            }
+            ctx.drawImage(background, background_x, background_y); 
+            ctx.drawImage(hero, hero_x, hero_y);
+            for (let i = 0; i < enemyList.length; i++) {
+                ctx.drawImage(enemyList[i].enemy, enemyList[i].enemy_x, hero_y);
+            }      
+        }
+    </script>
+
+</body>
+
+</html>

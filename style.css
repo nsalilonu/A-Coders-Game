@@ -1,0 +1,108 @@
+body {
+    overflow: hidden;
+}
+
+#time {
+    position: fixed;
+    font-family: 'Indie Flower', cursive;
+    display: block;
+    margin-left: 0%;
+    margin-top: 0%;
+    color: black;
+    padding: 5px;
+    font-size: 40px;
+}
+
+#health {
+    position: fixed;
+    font-family: 'Indie Flower', cursive;
+    display: block;
+    margin-left: 69%;
+    margin-top: 0%;
+    color: black;
+    padding: 3px;
+    font-size: 40px;
+}
+
+#progress {
+    background-color: rgb(144, 191, 230);
+    position: fixed;
+    margin-left: 77%;
+    padding: 5px;
+    margin-top: 15px;
+    width: 330px;
+    height: 20px;
+    display: block;
+    border-width:2px;
+    border-color: black;
+    border-radius: 8px;
+}
+
+#bar {
+    background-color: rgb(50, 133, 42);
+    position: fixed;
+    width: 330px;
+    padding: 5px;  
+    margin-left: 77%;
+    margin-top: 15px;
+    display: block;
+    height: 20px;
+    border-radius: 8px;
+}
+
+#header {
+    font-family: 'Indie Flower', cursive;
+    font-size: 90px;
+    text-align: center;
+    color: rgb(199, 211, 221);
+    display: block;
+    position: fixed;
+    border-color: transparent;
+    margin-left: 33%;
+    margin-top: 15%;
+}
+
+#play {
+    font-family: 'Indie Flower', cursive;
+    font-size: 50px;
+    width: 423px;
+    text-align: center;
+    color: black;
+    display: block;
+    position: fixed;
+    border-color: transparent;
+    margin-left: 38%;
+    margin-top: 25%;
+    background-color: springgreen;
+    border-color: black;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+#play:hover {
+    background-color: greenyellow
+}
+
+#code {
+    font-family: 'Indie Flower', cursive;
+    font-size: 50px;
+    width: 423px;
+    text-align: center;
+    color: black;
+    display: block;
+    position: fixed;
+    border-color: transparent;
+    margin-left: 38%;
+    margin-top: 35%;
+    background-color: springgreen;
+    border-color: black;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+#code:hover {
+    background-color: greenyellow
+}
+
+
+
