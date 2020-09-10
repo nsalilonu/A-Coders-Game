@@ -51,9 +51,22 @@
         var seconds = 0;
         let movingLeft = false;
         let movingRight = false;
-        let start = false;
-        let walkFrame = 0;
+        let startWalk = false;
+        let walkFrame = 1;
+        var startAttack = false;
+        let attackFrame = 0;
+
         var walkingInterval;
+        var heroAttack;
+        var walking = document.createElement("AUDIO");
+        walking.src = "footstep.mp3";
+        walking.volume = 0.2;
+        walking.playbackRate = 1.9;
+        var soundtrack = document.createElement("AUDIO");
+        soundtrack.src = "soundtrack.mp3";
+        soundtrack.loop = true;
+        soundtrack.volume = 0.5;
+      
 
         // Update the canvas every 20 milliseconds.
         var interval = setInterval(update, 10);
@@ -81,6 +94,7 @@
 
         // Add an enemy every 20 seconds.
         var enemyClock = setInterval(enemyInit, 20000);
+        soundtrack.play();
 
         gameStart = true;
         }
@@ -121,6 +135,7 @@
             const LEFT = 37;
             const RIGHT = 39;
             const UP = 87;
+            const SPACEBAR = 32;
 
             if (event.keyCode == LEFT) {
                 movingLeft = true;
@@ -130,27 +145,44 @@
                 movingRight = true;
                 runRight();
             }
+            if (event.keyCode == SPACEBAR) {
+                if (!startAttack) {
+                heroAttack = setInterval(function() {   var imgNum = (attackFrame % 8) + 1;
+                                                        if (movingLeft || hero.src.includes("tiger5.png") || hero.src.includes("LTigerAttack"))
+                                                            hero.src = "LTigerAttack" + imgNum.toString() +".png";
+                                                        else if (movingRight || hero.src.includes("tiger6.png") || hero.src.includes("RTigerAttack")) 
+                                                            hero.src = "RTigerAttack" + imgNum.toString() +".png";
+                                                        attackFrame++;
+                                                        }, 70);
+                startAttack = true;
+                }
+            }
         }
 
         function runLeft() {
             // Change image every 0.5 second when button is first pressed down.
-            if (!start) { 
+            if (!startWalk && !startAttack) { 
                 walkingInterval = setInterval(function(){   var imgNum = (walkFrame % 4) + 1;
                                                             hero.src = "tiger" + imgNum.toString() + ".png";
                                                             walkFrame++;
+                                                            if (imgNum % 2 == 0)
+                                                            walking.play();
                                                         }, 150);
-                start = true;
+                startWalk = true;
+                
             }
         }
 
         function runRight() {
             // Change image every 0.5 second when button is first pressed down.
-            if (!start) { 
+            if (!startWalk && !startAttack) { 
                 walkingInterval = setInterval(function(){   var imgNum = (walkFrame % 4) + 7;
                                                             hero.src = "tiger" + imgNum.toString() + ".png";
                                                             walkFrame++;
+                                                            if (imgNum % 2 == 0)
+                                                            walking.play();
                                                         }, 150);
-                start = true;
+                startWalk = true;
             } 
         }
 
@@ -158,19 +190,31 @@
         function stopMoveObject() {
             const LEFT = 37;
             const RIGHT = 39;
+            const SPACEBAR = 32;
+
             if (event.keyCode == LEFT) {
                 movingLeft = false;
-                start = false;
+                startWalk = false;
                 clearInterval(walkingInterval); // Stop walking animation
-                walkFrame = 1;
+                walkFrame = 0;
                 hero.src = "tiger5.png"; // Stationary avatar looking left
             }
             else if (event.keyCode == RIGHT) {
                 movingRight = false;
-                start = false;
+                startWalk = false;
                 clearInterval(walkingInterval); // Stop walking animation
-                walkFrame = 1;
+                walkFrame = 0;
                 hero.src = "tiger6.png"; // Stationary avatar looking right
+            }
+
+            if (event.keyCode == SPACEBAR) {
+                startAttack = false;
+                clearInterval(heroAttack);
+                attackFrame = 0;
+                if (hero.src.includes("RTigerAttack"))
+                    hero.src = "tiger6.png";  
+                else if (hero.src.includes("LTigerAttack"))
+                    hero.src = "tiger5.png";
             }
         }
     
@@ -194,7 +238,7 @@
                 hero_x-=6;
                 background_x+=6;
                 if (hero_x < 0) hero_x = 0; // Keep avatar in bounds
-                if (background_x > 0) background_x = -1275; // Scroll background.
+                if (background_x > 0) background_x = -1290; // Scroll background.
                 for (let i = 0; i < enemyList.length; i++) {
                     if (!enemyList[i].enemy.hidden) {
                         enemyList[i].enemy_x+=6;
@@ -208,7 +252,7 @@
                 hero_x+=6;
                 background_x-=6;
                 if (hero_x > canvas.width - 400) hero_x = canvas.width - 400;
-                if (background_x < -1275) background_x = 0; // Scroll background.
+                if (background_x < -1290) background_x = 0; // Scroll background.
                 for (let i = 0; i < enemyList.length; i++) {
                     if (!enemyList[i].enemy.hidden) {
                         enemyList[i].enemy_x-=6;
@@ -218,6 +262,7 @@
                     }
                 }
             }
+
             ctx.drawImage(background, background_x, background_y); 
             ctx.drawImage(hero, hero_x, hero_y);
             for (let i = 0; i < enemyList.length; i++) {
