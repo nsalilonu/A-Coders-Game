@@ -8,12 +8,14 @@ hero_x = 10;
 hero_y = canvas.height/12 + 200;
 hero = new Image();
 hero.src = "Tiger Walking/tiger5.png";
+console.log("Hero source: %s", hero.src)
 }
 
 // Initialize the background:
 var background = new Image();
-background.src = "Background.png";
-var background_x = -700;
+background.src = "titlePage.png";
+console.log("Background source: %s", background.src);
+var background_x = 0;
 var background_y = 0;
 
 // Initialize other variables.
@@ -34,6 +36,7 @@ walking.volume = 0.2;
 walking.playbackRate = 1.9;
 
 function enemyInit(canvas) {
+    console.log("Calling enemyInit!");
     // Only have 20 images in the array at a time.
     if (enemyList.length < 10) {
         var enemy = new Image();
@@ -211,30 +214,33 @@ function stopMoveObject() {
      }
 }
 
-function update(canvas, ctx) {
+function update(gameStart, canvas, ctx) {
     // Clear the canvas.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Move the enemy.
-    for (let i = 0; i < enemyList.length; i++) {
-        // if (enemyList[i].hitNum >= 3) // Insert spell 1 animation here.
-        if (!enemyList[i].enemy.hidden) {
-            if (enemyList[i].enemy_hit == 0)
-                enemyList[i].enemy_x -=7;
-                // Stop enemy from moving after hit for two seconds.
-            else if (enemyList[i].enemy_hit >= 10) {
-                enemyList[i].enemy_hit = 0;
-                clearInterval(enemyList[i].bearHit);
-                var enemyFrame = 0;
-                enemyList[i].hitFrame = 0;
-                enemyList[i].enemyWalk = setInterval(function(){    var imgNum = (enemyFrame % 4) + 1;
-                                                                    enemyList[i].enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
-                                                                    enemyFrame++; 
-                                                                }, 200);
+    // Move the enemy, change the background.
+    if (gameStart) {
+        background.src = "Background.png";
+        for (let i = 0; i < enemyList.length; i++) {
+            // if (enemyList[i].hitNum >= 3) // Insert spell 1 animation here.
+            if (!enemyList[i].enemy.hidden) {
+                if (enemyList[i].enemy_hit == 0)
+                    enemyList[i].enemy_x -=7;
+                    // Stop enemy from moving after hit for two seconds.
+                else if (enemyList[i].enemy_hit >= 10) {
+                    enemyList[i].enemy_hit = 0;
+                    clearInterval(enemyList[i].bearHit);
+                    var enemyFrame = 0;
+                    enemyList[i].hitFrame = 0;
+                    enemyList[i].enemyWalk = setInterval(function(){    var imgNum = (enemyFrame % 4) + 1;
+                                                                        enemyList[i].enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
+                                                                        enemyFrame++; 
+                                                                    }, 200);
+                }
+                var random = Math.random()*1000;
+                if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
+                if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;        
             }
-            var random = Math.random()*1000;
-            if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
-            if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;        
         }
     }
 
@@ -293,7 +299,7 @@ function update(canvas, ctx) {
                                                     if (background_x > 0) background_x = -1290; // Scroll background.
                                                     knockbackFrame++; }, 100);
         setTimeout(function(){  clearInterval (tigerKnockback)
-                                hero.src = "Tiger Walking/tiger5.png"; }, 600)
+                                hero.src = "Tiger Walking/tiger5.png"; }, 600);
     }
     
     if (knockbackFrame > 3) knockbackFrame++;
@@ -301,10 +307,14 @@ function update(canvas, ctx) {
     if (knockbackFrame > 270) knockbackFrame = 0;
     
 
-    ctx.drawImage(background, background_x, background_y); 
-    ctx.drawImage(hero, hero_x, hero_y);
-    for (let i = 0; i < enemyList.length; i++) {
-        ctx.drawImage(enemyList[i].enemy, enemyList[i].enemy_x, hero_y);
+    background.onload = function(){ctx.drawImage(background, background_x, background_y);};
+    console.log(background.src);
+    
+    if (gameStart) {
+        ctx.drawImage(hero, hero_x, hero_y);
+        for (let i = 0; i < enemyList.length; i++) {
+            ctx.drawImage(enemyList[i].enemy, enemyList[i].enemy_x, hero_y);
+        }
     }      
 }
 

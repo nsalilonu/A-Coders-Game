@@ -61,27 +61,44 @@ body {
 }
 
 #play {
-    font-family: 'Indie Flower', cursive;
+    font-family: 'Indie Flower', cursive; 
     font-size: 50px;
     width: 300px;
     text-align: center;
     color: black;
     display: block;
     position: fixed;
-    border-color: transparent;
     margin-left: 43%;
-    margin-top: 60%;
+    margin-top: 40%;
     background-color: springgreen;
     border-color: black;
     border-radius: 8px;
     border-width: 5px;
-    padding: 5px;
+    padding: 5px; 
 }
 
 #play:hover {
     background-color: greenyellow
 }
 
+#volume-on {
+    z-index: 1;
+    font-size: 30px;
+    position: absolute;
+    display: none;
+    margin-top: 5%;
+    margin-left: 1%;
+    color: white;
+} 
 
+#muted {
+    z-index: 1;
+    font-size: 30px;
+    position: absolute;
+    display: block;
+    margin-top: 5%;
+    margin-left: 1%;
+    color: white;
+} 
 
 

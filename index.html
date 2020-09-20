@@ -10,30 +10,33 @@
     <title id="title">  A Coder's Game </title>
 </head>
 
+<script src="animations.js" type="module"></script>
 <link href="style.css" type="text/css" rel="stylesheet" />
 
-<body style="background-color: rgb(64, 66, 219);">
+<body style="background-color: rgb(226, 113, 147);">
     <h1 id= "header"> A Coder's Game </h1>
-    <button id= "play">Start!</button></a>
+    <button id="play">Start!</button>
     
-
     <canvas id="canvas"></canvas>
 
     <script type="module">
-        // Initialize the canvas.
+        // Show the title page of the game!
+        var gameStart = false;
+        var seconds = 0;
+        
         var canvas = document.getElementById("canvas");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         var ctx = canvas.getContext("2d");
-        var titlescreen = new Image();
-        titlescreen.src = "titlePage.png";
-        ctx.drawImage(titlescreen, -15, 0, canvas.width, canvas.height); 
-        
-        var start = document.getElementById("play");
-        start.addEventListener('click', function() {
-            window.location.href = "gameplay.html";
-        });     
-    </script>
+        var background = new Image();
+        background.src = "titlePage.png";
+        background.onload = function(){ctx.drawImage(background, -15, 0, window.outerWidth, window.outerHeight);};
+
+        // Click start to be redirected to the game itself.
+        var play = document.getElementById("play");
+        play.addEventListener('click', function() { window.location.href = "./gameplay.html";
+                                                  }, false);
+    </script> 
 
 </body>
 
