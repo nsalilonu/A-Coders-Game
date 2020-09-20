@@ -55,7 +55,6 @@
         // Add an enemy every 20 seconds.
         var enemyClock = setInterval(function() {enemyInit(canvas);}, 5000);
         soundtrack.play();
-        console.log(soundtrack.duration);
 
         // Update the canvas every 10 milliseconds.
         var interval = setInterval(function() {update(canvas, ctx);}, 10);
