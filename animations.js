@@ -1,14 +1,14 @@
-// Initialize the canvas.
-var canvas = document.getElementById("canvas");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-var ctx = canvas.getContext("2d");
-
 // Initialize the hero.
-var hero_x = 10;
-var hero_y = canvas.height/12 + 200;
-var hero = new Image();
+var hero_x;
+var hero_y;
+var hero;
+
+function initializeHero(canvas) {
+hero_x = 10;
+hero_y = canvas.height/12 + 200;
+hero = new Image();
 hero.src = "Tiger Walking/tiger5.png";
+}
 
 // Initialize the background:
 var background = new Image();
@@ -18,13 +18,13 @@ var background_y = 0;
 
 // Initialize other variables.
 var enemyList = [];
-
 let movingLeft = false;
 let movingRight = false;
 let startWalk = false;
-let walkFrame = 1;
+let walkFrame = 0;
 var startAttack = false;
 let attackFrame = 0;
+var firstHit = false;
 
 var walkingInterval;
 var heroAttack;
@@ -33,9 +33,9 @@ walking.src = "footstep.mp3";
 walking.volume = 0.2;
 walking.playbackRate = 1.9;
 
-function enemyInit() {
+function enemyInit(canvas) {
     // Only have 20 images in the array at a time.
-    if (enemyList.length < 20) {
+    if (enemyList.length < 10) {
         var enemy = new Image();
         enemy.src = "Enemy Walking/enemy5.png";
         
@@ -43,13 +43,16 @@ function enemyInit() {
         // Put the enemy in a random place off the canvas.
         var random = Math.random()*100;
         var enemy_x = canvas.width + random; 
-        var enemy_y = hero_y;  
+        var enemy_hit = 0;  
         var enemyFrame = 1;
+        var bearHit;
+        var hitFrame = 0;
+        var hitNum = 0;
         var enemyWalk = setInterval(function() { var imgNum = (enemyFrame % 4) + 1;
                                                 enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
                                                 enemyFrame++; 
                                             }, 200);
-        enemyList.push({enemy: enemy, enemy_x: enemy_x});
+        enemyList.push({enemy: enemy, enemy_x: enemy_x, enemy_hit: enemy_hit, hitFrame: hitFrame, bearHit: bearHit, enemyWalk: enemyWalk, hitNum: hitNum});
     }
 
     // If we have 20 images in the array, make visible a defeated enemy.
@@ -79,17 +82,78 @@ function moveObject() {
         movingRight = true;
         runRight();
     }
+}
+
+function bearHit() {
+    const SPACEBAR = 32;
     if (event.keyCode == SPACEBAR) {
-        if (!startAttack) {
-        heroAttack = setInterval(function() {   var imgNum = (attackFrame % 7) + 1;
-                                                if (movingLeft || hero.src.includes("tiger5.png") || hero.src.includes("LTigerAttack"))
-                                                    hero.src = "Tiger Attack/LTigerAttack" + imgNum.toString() +".png";
-                                                else if (movingRight || hero.src.includes("tiger6.png") || hero.src.includes("RTigerAttack")) 
-                                                    hero.src = "Tiger Attack/RTigerAttack" + imgNum.toString() +".png";
-                                                attackFrame++;
-                                                }, 70);
-        startAttack = true;
+        if (heroAttack != undefined)
+            clearInterval(heroAttack);
+        if (!startAttack){
+            heroAttack = setInterval(function() {   var imgNum = (attackFrame % 7) + 1;
+                                                    if (movingLeft || hero.src.includes("tiger5.png") || hero.src.includes("LTigerAttack"))
+                                                        hero.src = "Tiger Attack/LTigerAttack" + imgNum.toString() +".png";
+                                                    else if (movingRight || hero.src.includes("tiger6.png") || hero.src.includes("RTigerAttack")) 
+                                                        hero.src = "Tiger Attack/RTigerAttack" + imgNum.toString() +".png";
+                                                    attackFrame++;
+                                                    }, 70);
+            
+            setTimeout(function() { if (hero.src.includes("RTigerAttack") && (!movingLeft && !movingRight))
+                                        hero.src = "Tiger Walking/tiger6.png";  
+                                    else if (hero.src.includes("LTigerAttack") && (!movingLeft && !movingRight))
+                                        hero.src = "Tiger Walking/tiger5.png"; 
+                                    else if (movingRight) {
+                                        hero.src = "Tiger Walking/tiger10.png"; 
+                                    }
+                                    else if (movingLeft) {
+                                        hero.src = "Tiger Walking/tiger4.png";
+                                    } 
+                                    clearInterval(heroAttack);
+                                    attackFrame = 0;
+                                    walkFrame = 0;
+                                    startAttack = false;
+                                }, 700);
+            startAttack = true;
         }
+
+        // Make bear fall back if hero hits it.
+        var closestBear;
+        var closest = 200;
+        var closestBearFound = false;
+        for (let i = 0; i < enemyList.length; i++) {
+            if (!enemyList[i].enemy.hidden) {
+                // Look for the closest bear.
+                if (Math.abs(hero_x - enemyList[i].enemy_x) < closest) {
+                    closest = Math.abs(hero_x - enemyList[i].enemy_x);
+                    closestBearFound = true;
+                    closestBear = i;
+                }
+            }
+        }
+
+        // Run animation for bear and move it back if it is the closest to the tiger when spacebar is pressed.
+        // And make sure the user isn't holding spacebar by only setting the interval after 100 ms from when the spacebar was pressed.
+        
+        if (closestBearFound && !firstHit) {
+        enemyList[closestBear].enemy_hit = 0;
+        enemyList[closestBear].hitFrame = 0;
+        clearInterval(enemyList[closestBear].enemyWalk); // Stops walking
+        clearInterval(enemyList[closestBear].bearHit);
+        enemyList[closestBear].bearHit = setInterval(function (){   if (enemyList[closestBear].hitFrame < 3) {
+                                                                    var imgNum = (enemyList[closestBear].hitFrame % 3) + 1;
+                                                                    enemyList[closestBear].enemy.src = "Enemy Hit/enemyhit" + imgNum.toString() + ".png";
+                                                                    enemyList[closestBear].enemy_x += 100;
+                                                                    enemyList[closestBear].hitFrame++;
+                                                                    }
+                                                                    else
+                                                                        enemyList[closestBear].enemy.src = "Enemy Hit/enemyhit3.png";
+
+                                                                    enemyList[closestBear].enemy_hit++;
+                                                                }, 100);
+        enemyList[closestBear].hitNum++;
+        firstHit = true;
+        }
+                    
     }
 }
 
@@ -141,30 +205,36 @@ function stopMoveObject() {
         hero.src = "Tiger Walking/tiger6.png"; // Stationary avatar looking right
     }
 
-    if (event.keyCode == SPACEBAR) {
+     if (event.keyCode == SPACEBAR) {
+        firstHit = false;
         startAttack = false;
-        clearInterval(heroAttack);
-        attackFrame = 0;
-        if (hero.src.includes("RTigerAttack"))
-            hero.src = "Tiger Walking/tiger6.png";  
-        else if (hero.src.includes("LTigerAttack"))
-            hero.src = "Tiger Walking/tiger5.png";
-    }
+     }
 }
 
-function update(gameStart) {
+function update(canvas, ctx) {
     // Clear the canvas.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Move the enemy.
-    if (gameStart) {
-        for (let i = 0; i < enemyList.length; i++) {
-            if (!enemyList[i].enemy.hidden) {
-                enemyList[i].enemy_x-=7;
-                var random = Math.random()*1000;
-                if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
-                if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;
+    for (let i = 0; i < enemyList.length; i++) {
+        // if (enemyList[i].hitNum >= 3) // Insert spell 1 animation here.
+        if (!enemyList[i].enemy.hidden) {
+            if (enemyList[i].enemy_hit == 0)
+                enemyList[i].enemy_x -=7;
+                // Stop enemy from moving after hit for two seconds.
+            else if (enemyList[i].enemy_hit >= 10) {
+                enemyList[i].enemy_hit = 0;
+                clearInterval(enemyList[i].bearHit);
+                var enemyFrame = 0;
+                enemyList[i].hitFrame = 0;
+                enemyList[i].enemyWalk = setInterval(function(){    var imgNum = (enemyFrame % 4) + 1;
+                                                                    enemyList[i].enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
+                                                                    enemyFrame++; 
+                                                                }, 200);
             }
+            var random = Math.random()*1000;
+            if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
+            if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;        
         }
     }
 
@@ -197,6 +267,40 @@ function update(gameStart) {
         }
     }
 
+    // Check if the tiger is near the bear. If so, then have the bear attack it.
+    var closestBear;
+    var closest = 100;
+    var closestBearFound = false;
+    var tigerKnockback;
+    var knockbackFrame = 0;
+    for (let i = 0; i < enemyList.length; i++) {
+        if (!enemyList[i].enemy.hidden) {
+            // Look for the closest bear if the bear is in front of the tiger.
+            if ((enemyList[i].enemy_x - hero_x) < closest && (enemyList[i].enemy_x - hero_x) > 0) {
+                closest = enemyList[i].enemy_x - hero_x;
+                closestBearFound = true;
+                closestBear = i;
+            }
+        }
+    }
+
+    // Knocks back tiger.
+    if (closestBearFound && knockbackFrame == 0) {
+        tigerKnockback = setInterval(function() {   var imgNum = (knockbackFrame % 3) + 1;
+                                                    hero.src = "Tiger Hit/tigerhit" + imgNum.toString() + ".png";
+                                                    hero_x -= 2;
+                                                    if (hero_x < 0) hero_x = 0; // Keep avatar in bounds
+                                                    if (background_x > 0) background_x = -1290; // Scroll background.
+                                                    knockbackFrame++; }, 100);
+        setTimeout(function(){  clearInterval (tigerKnockback)
+                                hero.src = "Tiger Walking/tiger5.png"; }, 600)
+    }
+    
+    if (knockbackFrame > 3) knockbackFrame++;
+       
+    if (knockbackFrame > 270) knockbackFrame = 0;
+    
+
     ctx.drawImage(background, background_x, background_y); 
     ctx.drawImage(hero, hero_x, hero_y);
     for (let i = 0; i < enemyList.length; i++) {
@@ -204,4 +308,4 @@ function update(gameStart) {
     }      
 }
 
-export {update, enemyInit, moveObject, stopMoveObject};
+export {update, enemyInit, moveObject, stopMoveObject, initializeHero, bearHit};

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- the next three lines try to discourage browser from keeping page in cache -->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="cache-control" content="no-store">
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+    <title id="title">  A Coder's Game </title>
+</head>
+
+<script src="animations.js" type="module"></script>
+<link href="style.css" type="text/css" rel="stylesheet" />
+
+<body style="background-color: rgb(226, 113, 147);">
+    <p1 id= "time">Points: 0</p1>
+    <p1 id= "health">Health:</p1>
+    <div id= "progress">
+    </div>
+    <div id= "bar"></div>
+    
+
+    <canvas id="canvas"></canvas>
+
+    <script type="module">
+        import { update, enemyInit, moveObject, stopMoveObject, initializeHero, bearHit } from "./animations.js"; 
+        
+        // Initialize the canvas.
+        var canvas = document.getElementById("canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var ctx = canvas.getContext("2d");
+
+        var seconds = 0;
+        
+        var soundtrack = document.createElement("AUDIO");
+        soundtrack.src = "soundtrack.mp3";
+        soundtrack.loop = true;
+        soundtrack.volume = 0.5; 
+       
+        initializeHero(canvas);
+
+        // Respond to different keyboard presses.
+        window.addEventListener('keydown', moveObject, false);
+        window.addEventListener('keyup', stopMoveObject, false);
+        window.addEventListener('keypress', bearHit, false);
+
+        // The amount of time that the user has survived.
+        var clock = setInterval(function() { var points = document.getElementById("time");
+                                             seconds++;
+                                             points.innerHTML = "Points:      " + seconds;
+                                           }, 1000);
+
+        // Add an enemy every 20 seconds.
+        var enemyClock = setInterval(function() {enemyInit(canvas);}, 5000);
+        soundtrack.play();
+        console.log(soundtrack.duration);
+
+        // Update the canvas every 10 milliseconds.
+        var interval = setInterval(function() {update(canvas, ctx);}, 10);
+        
+    </script>
+
+</body>
+
+</html>

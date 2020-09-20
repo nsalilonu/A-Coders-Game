@@ -52,7 +52,7 @@ body {
     font-family: 'Indie Flower', cursive;
     font-size: 90px;
     text-align: center;
-    color: rgb(199, 211, 221);
+    color: rgb(255, 255, 255);
     display: block;
     position: fixed;
     border-color: transparent;
@@ -70,7 +70,7 @@ body {
     position: fixed;
     border-color: transparent;
     margin-left: 43%;
-    margin-top: 25%;
+    margin-top: 60%;
     background-color: springgreen;
     border-color: black;
     border-radius: 8px;
