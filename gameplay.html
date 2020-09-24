@@ -27,6 +27,7 @@
 
     <script type="module">
         var seconds = 0;
+        var bar_width = 330;
         
         var canvas = document.getElementById("canvas");
         canvas.width = window.innerWidth;
@@ -104,26 +105,43 @@
 
                 // Put the enemy in a random place off the canvas.
                 var random = Math.random()*100;
-                var enemy_x = canvas.width + random; 
-                var enemy_hit = 0;  
-                var enemyFrame = 1;
-                var bearHit;
-                var hitFrame = 0;
-                var hitNum = 0;
+                var enemy_x = canvas.width + random; // Where the enemy appears on the canvas.
+                var enemy_y = canvas.height/12 + 200;
+                var enemy_hit = 0;  // How long the enemy has been hit for
+                var enemyFrame = 0; // The different frames for the enemy walk
+                var bearHit; // The interval that features the "enemy hit" animation
+                var transform; // The interval that feataures the "enemy transformed" animation
+                var hitFrame = 0; // The different frames for when the enemy is hit.
+                var hitNum = 0; // The amount of times the enemy has been hit.
+                var enemyDown = 0; // The amount of time the enemy has been defeated for.
                 var enemyWalk = setInterval(function() { var imgNum = (enemyFrame % 4) + 1;
                                                         enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
                                                         enemyFrame++; 
                                                     }, 200);
-                enemyList.push({enemy: enemy, enemy_x: enemy_x, enemy_hit: enemy_hit, hitFrame: hitFrame, bearHit: bearHit, enemyWalk: enemyWalk, hitNum: hitNum});
+                enemyList.push({enemy: enemy, enemy_x: enemy_x, enemy_y: enemy_y, 
+                enemy_hit: enemy_hit, hitFrame: hitFrame, bearHit: bearHit, 
+                transform: transform, enemyWalk: enemyWalk, hitNum: hitNum, 
+                enemyDown: enemyDown});
             }
 
-            // If we have 20 images in the array, make visible a defeated enemy.
+            // If we have 10 images in the array and an enemy has been down for 20 s, 
+            // make visible a defeated enemy.
             else {
                 for (let i = 0; i < enemyList.length; i++) {
-                    if (enemyList[i].enemy.hidden) {
-                        enemyList[i].enemy.hidden = false;
+                    if (enemyList[i].enemyDown > 100) {
+                        enemyList[i].enemy.src = "Enemy Walking/enemy5.png";
+                        var enemyFrame = 1;
+                        enemyList[i].enemyWalk = setInterval(function() {var imgNum = (enemyFrame % 4) + 1;
+                                                                         enemyList[i].enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
+                                                                         enemyFrame++; 
+                                                                        }, 200);
                         var random = Math.random()*100;
                         enemyList[i].enemy_x = canvas.width + random;
+                        enemyList[i].enemy_y =vcanvas.height/12 + 200;
+                        enemyList[i].enemy.hitNum = 0;
+                        enemyList[i].enemy.hitFrame = 0;
+                        enemyList[i].enemy.enemy_hit = 0;
+                        enemyList[i].enemyDown = 0;
                         break;
                     }
                 }
@@ -183,7 +201,7 @@
                 var closest = 200;
                 var closestBearFound = false;
                 for (let i = 0; i < enemyList.length; i++) {
-                    if (!enemyList[i].enemy.hidden) {
+                    if (!enemyList[i].enemy.src.includes("transform")) {
                         // Look for the closest bear.
                         if (Math.abs(hero_x - enemyList[i].enemy_x) < closest) {
                             closest = Math.abs(hero_x - enemyList[i].enemy_x);
@@ -280,8 +298,22 @@
             // Move the enemy, change the background.
             background.src = "Background.png";
             for (let i = 0; i < enemyList.length; i++) {
-                // if (enemyList[i].hitNum >= 3) // Insert spell 1 animation here.
-                if (!enemyList[i].enemy.hidden) {
+                // Spell 1 animation.
+                if (enemyList[i].hitNum >= 3 && enemyList[i].enemyDown == 0)  {
+                    clearInterval(enemyList[i].bearHit);
+                    var enemyFrame = 0;
+                    enemyList[i].transform = setInterval(function(){ var imgNum = (enemyFrame % 18) + 1;
+                                                                     enemyList[i].enemy.src = "Spell 1/transform" + imgNum.toString() + ".png";
+                                                                     enemyFrame++;
+                                                                     if (enemyFrame == 18) {
+                                                                         enemyFrame = 15; // Loop the flapping animation.
+                                                                         enemyList[i].enemy_y-=3; // Start going up!
+                                                                     }
+                                                                     enemyList[i].enemyDown++;
+                                                                     
+                                                                   }, 200);
+                }
+                if (!enemyList[i].enemy.src.includes("transform")) {
                     if (enemyList[i].enemy_hit == 0)
                         enemyList[i].enemy_x -=7;
                         // Stop enemy from moving after hit for two seconds.
@@ -307,12 +339,11 @@
                 if (hero_x < 0) hero_x = 0; // Keep avatar in bounds
                 if (background_x > 0) background_x = -1290; // Scroll background.
                 for (let i = 0; i < enemyList.length; i++) {
-                    if (!enemyList[i].enemy.hidden) {
                         enemyList[i].enemy_x+=6;
                         var random = Math.random()*1000;
                         if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
                         if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;
-                    }
+                    
                 }
             }
             if (movingRight) {
@@ -321,12 +352,10 @@
                 if (hero_x > canvas.width - 400) hero_x = canvas.width - 400;
                 if (background_x < -1290) background_x = 0; // Scroll background.
                 for (let i = 0; i < enemyList.length; i++) {
-                    if (!enemyList[i].enemy.hidden) {
                         enemyList[i].enemy_x-=6;
                         var random = Math.random()*1000;
                         if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
                         if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;
-                    }
                 }
             }
 
@@ -337,7 +366,7 @@
             var tigerKnockback;
             var knockbackFrame = 0;
             for (let i = 0; i < enemyList.length; i++) {
-                if (!enemyList[i].enemy.hidden) {
+                if (!enemyList[i].enemy.src.includes("transform")) {
                     // Look for the closest bear if the bear is in front of the tiger.
                     if ((enemyList[i].enemy_x - hero_x) < closest && (enemyList[i].enemy_x - hero_x) > 0) {
                         closest = enemyList[i].enemy_x - hero_x;
@@ -349,9 +378,12 @@
 
             // Knocks back tiger.
             if (closestBearFound && knockbackFrame == 0) {
+                var health = document.getElementById("bar");
                 tigerKnockback = setInterval(function() {   var imgNum = (knockbackFrame % 3) + 1;
                                                             hero.src = "Tiger Hit/tigerhit" + imgNum.toString() + ".png";
                                                             hero_x -= 2;
+                                                            bar_width -= 0.1;
+                                                            health.style.width = bar_width.toString()+"px";
                                                             if (hero_x < 0) hero_x = 0; // Keep avatar in bounds
                                                             if (background_x > 0) background_x = -1290; // Scroll background.
                                                             knockbackFrame++; }, 100);
@@ -366,7 +398,7 @@
             ctx.drawImage(background, background_x, background_y);
             ctx.drawImage(hero, hero_x, hero_y);
             for (let i = 0; i < enemyList.length; i++) {
-                ctx.drawImage(enemyList[i].enemy, enemyList[i].enemy_x, hero_y);
+                ctx.drawImage(enemyList[i].enemy, enemyList[i].enemy_x, enemyList[i].enemy_y);
             } 
         }
 
