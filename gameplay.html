@@ -76,8 +76,8 @@
                                              points.innerHTML = "Points:      " + seconds;
                                            }, 1000);
 
-        // Add an enemy every 20 seconds.
-        var enemyClock = setInterval(function() {enemyInit(canvas);}, 20000);
+        // Add an enemy every 10 seconds.
+        var enemyClock = setInterval(function() {enemyInit(canvas);}, 3000);
 
         // Initialize other variables.
         var enemyList = [];
@@ -98,7 +98,7 @@
 
         function enemyInit(canvas) {
             // Only have 20 images in the array at a time.
-            if (enemyList.length < 10) {
+            if (enemyList.length < 1) {
                 var enemy = new Image();
                 enemy.src = "Enemy Walking/enemy5.png";
                 
@@ -129,6 +129,8 @@
             else {
                 for (let i = 0; i < enemyList.length; i++) {
                     if (enemyList[i].enemyDown > 100) {
+                        clearInterval(enemyList[i].transform);
+                        clearInterval(enemyList[i].enemyWalk);
                         enemyList[i].enemy.src = "Enemy Walking/enemy5.png";
                         var enemyFrame = 1;
                         enemyList[i].enemyWalk = setInterval(function() {var imgNum = (enemyFrame % 4) + 1;
@@ -137,10 +139,10 @@
                                                                         }, 200);
                         var random = Math.random()*100;
                         enemyList[i].enemy_x = canvas.width + random;
-                        enemyList[i].enemy_y =vcanvas.height/12 + 200;
-                        enemyList[i].enemy.hitNum = 0;
-                        enemyList[i].enemy.hitFrame = 0;
-                        enemyList[i].enemy.enemy_hit = 0;
+                        enemyList[i].enemy_y = canvas.height/12 + 200;
+                        enemyList[i].hitNum = 0;
+                        enemyList[i].hitFrame = 0;
+                        enemyList[i].enemy_hit = 0;
                         enemyList[i].enemyDown = 0;
                         break;
                     }
@@ -198,7 +200,7 @@
 
                 // Make bear fall back if hero hits it.
                 var closestBear;
-                var closest = 200;
+                var closest = 400;
                 var closestBearFound = false;
                 for (let i = 0; i < enemyList.length; i++) {
                     if (!enemyList[i].enemy.src.includes("transform")) {
@@ -301,20 +303,21 @@
                 // Spell 1 animation.
                 if (enemyList[i].hitNum >= 3 && enemyList[i].enemyDown == 0)  {
                     clearInterval(enemyList[i].bearHit);
+                    enemyList[i].hitNum = 0;
                     var enemyFrame = 0;
                     enemyList[i].transform = setInterval(function(){ var imgNum = (enemyFrame % 18) + 1;
                                                                      enemyList[i].enemy.src = "Spell 1/transform" + imgNum.toString() + ".png";
                                                                      enemyFrame++;
                                                                      if (enemyFrame == 18) {
                                                                          enemyFrame = 15; // Loop the flapping animation.
-                                                                         enemyList[i].enemy_y-=3; // Start going up!
                                                                      }
                                                                      enemyList[i].enemyDown++;
-                                                                     
+                                                                     if (enemyFrame >= 15)
+                                                                     enemyList[i].enemy_y-=100; // Start going up!
                                                                    }, 200);
                 }
                 if (!enemyList[i].enemy.src.includes("transform")) {
-                    if (enemyList[i].enemy_hit == 0)
+                    if (enemyList[i].enemy_hit == 0) 
                         enemyList[i].enemy_x -=7;
                         // Stop enemy from moving after hit for two seconds.
                     else if (enemyList[i].enemy_hit >= 10) {
