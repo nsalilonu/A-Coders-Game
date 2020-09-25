@@ -109,19 +109,17 @@
                 var enemy_y = canvas.height/12 + 200;
                 var enemy_hit = 0;  // How long the enemy has been hit for
                 var enemyFrame = 0; // The different frames for the enemy walk
-                var bearHit; // The interval that features the "enemy hit" animation
-                var transform; // The interval that feataures the "enemy transformed" animation
                 var hitFrame = 0; // The different frames for when the enemy is hit.
                 var hitNum = 0; // The amount of times the enemy has been hit.
                 var enemyDown = 0; // The amount of time the enemy has been defeated for.
-                var enemyWalk = setInterval(function() { var imgNum = (enemyFrame % 4) + 1;
+                var bearInterval; // The interval for all bear animations.
+                bearInterval = setInterval(function() { var imgNum = (enemyFrame % 4) + 1;
                                                         enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
                                                         enemyFrame++; 
                                                     }, 200);
                 enemyList.push({enemy: enemy, enemy_x: enemy_x, enemy_y: enemy_y, 
-                enemy_hit: enemy_hit, hitFrame: hitFrame, bearHit: bearHit, 
-                transform: transform, enemyWalk: enemyWalk, hitNum: hitNum, 
-                enemyDown: enemyDown});
+                enemy_hit: enemy_hit, hitFrame: hitFrame, hitNum: hitNum, 
+                enemyDown: enemyDown, bearInterval: bearInterval});
             }
 
             // If we have 10 images in the array and an enemy has been down for 20 s, 
@@ -129,11 +127,10 @@
             else {
                 for (let i = 0; i < enemyList.length; i++) {
                     if (enemyList[i].enemyDown > 100) {
-                        clearInterval(enemyList[i].transform);
-                        clearInterval(enemyList[i].enemyWalk);
+                        clearInterval(enemyList[i].bearInterval);
                         enemyList[i].enemy.src = "Enemy Walking/enemy5.png";
                         var enemyFrame = 1;
-                        enemyList[i].enemyWalk = setInterval(function() {var imgNum = (enemyFrame % 4) + 1;
+                        enemyList[i].bearInterval = setInterval(function() {var imgNum = (enemyFrame % 4) + 1;
                                                                          enemyList[i].enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
                                                                          enemyFrame++; 
                                                                         }, 200);
@@ -219,9 +216,8 @@
                 if (closestBearFound && !firstHit) {
                 enemyList[closestBear].enemy_hit = 0;
                 enemyList[closestBear].hitFrame = 0;
-                clearInterval(enemyList[closestBear].enemyWalk); // Stops walking
-                clearInterval(enemyList[closestBear].bearHit);
-                enemyList[closestBear].bearHit = setInterval(function (){   if (enemyList[closestBear].hitFrame < 3) {
+                clearInterval(enemyList[closestBear].bearInterval); // Stops previous animation
+                enemyList[closestBear].bearInterval = setInterval(function (){   if (enemyList[closestBear].hitFrame < 3) {
                                                                             var imgNum = (enemyList[closestBear].hitFrame % 3) + 1;
                                                                             enemyList[closestBear].enemy.src = "Enemy Hit/enemyhit" + imgNum.toString() + ".png";
                                                                             enemyList[closestBear].enemy_x += 100;
@@ -302,10 +298,10 @@
             for (let i = 0; i < enemyList.length; i++) {
                 // Spell 1 animation.
                 if (enemyList[i].hitNum >= 3 && enemyList[i].enemyDown == 0)  {
-                    clearInterval(enemyList[i].bearHit);
+                    clearInterval(enemyList[i].bearInterval);
                     enemyList[i].hitNum = 0;
                     var enemyFrame = 0;
-                    enemyList[i].transform = setInterval(function(){ var imgNum = (enemyFrame % 18) + 1;
+                    enemyList[i].bearInterval = setInterval(function(){ var imgNum = (enemyFrame % 18) + 1;
                                                                      enemyList[i].enemy.src = "Spell 1/transform" + imgNum.toString() + ".png";
                                                                      enemyFrame++;
                                                                      if (enemyFrame == 18) {
@@ -322,10 +318,10 @@
                         // Stop enemy from moving after hit for two seconds.
                     else if (enemyList[i].enemy_hit >= 10) {
                         enemyList[i].enemy_hit = 0;
-                        clearInterval(enemyList[i].bearHit);
+                        clearInterval(enemyList[i].bearInterval);
                         var enemyFrame = 0;
                         enemyList[i].hitFrame = 0;
-                        enemyList[i].enemyWalk = setInterval(function(){    var imgNum = (enemyFrame % 4) + 1;
+                        enemyList[i].bearInterval = setInterval(function(){    var imgNum = (enemyFrame % 4) + 1;
                                                                             enemyList[i].enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
                                                                             enemyFrame++; 
                                                                         }, 200);
