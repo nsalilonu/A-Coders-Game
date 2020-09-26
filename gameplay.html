@@ -11,7 +11,7 @@
     <title id="title">  A Coder's Game </title>
 </head>
 
-<script src="animations.js" type="module"></script>
+
 <link href="style.css" type="text/css" rel="stylesheet" />
 
 <body style="background-color: rgb(226, 113, 147);">
@@ -194,7 +194,7 @@
                     heroAttack = setInterval(function() {   var imgNum = (attackFrame % 7) + 1;
                                                             if (movingLeft || hero.src.includes("tiger5.png") || hero.src.includes("LTigerAttack"))
                                                                 hero.src = "Tiger Attack/LTigerAttack" + imgNum.toString() +".png";
-                                                            else if (movingRight || hero.src.includes("tiger6.png") || hero.src.includes("RTigerAttack")) 
+                                                            else 
                                                                 hero.src = "Tiger Attack/RTigerAttack" + imgNum.toString() +".png";
                                                             attackFrame++;
                                                             }, 70);
@@ -411,7 +411,7 @@
                                                             if (background_x > 0) background_x = -1290; // Scroll background.
                                                             knockbackFrame++; }, 100);
                 setTimeout(function(){  clearInterval(tigerKnockback);
-                                        hero.src = "Tiger Walking/tiger5.png"; }, 600);
+                                        hero.src = "Tiger Walking/tiger6.png"; }, 600);
             }
 
             // Check if the health bar is empty. If so, then run the dying hero animation :,( and end the game.
