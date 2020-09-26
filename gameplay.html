@@ -19,6 +19,15 @@
     <p1 id= "health">Health:</p1>
     <div id= "progress"></div>
     <div id= "bar"></div>
+    <div id= "endGameBack">
+        <div id= "endGameFront">
+            <p id= "endGameTxt"><b>The Backwood Bears have defeated
+                you this time! But they haven't managed to find your restart 
+                code yet! <br> You have another chance! <br> Fight again to keep magic 
+                alive in the wood! </b></p>
+        </div>
+        <button id="restart">Restart?</button>
+    </div>
     <i class="fas fa-volume-mute" id="muted"></i>
     <i class="fas fa-volume-up" id="volume-on"></i>
     
@@ -63,12 +72,20 @@
 
         var muted = document.getElementById("muted");
         var sound = document.getElementById("volume-on");
+        var restart = document.getElementById("restart");
+
+        // Turn sound on.
         muted.addEventListener('click', function() {muted.style.display = "none";
                                                     sound.style.display = "block";
                                                     soundtrack.play();});
+
+        // Turn sound off.
         sound.addEventListener('click', function() {muted.style.display = "block";
                                                     sound.style.display = "none";
                                                     soundtrack.pause();});
+
+        // Reload the page in the event that the user loses and wants to restart.
+        restart.addEventListener('click', function() {location.reload();});
 
         // The amount of time that the user has survived.
         var clock = setInterval(function() { var points = document.getElementById("time");
@@ -76,8 +93,8 @@
                                              points.innerHTML = "Points:      " + seconds;
                                            }, 1000);
 
-        // Add an enemy every 10 seconds.
-        var enemyClock = setInterval(function() {enemyInit(canvas);}, 3000);
+        // Add an enemy every 5 seconds.
+        var enemyClock = setInterval(function() {enemyInit(canvas);}, 5000);
 
         // Initialize other variables.
         var enemyList = [];
@@ -88,6 +105,7 @@
         var startAttack = false;
         let attackFrame = 0;
         var firstHit = false;
+        var dying = false;
 
         var walkingInterval;
         var heroAttack;
@@ -97,8 +115,8 @@
         walking.playbackRate = 1.9;
 
         function enemyInit(canvas) {
-            // Only have 20 images in the array at a time.
-            if (enemyList.length < 1) {
+            // Only have 10 images in the array at a time.
+            if (enemyList.length < 10) {
                 var enemy = new Image();
                 enemy.src = "Enemy Walking/enemy5.png";
                 
@@ -126,7 +144,7 @@
             // make visible a defeated enemy.
             else {
                 for (let i = 0; i < enemyList.length; i++) {
-                    if (enemyList[i].enemyDown > 100) {
+                    if (enemyList[i].enemyDown > 50) {
                         clearInterval(enemyList[i].bearInterval);
                         enemyList[i].enemy.src = "Enemy Walking/enemy5.png";
                         var enemyFrame = 1;
@@ -148,6 +166,7 @@
         }
 
         function moveObject() {
+            if (dying) return;
             const LEFT = 37;
             const RIGHT = 39;
             const UP = 87;
@@ -164,11 +183,14 @@
         }
 
         function bearHit() {
+            if (dying) return;
+
             const SPACEBAR = 32;
             if (event.keyCode == SPACEBAR) {
-                if (heroAttack != undefined)
-                    clearInterval(heroAttack);
-                if (!startAttack){
+               
+                if (!startAttack && !dying){
+                    clearInterval(walkingInterval);
+                    startWalk = false;
                     heroAttack = setInterval(function() {   var imgNum = (attackFrame % 7) + 1;
                                                             if (movingLeft || hero.src.includes("tiger5.png") || hero.src.includes("LTigerAttack"))
                                                                 hero.src = "Tiger Attack/LTigerAttack" + imgNum.toString() +".png";
@@ -177,20 +199,23 @@
                                                             attackFrame++;
                                                             }, 70);
                     
-                    setTimeout(function() { if (hero.src.includes("RTigerAttack") && (!movingLeft && !movingRight))
+                    setTimeout(function() { clearInterval(heroAttack);
+                                            attackFrame = 0;
+                                            walkFrame = 0;
+                                            startAttack = false;
+                                            if (hero.src.includes("RTigerAttack") && (!movingLeft && !movingRight))
                                                 hero.src = "Tiger Walking/tiger6.png";  
                                             else if (hero.src.includes("LTigerAttack") && (!movingLeft && !movingRight))
                                                 hero.src = "Tiger Walking/tiger5.png"; 
                                             else if (movingRight) {
-                                                hero.src = "Tiger Walking/tiger10.png"; 
+                                                hero.src = "Tiger Walking/tiger10.png";
+                                                runRight(); 
                                             }
                                             else if (movingLeft) {
                                                 hero.src = "Tiger Walking/tiger4.png";
+                                                runLeft();
                                             } 
-                                            clearInterval(heroAttack);
-                                            attackFrame = 0;
-                                            walkFrame = 0;
-                                            startAttack = false;
+                                            
                                         }, 700);
                     startAttack = true;
                 }
@@ -212,8 +237,9 @@
 
                 // Run animation for bear and move it back if it is the closest to the tiger when spacebar is pressed.
                 // And make sure the user isn't holding spacebar by only setting the interval after 100 ms from when the spacebar was pressed.
+                // AND make sure the user is facing the bear it wants to hit.
                 
-                if (closestBearFound && !firstHit) {
+                if (closestBearFound && !firstHit && !dying && hero.src.includes("RTigerAttack")) {
                 enemyList[closestBear].enemy_hit = 0;
                 enemyList[closestBear].hitFrame = 0;
                 clearInterval(enemyList[closestBear].bearInterval); // Stops previous animation
@@ -237,26 +263,23 @@
 
         function runLeft() {
             // Change image every 0.5 second when button is first pressed down.
-            if (!startWalk && !startAttack) { 
+            if (!startWalk && !startAttack && !dying) { 
                 walkingInterval = setInterval(function(){   var imgNum = (walkFrame % 4) + 1;
                                                             hero.src = "Tiger Walking/tiger" + imgNum.toString() + ".png";
                                                             walkFrame++;
-                                                            if (imgNum % 2 == 0)
-                                                            walking.play();
+                                                            if (imgNum % 2 == 0) walking.play();
                                                         }, 150);
-                startWalk = true;
-                
+                startWalk = true; 
             }
         }
 
         function runRight() {
             // Change image every 0.5 second when button is first pressed down.
-            if (!startWalk && !startAttack) { 
+            if (!startWalk && !startAttack && !dying) {
                 walkingInterval = setInterval(function(){   var imgNum = (walkFrame % 4) + 7;
                                                             hero.src = "Tiger Walking/tiger" + imgNum.toString() + ".png";
                                                             walkFrame++;
-                                                            if (imgNum % 2 == 0)
-                                                            walking.play();
+                                                            if (imgNum % 2 == 0) walking.play();
                                                         }, 150);
                 startWalk = true;
             } 
@@ -264,6 +287,8 @@
 
         // Stops moving if keyup.
         function stopMoveObject() {
+            if (dying) return;
+
             const LEFT = 37;
             const RIGHT = 39;
             const SPACEBAR = 32;
@@ -273,19 +298,18 @@
                 startWalk = false;
                 clearInterval(walkingInterval); // Stop walking animation
                 walkFrame = 0;
-                hero.src = "Tiger Walking/tiger5.png"; // Stationary avatar looking left
+                if (!startAttack) hero.src = "Tiger Walking/tiger5.png"; // Stationary avatar looking left 
             }
             else if (event.keyCode == RIGHT) {
                 movingRight = false;
                 startWalk = false;
                 clearInterval(walkingInterval); // Stop walking animation
                 walkFrame = 0;
-                hero.src = "Tiger Walking/tiger6.png"; // Stationary avatar looking right
+                if (!startAttack) hero.src = "Tiger Walking/tiger6.png"; // Stationary avatar looking right
             }
 
             if (event.keyCode == SPACEBAR) {
                 firstHit = false;
-                startAttack = false;
             }
         }
 
@@ -332,7 +356,7 @@
                 }
             }
 
-            if (movingLeft) {
+            if (movingLeft && !dying) {
                 hero_x-=6;
                 background_x+=6;
                 if (hero_x < 0) hero_x = 0; // Keep avatar in bounds
@@ -345,7 +369,7 @@
                     
                 }
             }
-            if (movingRight) {
+            if (movingRight && !dying) {
                 hero_x+=6;
                 background_x-=6;
                 if (hero_x > canvas.width - 400) hero_x = canvas.width - 400;
@@ -376,18 +400,38 @@
             }
 
             // Knocks back tiger.
-            if (closestBearFound && knockbackFrame == 0) {
+            if (closestBearFound && knockbackFrame == 0 && !dying) {
                 var health = document.getElementById("bar");
                 tigerKnockback = setInterval(function() {   var imgNum = (knockbackFrame % 3) + 1;
                                                             hero.src = "Tiger Hit/tigerhit" + imgNum.toString() + ".png";
                                                             hero_x -= 2;
-                                                            bar_width -= 0.1;
+                                                            bar_width -= 0.2;
                                                             health.style.width = bar_width.toString()+"px";
                                                             if (hero_x < 0) hero_x = 0; // Keep avatar in bounds
                                                             if (background_x > 0) background_x = -1290; // Scroll background.
                                                             knockbackFrame++; }, 100);
-                setTimeout(function(){  clearInterval (tigerKnockback)
+                setTimeout(function(){  clearInterval(tigerKnockback);
                                         hero.src = "Tiger Walking/tiger5.png"; }, 600);
+            }
+
+            // Check if the health bar is empty. If so, then run the dying hero animation :,( and end the game.
+            if (bar_width <= 0 && !dying) {
+                var deadFrame = 0;
+                dying = true;
+                clearInterval(walkingInterval);
+                var tigerDead = setInterval(function() {    var imgNum = (deadFrame % 9) + 1                                  
+                                                            hero.src = "Tiger Hit/tigerhit" + imgNum.toString() + ".png";
+                                                            deadFrame++;
+                                                            if (deadFrame == 9) {
+                                                                deadFrame = 8;
+                                                            }
+                                                        }, 200);
+                setTimeout(function() { clearInterval(tigerDead);
+                                        clearInterval(interval);
+                                        clearInterval(clock);
+                                        var endGame = document.getElementById("endGameBack");
+                                        endGame.style.display = "block";
+                                        }, 2300);
             }
             
             if (knockbackFrame > 3) knockbackFrame++;
