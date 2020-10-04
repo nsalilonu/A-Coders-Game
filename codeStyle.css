@@ -1,0 +1,127 @@
+body {
+    overflow: scroll;
+}
+
+.variable {
+    font-family: 'Source Code Pro', monospace;
+    color: rgb(166, 201, 255);
+    display: inline;
+}
+
+.symbol {
+    font-family: 'Source Code Pro', monospace;
+    color: rgb(255, 255, 255);
+    display: inline;
+}
+
+.keyword {
+    font-family: 'Source Code Pro', monospace;
+    color: rgb(88, 124, 224);
+    display: inline;
+}
+
+.functionName {
+    font-family: 'Source Code Pro', monospace;
+    color: rgb(253, 255, 144);
+    display: inline;
+}
+
+.number {
+    font-family: 'Source Code Pro', monospace;
+    color: rgb(196, 248, 216);
+    display: inline;
+}
+
+.constant {
+    font-family: 'Source Code Pro', monospace;
+    color: rgb(20, 145, 177);
+    display: inline;
+}
+
+.loop {
+    font-family: 'Source Code Pro', monospace;
+    color: rgb(168, 73, 245);
+    display: inline;
+}
+
+.codeLine {
+    font-family: 'Source Code Pro', monospace;
+    color: rgb(163, 163, 163);
+    display: inline; 
+}
+
+#error1 {
+    font-family: 'Source Code Pro', monospace;
+    color: rgb(241, 0, 0);
+    display: inline; 
+}
+
+#error1:hover{
+    color: rgb(255, 145, 145);
+}
+
+#error2 {
+    font-family: 'Source Code Pro', monospace;
+    color: rgb(241, 0, 0);
+    display: inline; 
+}
+
+#error2:hover{
+    color: rgb(255, 145, 145);
+}
+
+
+.close {
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    color: black;
+    font-size: 30px;
+}
+
+.close:hover{
+    color:rgb(190, 190, 190);
+}
+
+#answerBox {
+    display: none;
+    position: fixed;
+    background-color: rgb(255, 255, 255);
+    top: 250px;
+    left: 650px;
+    padding: 20px;
+    border: 6px solid rgb(160, 160, 160);
+    border-radius: 6px;
+    width: 20%;
+    z-index: 10;
+    text-align: center;
+}
+
+#answerBoxText {
+    font-family: 'Indie Flower', cursive;
+    font-size: 20px;
+}
+
+#answer1 {
+    display: none;
+}
+
+#answer2 {
+    display: none;
+}
+
+
+#submitButton {
+    font-family: 'Indie Flower', cursive;
+    border: 3px solid rgb(0, 0, 0);
+    border-radius: 6px;
+    background-color: rgb(0, 139, 53);
+    font-size: 20px;
+}
+
+#submitButton:hover {
+    background-color: rgb(111, 218, 152);
+}
+#sideBanner{
+    float: right;
+}
