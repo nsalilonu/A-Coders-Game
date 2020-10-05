@@ -24,7 +24,7 @@
         <p class = "codeLine">6:     </p>        <p class = "variable">movingLeft</p><p class = "symbol"> = </p><p class = "keyword">true</p><p class = "symbol">;</p>
         <p class = "codeLine">7:     </p>    <p class = "symbol">}</p>
         <p class = "codeLine">8:     </p>    <p class = "loop">else if </p><p class = "symbol">(</p><p class = "variable">event.keyCode</p><p class = "symbol"> == </p><p class = "constant">RIGHT</p><p class = "symbol">) {</p>
-        <p class = "codeLine">9:     </p>        <p class = "variable">movingRight</p><p class = "symbol"> = </p><p id = "error1">false</p><p class = "symbol">;</p>
+        <p class = "codeLine">9:     </p>        <p class = "variable">movingRight</p><p class = "symbol"> = </p><p class = "keyword">false</p><p class = "symbol">;</p>
         <p class = "codeLine">10:    </p>    <p class = "symbol">}</p>
         <p class = "codeLine">11:    </p><p class = "symbol">}</p>
         <p class = "codeLine">12:    </p>
@@ -57,46 +57,43 @@
     <div class = "answerBox"> 
         <span class="close">&times;</span>
         <form action="./answerHandler1.php" method="GET">
-            <p class = "answerBoxText"><b>What would you like to replace false with?</b></p>
-            <input type = "text" id = "answer1" name = "answer1">
-            <input type = "submit" value = "Go!" id = "submitButton">
-        </form>
-    </div>
-
-    <div class = "answerBox"> 
-        <span class="close">&times;</span>
-        <form action="./answerHandler1.php" method="GET">
             <p class = "answerBoxText"><b>What would you like to replace 0.000000000001 with?</b></p>
             <input type = "text" id = "answer2" name = "answer2">
             <input type = "submit" value = "Go!" id = "submitButton">
         </form>
     </div>
+
+    <div id = "congrats"> 
+        <span class="close">&times;</span>
+        <p id = "answerBoxText"><b>Congratulations, your magic has restored your ability to move left! But for some reason yooouuu'rrrreeee muuuuuuch slooooooweeeeer. Whaaaaaaaaat diiid theeeeeeey doooooooooo?</b>  
+        </p>
+
+    </div>
    
 
     <script type = "module">
         // Message for the first error in the code!
-        var error1 = document.getElementById("error1");
-        var answerBox1 = document.getElementsByClassName("answerBox")[0];
-
-        error1.addEventListener('click', function() {  answerBox1.style.display = "block";
-                                                    });
+        var answerBox = document.getElementsByClassName("answerBox")[0];
 
         // Message for the second error in the code!
         var error2 = document.getElementById("error2");
-        var answerBox2 = document.getElementsByClassName("answerBox")[1];
-        error2.addEventListener('click', function() {   answerBox2.style.display = "block"; 
+        error2.addEventListener('click', function() {   
+                                                        answerBox.style.display = "block"; 
                                                     });
 
-        // Close the modal if the user clicks on the 'X'.
+
+        // Close the modal if the user clicks on span or out of the answer box.
         var span = document.getElementsByClassName("close")[0];
         span.onclick = function() {
-            answerBox1.style.display = "none";
+        answerBox.style.display = "none";
         }
 
         var span2 = document.getElementsByClassName("close")[1];
+        var congrats = document.getElementById("congrats");
         span2.onclick = function() {
-            answerBox2.style.display = "none";
+            congrats.style.display = "none";
         }
+
 
     </script>
 </body>
