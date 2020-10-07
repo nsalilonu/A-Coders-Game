@@ -24,7 +24,7 @@
         <p class = "codeLine">6:     </p>        <p class = "variable">movingLeft</p><p class = "symbol"> = </p><p class = "keyword">true</p><p class = "symbol">;</p>
         <p class = "codeLine">7:     </p>    <p class = "symbol">}</p>
         <p class = "codeLine">8:     </p>    <p class = "loop">else if </p><p class = "symbol">(</p><p class = "variable">event.keyCode</p><p class = "symbol"> == </p><p class = "constant">RIGHT</p><p class = "symbol">) {</p>
-        <p class = "codeLine">9:     </p>        <p class = "variable">movingRight</p><p class = "symbol"> = </p><p class = "keyword">false</p><p class = "symbol">;</p>
+        <p class = "codeLine">9:     </p>        <p class = "variable">movingRight</p><p class = "symbol"> = </p><p class = "keyword">true</p><p class = "symbol">;</p>
         <p class = "codeLine">10:    </p>    <p class = "symbol">}</p>
         <p class = "codeLine">11:    </p><p class = "symbol">}</p>
         <p class = "codeLine">12:    </p>
@@ -63,12 +63,27 @@
         </form>
     </div>
 
-    <div id = "congrats"> 
-        <span class="close">&times;</span>
-        <p id = "answerBoxText"><b>Congratulations, your magic has restored your ability to move left! But for some reason yooouuu'rrrreeee muuuuuuch slooooooweeeeer. Whaaaaaaaaat diiid theeeeeeey doooooooooo?</b>  
-        </p>
-
-    </div>
+    <?php
+        // Show the congrats box if the user hasn't made any mistakes.
+        if ($_COOKIE["mistakes"] == NULL)
+        echo "<div id = 'congrats'> ";
+        echo "<span class='close'>&times;</span>";
+        echo "<p id = 'answerBoxText'><b>Congratulations, your magic has restored your ability to move left! 
+        But for some reason yooouuu'rrrreeee muuuuuuch slooooooweeeeer. Whaaaaaaaaat diiid theeeeeeey doooooooooo?</b> 
+        </p>";
+        echo "</div>";
+   ?>
+   <?php
+    // Check to see if the user has been to this page before. If they have, then they made a mistake
+    if ($_COOKIE["mistakes"] !== NULL) {
+        echo "<div class = 'errorBox' style = 'display: block;'>";
+        //echo "<p1> Mistakes: </p1>".$_COOKIE["mistakes"];
+        echo "<span class='close'>&times;</span>";
+        echo "<h1 class = 'errorBoxHeader'><b>Oops!</b></h1>";
+        echo "<p class = 'answerBoxText'><b>Your magic backfired! Must have been the wrong spell...try again!</b></p>";
+        echo "</div>";
+    }
+    ?>
    
 
     <script type = "module">
@@ -88,10 +103,18 @@
         answerBox.style.display = "none";
         }
 
-        var span2 = document.getElementsByClassName("close")[1];
+        var span1 = document.getElementsByClassName("close")[1];
         var congrats = document.getElementById("congrats");
-        span2.onclick = function() {
+        span1.onclick = function() {
             congrats.style.display = "none";
+        }
+
+        var errorBox = document.getElementsByClassName("errorBox")[0];
+        var span2 = document.getElementsByClassName("close")[2];
+        if (span2 != undefined) {
+            span2.onclick = function() {
+                errorBox.style.display = "none";
+            }
         }
 
 

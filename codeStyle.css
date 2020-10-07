@@ -97,9 +97,37 @@ body {
     text-align: center;
 }
 
+.errorBox {
+    display: none;
+    position: fixed;
+    background-color: rgb(209, 28, 28);
+    top: 250px;
+    left: 650px;
+    padding: 20px;
+    border: 6px solid rgb(0, 0, 0);
+    border-radius: 6px;
+    width: 20%;
+    z-index: 10;
+    text-align: center; 
+}
+
 .answerBoxText {
     font-family: 'Indie Flower', cursive;
     font-size: 20px;
+}
+
+.errorBoxHeader {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 30px;
+}
+
+.endCode {
+    color: white;
+    text-align: center;
+    width: 60%;
+    margin-left: 20%;
+    margin-top: auto;
+    float:center;
 }
 
 #answer1 {

@@ -72,7 +72,18 @@
         </form>
     </div>
    
-
+    <?php
+    // Check to see if the user has been to this page before. If they have, then they made a mistake
+    if ($_COOKIE["mistakes"] !== NULL) {
+        echo "<div class = 'errorBox' style = 'display: block;'>";
+        //echo "<p1> Mistakes: </p1>".$_COOKIE["mistakes"];
+        echo "<span class='close'>&times;</span>";
+        echo "<h1 class = 'errorBoxHeader'><b>Oops!</b></h1>";
+        echo "<p class = 'answerBoxText'><b>Your magic backfired! Must have been the wrong spell...try again!</b></p>";
+        echo "</div>";
+    }
+    ?>
+ 
     <script type = "module">
         // Message for the first error in the code!
         var error1 = document.getElementById("error1");
@@ -93,9 +104,17 @@
             answerBox1.style.display = "none";
         }
 
-        var span2 = document.getElementsByClassName("close")[1];
-        span2.onclick = function() {
+        var span1 = document.getElementsByClassName("close")[1];
+        span1.onclick = function() {
             answerBox2.style.display = "none";
+        }
+
+        var errorBox = document.getElementsByClassName("errorBox")[0];
+        var span2 = document.getElementsByClassName("close")[2];
+        if (span2 != undefined) {
+            span2.onclick = function() {
+                errorBox.style.display = "none";
+            }
         }
 
     </script>
