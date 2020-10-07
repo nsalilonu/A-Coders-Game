@@ -65,7 +65,7 @@
 
     <?php
         // Show the congrats box if the user hasn't made any mistakes.
-        if ($_COOKIE["mistakes"] == NULL)
+        if ($_COOKIE["mistakes"] == "0")
         echo "<div id = 'congrats'> ";
         echo "<span class='close'>&times;</span>";
         echo "<p id = 'answerBoxText'><b>Congratulations, your magic has restored your ability to move left! 
@@ -75,7 +75,7 @@
    ?>
    <?php
     // Check to see if the user has been to this page before. If they have, then they made a mistake
-    if ($_COOKIE["mistakes"] !== NULL) {
+    if ($_COOKIE["mistakes"] !== "0") {
         echo "<div class = 'errorBox' style = 'display: block;'>";
         //echo "<p1> Mistakes: </p1>".$_COOKIE["mistakes"];
         echo "<span class='close'>&times;</span>";

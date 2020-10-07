@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html>
+<?php
+    // If the user is visiting this page right after gameplay, they should have 0 mistakes
+    $referer = $_SERVER['HTTP_REFERER'];
+    
+    if (strpos($referer, "gameplay.html"))
+    setcookie("mistakes", "0", 0 , "/");
+?>
+
 
 <head>
     <!-- the next three lines try to discourage browser from keeping page in cache -->
@@ -73,8 +81,8 @@
     </div>
    
     <?php
-    // Check to see if the user has been to this page before. If they have, then they made a mistake
-    if ($_COOKIE["mistakes"] !== NULL) {
+    //Check to see if the user has been to this page before. If they have, then they made a mistake.
+    if ($_COOKIE["mistakes"] !== "0") {
         echo "<div class = 'errorBox' style = 'display: block;'>";
         //echo "<p1> Mistakes: </p1>".$_COOKIE["mistakes"];
         echo "<span class='close'>&times;</span>";

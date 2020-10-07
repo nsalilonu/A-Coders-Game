@@ -37,19 +37,19 @@ else if (is_numeric($answer2)) {
 // Check if the answer is correct if coming from the original coding page.
 if ($answer1 == "true" && strpos($referer, "codeLevel1.php")) {
     // Delete the cookie for the number of mistakes if they made a mistake.
-    if ($_COOKIE["mistakes"] !== NULL) {
-        setcookie("mistakes", "", time() - (86400), "/");
+    if ($_COOKIE["mistakes"] !== "0") {
+        setcookie("mistakes", "0", 0, "/");
     }
     
     $extra = 'codeLevel1_1.php';
-header("Location: http://$host$uri/$extra");
-exit;
+    header("Location: http://$host$uri/$extra");
+    exit;
 }
 
 
 if ($answer2 == 6  && strpos($referer, "codeLevel1.php")) {
-    if ($_COOKIE["mistakes"] !== NULL) {
-        setcookie("mistakes", "", time() - (86400), "/");
+    if ($_COOKIE["mistakes"] !== "0") {
+        setcookie("mistakes", "0", 0, "/");
     }
     $extra = 'codeLevel1_2.php';
     header("Location: http://$host$uri/$extra");
@@ -73,22 +73,8 @@ if ($answer2 == 6  && strpos($referer, "codeLevel1_1.php")) {
 // If either answer is incorrect, then display the old HTML page and send an error message.
 // Let old HTML page know that there's been an error by setting a cookie.
 else {
-    if (!isset($_COOKIE["mistakes"])) {
-        $cookie_name = "mistakes";
-        // $cookie_value = "";
-        $cookie_value = 1;
-
-        // Will remember how many mistakes you made for one day, can change
-        // this to be stored in a database if we get to that stage.
-        // setcookie($cookie_name, $cookie_value, time() -(86400), "/");
-        setcookie($cookie_name, $cookie_value, time() + (86400), "/");
-    }
-    else {
-        $count = (int)$_COOKIE["mistakes"] + 1;
-        // $count = "";
-        // setcookie("mistakes", $count, time() -(86400), "/");
-        setcookie("mistakes", $count, time() + (86400), "/");
-    }
+    $count = (int)$_COOKIE["mistakes"] + 1;
+    setcookie("mistakes", $count, 0, "/");
     header("Location: $referer");
     exit;
 }
