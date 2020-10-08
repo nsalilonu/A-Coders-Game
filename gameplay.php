@@ -15,6 +15,15 @@
 <link href="style.css" type="text/css" rel="stylesheet" />
 
 <body style="background-color: rgb(226, 113, 147);">
+
+<?php 
+        if (isset($_COOKIE["level"])) {
+            echo "<p1 id= 'level'>Level ".$_COOKIE["level"]."</p1>";
+        }
+        else {
+            setcookie("level", "1", 0, "/");
+        }
+?>
     <p1 id= "time">Points: 0</p1>
     <p1 id= "health">Health:</p1>
     <div id= "progress"></div>
@@ -31,11 +40,7 @@
     <i class="fas fa-volume-mute" id="muted"></i>
     <i class="fas fa-volume-up" id="volume-on"></i>
 
-    <?php 
-        if (isset($_COOKIE["level"])) {
-            echo "<p1 id= 'level'>Level ".$_COOKIE["level"]."</p1>";
-        }
-    ?>
+
 
     <canvas id="canvas"></canvas>
 
@@ -102,7 +107,7 @@
         var enemyClock = setInterval(function() {enemyInit(canvas);}, 5000);
 
         // Switch to the coding HTML page after 10 seconds (will obviously be longer in the actual game).
-        // setTimeout(function() {window.location.href = "./codeLevel1.php";}, 10000);
+        setTimeout(function() {window.location.href = "./codeLevel1.php";}, 10000);
         var level = document.getElementById("level");
         setTimeout(function() { level.style.display = "none";}, 5000);
 
