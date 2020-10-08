@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 <html>
+<?php 
+        if (isset($_COOKIE["level"])) {
+            echo "<p1 id= 'level'>Level ".$_COOKIE["level"]."</p1>";
+        }
+        else {
+            setcookie("level", "1", 0, "/");
+        }
+?>
+
 
 <head>
     <!-- the next three lines try to discourage browser from keeping page in cache -->
@@ -16,14 +25,7 @@
 
 <body style="background-color: rgb(226, 113, 147);">
 
-<?php 
-        if (isset($_COOKIE["level"])) {
-            echo "<p1 id= 'level'>Level ".$_COOKIE["level"]."</p1>";
-        }
-        else {
-            setcookie("level", "1", 0, "/");
-        }
-?>
+
     <p1 id= "time">Points: 0</p1>
     <p1 id= "health">Health:</p1>
     <div id= "progress"></div>

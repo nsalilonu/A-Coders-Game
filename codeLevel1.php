@@ -79,6 +79,7 @@
             <input type = "submit" value = "Go!" id = "submitButton">
         </form>
     </div>
+
    
     <?php
     //Check to see if the user has been to this page before. If they have, then they made a mistake.
@@ -90,6 +91,23 @@
         echo "<p class = 'answerBoxText'><b>Your magic backfired! Must have been the wrong spell...try again!</b></p>";
         echo "</div>";
     }
+    ?>
+
+    <?php 
+        // Show the intro if it's the user's first time on the screen.
+        if (strpos($referer, "gameplay.php")) {
+            echo "<div id='backdrop' style='display:block;'>";
+                echo "<div class = 'introBox'>"; 
+                    echo "<span class='close'>&times;</span>";
+                    echo "<p class = 'answerBoxText'><b>The Backwood Bears have had it with your schemes and plan their revenge!
+                        They use their dark magic to unleash chaos, and now you can't move! Don't worry, I've marked where
+                        they have been in red. Why didn't I fix it myself? Well, I'm not allowed to directly intervene
+                        in these things...Now, now, don't be so mopey about it. How would you like it if I 
+                        unmarked the code? No? I thought so... </b></p>";
+                    echo "<img src='codeLevel1Intro.png' style='width: 50%;'>";
+                echo "</div>";
+            echo "</div>";
+        }
     ?>
  
     <script type = "module">
@@ -119,9 +137,18 @@
 
         var errorBox = document.getElementsByClassName("errorBox")[0];
         var span2 = document.getElementsByClassName("close")[2];
-        if (span2 != undefined) {
+        if (span2 != undefined && errorBox != undefined) {
             span2.onclick = function() {
                 errorBox.style.display = "none";
+            }
+        }
+
+        // Can only ever have 3 spans, but sometimes it is defined for errorBox and other times it is defined for intro.
+        var intro = document.getElementById("backdrop");
+        var span3 = document.getElementsByClassName("close")[2];
+        if (span3 != undefined && intro != undefined) {
+            span3.onclick = function() {
+                intro.style.display = "none";
             }
         }
 
