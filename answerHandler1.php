@@ -58,14 +58,14 @@ if ($answer2 == 6  && strpos($referer, "codeLevel1.php")) {
 
 // Check if the answer is correct if coming from the new coding pages.
 if ($answer1 == "true" && strpos($referer, "codeLevel1_2.php")) {
-    $extra = 'codeLevel1End.html';
+    $extra = 'codeLevel1End.php';
     header("Location: http://$host$uri/$extra");
     exit;
     }
     
     
 if ($answer2 == 6  && strpos($referer, "codeLevel1_1.php")) {
-    $extra = 'codeLevel1End.html';
+    $extra = 'codeLevel1End.php';
     header("Location: http://$host$uri/$extra");
     exit;
 }

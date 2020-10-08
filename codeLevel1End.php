@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
 
+<?php
+    // Changing the level. 
+    setcookie("level", "2", 0, "/");
+    setcookie("mistakes", "0", 0, "/");
+?>
+
+
 <head>
     <!-- the next three lines try to discourage browser from keeping page in cache -->
     <meta http-equiv="Pragma" content="no-cache">
@@ -33,7 +40,7 @@
 
     <script type="module">
         var continueGame = document.getElementsByClassName("continue")[0];
-        continueGame.addEventListener("click", function() {window.location.href = "./gameplay.html";}, false);
+        continueGame.addEventListener("click", function() {window.location.href = "./gameplay.php";}, false);
     </script>
 
 </body>

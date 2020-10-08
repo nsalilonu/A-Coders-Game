@@ -4,7 +4,7 @@
     // If the user is visiting this page right after gameplay, they should have 0 mistakes
     $referer = $_SERVER['HTTP_REFERER'];
     
-    if (strpos($referer, "gameplay.html"))
+    if (strpos($referer, "gameplay.php"))
     setcookie("mistakes", "0", 0 , "/");
 ?>
 

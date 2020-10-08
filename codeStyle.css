@@ -130,6 +130,26 @@ body {
     float:center;
 }
 
+.continue {
+    font-family: 'Indie Flower', cursive; 
+    font-size: 20px;
+    width: 200px;
+    text-align: center;
+    color: black;
+    position: relative;
+    left: 600px;
+    top: 200px;
+    background-color: rgb(76, 87, 192);
+    border-color: black;
+    border-radius: 12px;
+    border-width: 5px;
+    padding: 5px; 
+}
+
+.continue:hover {
+    background-color: rgb(166, 165, 245);
+}
+
 #answer1 {
     display: block;
 }
