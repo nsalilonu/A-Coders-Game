@@ -3,7 +3,7 @@
 
 <?php
     // Changing the level. 
-    setcookie("level", "2", 0, "/");
+    if ($_COOKIE["level"] == "1") setcookie("level", "2", 0, "/");
     setcookie("mistakes", "0", 0, "/");
 ?>
 
