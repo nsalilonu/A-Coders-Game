@@ -7,6 +7,7 @@
         else {
             setcookie("level", "1", 0, "/");
         }
+        setcookie("mistakes", "0", 0, "/");
 ?>
 
 
