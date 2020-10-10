@@ -234,7 +234,7 @@
                                                 runLeft();
                                             } 
                                             
-                                        }, 700);
+                                        }, 1400);
                     startAttack = true;
                 }
 
