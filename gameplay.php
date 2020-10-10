@@ -286,7 +286,7 @@
                                                             hero.src = "Tiger Walking/tiger" + imgNum.toString() + ".png";
                                                             walkFrame++;
                                                             if (imgNum % 2 == 0) walking.play();
-                                                        }, 150);
+                                                        }, 400);
                 startWalk = true; 
             }
         }
