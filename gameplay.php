@@ -58,8 +58,8 @@
 
         // Initialize the hero.
         var hero_x = 10;
-        var hero_y = canvas.height/12 + 200;
-        var hero = new Image(100, 100);
+        var hero_y = canvas.height/12 + 380;
+        var hero = new Image();
         hero.src = "Tiger Walking/tiger5.png";
 
 
@@ -135,14 +135,14 @@
         function enemyInit(canvas) {
             // Only have 10 images in the array at a time.
             if (enemyList.length < 10) {
-                var enemy = new Image(100, 100);
+                var enemy = new Image();
                 enemy.src = "Enemy Walking/enemy5.png";
                 
 
                 // Put the enemy in a random place off the canvas.
                 var random = Math.random()*100;
                 var enemy_x = canvas.width + random; // Where the enemy appears on the canvas.
-                var enemy_y = canvas.height/12 + 200;
+                var enemy_y = canvas.height/12 + 380;
                 var enemy_hit = 0;  // How long the enemy has been hit for
                 var enemyFrame = 0; // The different frames for the enemy walk
                 var hitFrame = 0; // The different frames for when the enemy is hit.
@@ -172,7 +172,7 @@
                                                                         }, 200);
                         var random = Math.random()*100;
                         enemyList[i].enemy_x = canvas.width + random;
-                        enemyList[i].enemy_y = canvas.height/12 + 200;
+                        enemyList[i].enemy_y = canvas.height/12 + 380;
                         enemyList[i].hitNum = 0;
                         enemyList[i].hitFrame = 0;
                         enemyList[i].enemy_hit = 0;
@@ -215,7 +215,7 @@
                                                             else 
                                                                 hero.src = "Tiger Attack/RTigerAttack" + imgNum.toString() +".png";
                                                             attackFrame++;
-                                                            }, 150);
+                                                            }, 70);
                     
                     setTimeout(function() { clearInterval(heroAttack);
                                             attackFrame = 0;
@@ -457,9 +457,9 @@
             
 
             ctx.drawImage(background, background_x, background_y);
-            ctx.drawImage(hero, hero_x, hero_y);
+            ctx.drawImage(hero, hero_x, hero_y, 150, 150);
             for (let i = 0; i < enemyList.length; i++) {
-                ctx.drawImage(enemyList[i].enemy, enemyList[i].enemy_x, enemyList[i].enemy_y);
+                ctx.drawImage(enemyList[i].enemy, enemyList[i].enemy_x, enemyList[i].enemy_y, 150, 150);
             } 
         }
 
