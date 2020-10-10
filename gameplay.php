@@ -215,7 +215,7 @@
                                                             else 
                                                                 hero.src = "Tiger Attack/RTigerAttack" + imgNum.toString() +".png";
                                                             attackFrame++;
-                                                            }, 70);
+                                                            }, 150);
                     
                     setTimeout(function() { clearInterval(heroAttack);
                                             attackFrame = 0;
@@ -286,7 +286,7 @@
                                                             hero.src = "Tiger Walking/tiger" + imgNum.toString() + ".png";
                                                             walkFrame++;
                                                             if (imgNum % 2 == 0) walking.play();
-                                                        }, 400);
+                                                        }, 150);
                 startWalk = true; 
             }
         }
