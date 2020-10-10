@@ -210,11 +210,11 @@
                     clearInterval(walkingInterval);
                     startWalk = false;
                     heroAttack = setInterval(function() {   var imgNum = (attackFrame % 7) + 1;
-                                                            if (movingLeft || hero.src.includes("tiger5.png") || hero.src.includes("LTigerAttack"))
+                                                            if (movingLeft || hero.src.includes("tiger5.png") || hero.src.includes("LTigerAttack")) 
                                                                 hero.src = "Tiger Attack/LTigerAttack" + imgNum.toString() +".png";
                                                             else 
                                                                 hero.src = "Tiger Attack/RTigerAttack" + imgNum.toString() +".png";
-                                                            // attackFrame++;
+                                                            attackFrame++;
                                                             }, 70);
                     
                     setTimeout(function() { clearInterval(heroAttack);
