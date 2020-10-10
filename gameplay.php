@@ -215,7 +215,7 @@
                                                             else 
                                                                 hero.src = "Tiger Attack/RTigerAttack" + imgNum.toString() +".png";
                                                             attackFrame++;
-                                                            }, 70);
+                                                            }, 100);
                     
                     setTimeout(function() { clearInterval(heroAttack);
                                             attackFrame = 0;
@@ -234,7 +234,7 @@
                                                 runLeft();
                                             } 
                                             
-                                        }, 1400);
+                                        }, 900);
                     startAttack = true;
                 }
 
@@ -356,7 +356,7 @@
                 }
                 if (!enemyList[i].enemy.src.includes("transform")) {
                     if (enemyList[i].enemy_hit == 0) 
-                        enemyList[i].enemy_x -=7;
+                        enemyList[i].enemy_x -=5;
                         // Stop enemy from moving after hit for two seconds.
                     else if (enemyList[i].enemy_hit >= 10) {
                         enemyList[i].enemy_hit = 0;
@@ -375,12 +375,12 @@
             }
 
             if (movingLeft && !dying) {
-                hero_x-=6;
-                background_x+=6;
+                hero_x-=4;
+                background_x+=4;
                 if (hero_x < 0) hero_x = 0; // Keep avatar in bounds
                 if (background_x > 0) background_x = -1290; // Scroll background.
                 for (let i = 0; i < enemyList.length; i++) {
-                        enemyList[i].enemy_x+=6;
+                        enemyList[i].enemy_x+=4;
                         var random = Math.random()*1000;
                         if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
                         if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;
@@ -388,12 +388,12 @@
                 }
             }
             if (movingRight && !dying) {
-                hero_x+=6;
-                background_x-=6;
+                hero_x+=4;
+                background_x-=4;
                 if (hero_x > canvas.width - 400) hero_x = canvas.width - 400;
                 if (background_x < -1290) background_x = 0; // Scroll background.
                 for (let i = 0; i < enemyList.length; i++) {
-                        enemyList[i].enemy_x-=6;
+                        enemyList[i].enemy_x-=4;
                         var random = Math.random()*1000;
                         if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
                         if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;
@@ -422,7 +422,7 @@
                 var health = document.getElementById("bar");
                 tigerKnockback = setInterval(function() {   var imgNum = (knockbackFrame % 3) + 1;
                                                             hero.src = "Tiger Hit/tigerhit" + imgNum.toString() + ".png";
-                                                            hero_x -= 2;
+                                                            hero_x -= 1;
                                                             bar_width -= 0.2;
                                                             health.style.width = bar_width.toString()+"px";
                                                             if (hero_x < 0) hero_x = 0; // Keep avatar in bounds
