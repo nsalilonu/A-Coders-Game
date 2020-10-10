@@ -214,7 +214,7 @@
                                                                 hero.src = "Tiger Attack/LTigerAttack" + imgNum.toString() +".png";
                                                             else 
                                                                 hero.src = "Tiger Attack/RTigerAttack" + imgNum.toString() +".png";
-                                                            attackFrame++;
+                                                            // attackFrame++;
                                                             }, 70);
                     
                     setTimeout(function() { clearInterval(heroAttack);
