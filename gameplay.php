@@ -59,7 +59,7 @@
         // Initialize the hero.
         var hero_x = 10;
         var hero_y = canvas.height/12 + 200;
-        var hero = new Image();
+        var hero = new Image(100, 100);
         hero.src = "Tiger Walking/tiger5.png";
 
 
@@ -135,7 +135,7 @@
         function enemyInit(canvas) {
             // Only have 10 images in the array at a time.
             if (enemyList.length < 10) {
-                var enemy = new Image();
+                var enemy = new Image(100, 100);
                 enemy.src = "Enemy Walking/enemy5.png";
                 
 
