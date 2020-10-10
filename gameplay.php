@@ -209,13 +209,16 @@
                 if (!startAttack && !dying){
                     clearInterval(walkingInterval);
                     startWalk = false;
-                    heroAttack = setInterval(function() {   var imgNum = (attackFrame % 7) + 1;
+                    heroAttack = setInterval(function() {   //var imgNum = (attackFrame % 7) + 1;
+                                                            var imgNum = 7;
                                                             if (movingLeft || hero.src.includes("tiger5.png") || hero.src.includes("LTigerAttack")) 
                                                                 hero.src = "Tiger Attack/LTigerAttack" + imgNum.toString() +".png";
                                                             else 
                                                                 hero.src = "Tiger Attack/RTigerAttack" + imgNum.toString() +".png";
-                                                            attackFrame++;
-                                                            }, 100);
+                                                            //attackFrame++;
+                                                            
+                                                        }, 100);
+                                                        
                     
                     setTimeout(function() { clearInterval(heroAttack);
                                             attackFrame = 0;
@@ -234,7 +237,7 @@
                                                 runLeft();
                                             } 
                                             
-                                        }, 900);
+                                        }, 500);
                     startAttack = true;
                 }
 
