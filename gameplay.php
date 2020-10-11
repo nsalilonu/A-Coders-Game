@@ -58,15 +58,27 @@
 
         // Initialize the hero.
         var hero_x = 10;
-        var hero_y = canvas.height/12 + 380;
+        var hero_y = canvas.height/12 + 440;
         var hero = new Image();
         hero.src = "Tiger Walking/tiger5.png";
 
 
         var background = new Image();
-        background.src = "Background.png";
+        background.src = "Background1.png";
         var background_x = -700;
         var background_y = 0;
+        var foreground = new Image();
+        foreground.src = "foreground.png";
+        
+
+        var back_background = new Image();
+        back_background.src = "Back_Background.png";
+
+        var clouds = new Image();
+        clouds.src = "Clouds.png";
+        var clouds_x = -1000;
+        ctx.drawImage(back_background, 0, 0);
+        ctx.drawImage(clouds, clouds_x, 0);
         ctx.drawImage(background, background_x , background_y);
 
 
@@ -107,7 +119,7 @@
                                            }, 1000);
 
         // Add an enemy every 5 seconds.
-        var enemyClock = setInterval(function() {enemyInit(canvas);}, 5000);
+        var enemyClock = setInterval(function() {enemyInit(canvas);}, 8000);
 
         // Switch to the coding HTML page after 10 seconds (will obviously be longer in the actual game).
         // setTimeout(function() {window.location.href = "./codeLevel1.php";}, 10000);
@@ -142,7 +154,7 @@
                 // Put the enemy in a random place off the canvas.
                 var random = Math.random()*100;
                 var enemy_x = canvas.width + random; // Where the enemy appears on the canvas.
-                var enemy_y = canvas.height/12 + 380;
+                var enemy_y = canvas.height/12 + 440;
                 var enemy_hit = 0;  // How long the enemy has been hit for
                 var enemyFrame = 0; // The different frames for the enemy walk
                 var hitFrame = 0; // The different frames for when the enemy is hit.
@@ -172,7 +184,7 @@
                                                                         }, 200);
                         var random = Math.random()*100;
                         enemyList[i].enemy_x = canvas.width + random;
-                        enemyList[i].enemy_y = canvas.height/12 + 380;
+                        enemyList[i].enemy_y = canvas.height/12 + 440;
                         enemyList[i].hitNum = 0;
                         enemyList[i].hitFrame = 0;
                         enemyList[i].enemy_hit = 0;
@@ -339,7 +351,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Move the enemy, change the background.
-            background.src = "Background.png";
+            background.src = "Background1.png";
             for (let i = 0; i < enemyList.length; i++) {
                 // Spell 1 animation.
                 if (enemyList[i].hitNum >= 3 && enemyList[i].enemyDown == 0)  {
@@ -381,7 +393,7 @@
                 hero_x-=4;
                 background_x+=4;
                 if (hero_x < 0) hero_x = 0; // Keep avatar in bounds
-                if (background_x > 0) background_x = -1290; // Scroll background.
+                if (background_x > 0) background_x = -1360; // Scroll background.
                 for (let i = 0; i < enemyList.length; i++) {
                         enemyList[i].enemy_x+=4;
                         var random = Math.random()*1000;
@@ -394,7 +406,7 @@
                 hero_x+=4;
                 background_x-=4;
                 if (hero_x > canvas.width - 400) hero_x = canvas.width - 400;
-                if (background_x < -1290) background_x = 0; // Scroll background.
+                if (background_x < -1360) background_x = 0; // Scroll background.
                 for (let i = 0; i < enemyList.length; i++) {
                         enemyList[i].enemy_x-=4;
                         var random = Math.random()*1000;
@@ -429,7 +441,7 @@
                                                             bar_width -= 0.2;
                                                             health.style.width = bar_width.toString()+"px";
                                                             if (hero_x < 0) hero_x = 0; // Keep avatar in bounds
-                                                            if (background_x > 0) background_x = -1290; // Scroll background.
+                                                            if (background_x > 0) background_x = -1360; // Scroll background.
                                                             knockbackFrame++; }, 100);
                 setTimeout(function(){  clearInterval(tigerKnockback);
                                         hero.src = "Tiger Walking/tiger6.png"; }, 600);
@@ -458,12 +470,19 @@
             if (knockbackFrame > 3) knockbackFrame++;
             if (knockbackFrame > 270) knockbackFrame = 0;
             
+            ctx.drawImage(back_background, 0, 0);
+
+            ctx.drawImage(clouds, clouds_x, 0);
+            clouds_x -= 0.5;
+            if (clouds_x <= -1390) clouds_x = 0; // Scroll clouds.
 
             ctx.drawImage(background, background_x, background_y);
             ctx.drawImage(hero, hero_x, hero_y, 150, 150);
             for (let i = 0; i < enemyList.length; i++) {
                 ctx.drawImage(enemyList[i].enemy, enemyList[i].enemy_x, enemyList[i].enemy_y, 150, 150);
-            } 
+            }
+            ctx.drawImage(foreground, background_x, background_y); 
+            
         }
 
     </script> 
