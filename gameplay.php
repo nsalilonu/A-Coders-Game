@@ -33,10 +33,11 @@
     <div id= "bar"></div>
     <div id= "endGameBack">
         <div id= "endGameFront">
-            <p id= "endGameTxt"><b>The Backwood Bears have defeated
-                you this time! But they haven't managed to find your restart 
-                code yet! <br> You have another chance! <br> Fight again to keep magic 
-                alive in the wood! </b></p>
+            <p id= "endGameTxt"><b>Oh my...you are not looking well. No, no, not in that way. You're very pretty, but you're also,
+                well, dead...My fault? Don't be preposterous, I already told you, my hands are tied! The rules and regulations that 
+                come with being a creator forbid me to...Come on, don't yell...OK, OK! There's one thing I can do...here! A restart 
+                button. Yes, you'll lose all your points, but you'll get your health back! And that's all you're getting out of me!
+            </b></p>
         </div>
         <button id="restart">Restart?</button>
     </div>
@@ -131,13 +132,16 @@
         let movingLeft = false;
         let movingRight = false;
         let startWalk = false;
+        let startJump = false;
+        var jumpFrame = 0;
         let walkFrame = 0;
         var startAttack = false;
         let attackFrame = 0;
         var firstHit = false;
         var dying = false;
 
-        var walkingInterval;
+        var walkingInterval;        
+        var jumpInterval; 
         var heroAttack;
         var walking = document.createElement("AUDIO");
         walking.src = "footstep.mp3";
@@ -199,8 +203,7 @@
             if (dying) return;
             const LEFT = 37;
             const RIGHT = 39;
-            const UP = 87;
-            const SPACEBAR = 32;
+            const UP = 38;
 
             if (event.keyCode == LEFT) {
                 movingLeft = true;
@@ -209,6 +212,9 @@
             else if (event.keyCode == RIGHT) {
                 movingRight = true;
                 runRight();
+            }
+            else if (event.keyCode == UP) {
+                jumpUp();
             }
         }
 
@@ -296,7 +302,7 @@
 
         function runLeft() {
             // Change image every 0.5 second when button is first pressed down.
-            if (!startWalk && !startAttack && !dying) { 
+            if (!startWalk && !startAttack && !dying && jumpFrame == 0) { 
                 walkingInterval = setInterval(function(){   var imgNum = (walkFrame % 4) + 1;
                                                             hero.src = "Tiger Walking/tiger" + imgNum.toString() + ".png";
                                                             walkFrame++;
@@ -308,7 +314,7 @@
 
         function runRight() {
             // Change image every 0.5 second when button is first pressed down.
-            if (!startWalk && !startAttack && !dying) {
+            if (!startWalk && !startAttack && !dying && !startJump && jumpFrame == 0) {
                 walkingInterval = setInterval(function(){   var imgNum = (walkFrame % 4) + 7;
                                                             hero.src = "Tiger Walking/tiger" + imgNum.toString() + ".png";
                                                             walkFrame++;
@@ -317,6 +323,30 @@
                 startWalk = true;
             } 
         }
+
+        // Sets the animation for the tiger jump during gameplay.
+        function jumpUp() {
+            // Makes sure that you only set the interval once.
+            if (!dying && jumpFrame == 0) {
+                if (jumpInterval != undefined) clearInterval(jumpInterval);
+                jumpInterval = setInterval(function() { jumpFrame++;
+                                                        if (jumpFrame < 2) {
+                                                            if (movingLeft || hero.src.includes("tiger5.png") || hero.src.includes("LTigerAttack") || 
+                                                            hero.src.includes("TigerJump4"))
+                                                                hero.src = "Tiger Jump/TigerJump4.png";
+                                                            else 
+                                                                hero.src = "Tiger Jump/TigerJump1.png"; 
+                                                        }
+                                                        else {
+                                                            if (movingLeft ||  hero.src.includes("TigerJump4") || hero.src.includes("TigerJump5"))
+                                                                hero.src = "Tiger Jump/TigerJump5.png";
+                                                            else
+                                                                hero.src = "Tiger Jump/TigerJump2.png" 
+                                                        }
+                                                        
+                                                    }, 150);
+                }     
+            }
 
         // Stops moving if keyup.
         function stopMoveObject() {
@@ -433,7 +463,7 @@
             }
 
             // Knocks back tiger.
-            if (closestBearFound && knockbackFrame == 0 && !dying) {
+            if (closestBearFound && knockbackFrame == 0 && !dying && hero_y > canvas.height/12 + 440 - 10) {
                 var health = document.getElementById("bar");
                 tigerKnockback = setInterval(function() {   var imgNum = (knockbackFrame % 3) + 1;
                                                             hero.src = "Tiger Hit/tigerhit" + imgNum.toString() + ".png";
@@ -469,6 +499,32 @@
             
             if (knockbackFrame > 3) knockbackFrame++;
             if (knockbackFrame > 270) knockbackFrame = 0;
+
+            // Move the tiger up if the jump has started, and down after some time.
+            // 0.1*jumpFrame for acceleration.
+            if (jumpFrame > 1 && jumpFrame <= 5) hero_y = hero_y - 6 + 0.1*(jumpFrame + 6);
+            if (jumpFrame > 5) {
+                clearInterval(jumpInterval);
+                
+                if (movingLeft || hero.src.includes("TigerJump5") || hero.src.includes("TigerJump6"))
+                    hero.src = "Tiger Jump/TigerJump6.png";
+                else
+                    hero.src = "Tiger Jump/TigerJump3.png";
+
+                hero_y = hero_y + 0.1*jumpFrame;
+                if (hero_y >= canvas.height/12 + 440) {
+                    jumpFrame = 0;
+                    hero_y = canvas.height/12 + 440;
+                    if (movingLeft || hero.src.includes("TigerJump6"))
+                        hero.src = "Tiger Walking/tiger5.png";
+                    else
+                        hero.src = "Tiger Walking/tiger6.png";
+                }
+                else jumpFrame++;
+            }
+            console.log(jumpFrame);
+
+
             
             ctx.drawImage(back_background, 0, 0);
 

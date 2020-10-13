@@ -219,3 +219,22 @@ body {
     from {top: 250px;}
     to {top: 200px;}
 }
+
+.HintBox {
+    display: none;
+    position: fixed;
+    background-color: rgb(120, 175, 238);
+    top: 250px;
+    left: 650px;
+    padding: 20px;
+    border: 6px solid rgb(0, 0, 0);
+    border-radius: 6px;
+    width: 20%;
+    z-index: 10;
+    text-align: center; 
+}
+
+#HintBoxText {
+    font-family: 'Indie Flower', cursive;
+    font-size: 20px;
+}
