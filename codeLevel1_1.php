@@ -85,6 +85,9 @@
     }
     ?>
    
+   <div class="HintBox"> 
+        <p1 id="HintBoxText"></p1>
+    </div>
 
     <script type = "module">
         // Message for the first error in the code!
@@ -182,7 +185,7 @@
                                                                                  were that reliable. I always fear that it's broken, and I'm simply wasting my time.</b>`});
         codeLine5.addEventListener("mouseout", function() {hintBox.style.display = "none";});
         codeLine6.addEventListener("mouseover", function() {hintBox.style.display = "block";
-                                                           hintText.innerHTML = `<b> If the left arrow key is being pressed, movingLeft, what we call a variable, will be set to false. Variables
+                                                           hintText.innerHTML = `<b> If the left arrow key is being pressed, movingLeft, what we call a variable, will be set to true. Variables
                                                                                 can change, are meant to change. But what if I don't want to change, Rose?! </b>`});
         codeLine6.addEventListener("mouseout", function() {hintBox.style.display = "none";});
         codeLine7.addEventListener("mouseover", function() {hintBox.style.display = "block";

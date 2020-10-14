@@ -43,6 +43,22 @@
     </div>
     <i class="fas fa-volume-mute" id="muted"></i>
     <i class="fas fa-volume-up" id="volume-on"></i>
+    <i class="fas fa-pause" id="pauseButton"></i>
+    <i class="fas fa-play" id="playButton"></i>
+    <div id = "spells">
+        <p1>Spells</p1>
+        <br>
+        <table>
+            <td>
+                <img src="icon1.png" id = "spell1" style="height:100px; width: 100px; border-radius: 6px; display: none;">
+                <img src="icon1.png" id = "spell1Select" style="height:100px; width: 100px; border-radius: 6px; border: 3px solid black;"> 
+            </td>
+            <td>
+                <img src="icon2.png" id = "spell2" style="height:100px; width: 100px; border-radius: 6px; display: none;">
+                <img src="icon2.png" id = "spell2Select" style="height:100px; width: 100px; border-radius: 6px; border: 3px solid black; display: none;">
+            </td>
+        </table>
+    </div>
 
 
 
@@ -98,32 +114,71 @@
 
         var muted = document.getElementById("muted");
         var sound = document.getElementById("volume-on");
+        var pauseButton = document.getElementById("pauseButton");
+        var playButton = document.getElementById("playButton");
         var restart = document.getElementById("restart");
+        var spellBox = document.getElementById("spells");
+        var spell1 = document.getElementById("spell1");
+        var spell1Select = document.getElementById("spell1Select");
+        var spell2 = document.getElementById("spell2");
+        var spell2Select = document.getElementById("spell2Select");
+        var level = document.getElementById("level");
+        var spellSelected = 1;
 
         // Turn sound on.
-        muted.addEventListener('click', function() {muted.style.display = "none";
-                                                    sound.style.display = "block";
-                                                    soundtrack.play();});
+        muted.addEventListener('click', function()  {   muted.style.display = "none";
+                                                        sound.style.display = "block";
+                                                        soundtrack.play();
+                                                    });
 
         // Turn sound off.
-        sound.addEventListener('click', function() {muted.style.display = "block";
-                                                    sound.style.display = "none";
-                                                    soundtrack.pause();});
+        sound.addEventListener('click', function()  {   muted.style.display = "block";
+                                                        sound.style.display = "none";
+                                                        soundtrack.pause();
+                                                    });
 
+        // Pause or unpause the game.
+        pauseButton.addEventListener('click', function(){   pause = true;
+                                                            pauseButton.style.display = "none";
+                                                            playButton.style.display = "block";
+                                                        });
+                                                            // Pause or unpause the game.
+        playButton.addEventListener('click', function(){    pause = false;
+                                                            pauseButton.style.display = "block";
+                                                            playButton.style.display = "none";
+                                                       });
         // Reload the page in the event that the user loses and wants to restart.
         restart.addEventListener('click', function() {location.reload();});
+        
+
+        // Handle the spells.
+        if (level.innerHTML.includes("Level 2")) spell2.style.display = "block";
+        spell1.addEventListener('click', function() {   spell1Select.style.display = "block";
+                                                        spell1.style.display = "none";
+                                                        spell2Select.style.display = "none";
+                                                        spell2.style.display = "block";
+                                                        spellSelected = 1;
+                                                    });
+        spell2.addEventListener('click', function() {   spell2Select.style.display = "block";
+                                                        spell2.style.display = "none";
+                                                        spell1Select.style.display = "none";
+                                                        spell1.style.display = "block";
+                                                        spellSelected = 2;
+                                                    });
 
         // The amount of time that the user has survived.
-        var clock = setInterval(function() { var points = document.getElementById("time");
-                                             seconds++;
-                                             points.innerHTML = "Points:      " + seconds;
+        var clock = setInterval(function() {    if (!pause) { 
+                                                    var points = document.getElementById("time");
+                                                    seconds++;
+                                                    points.innerHTML = "Points:      " + seconds;
+                                                }     
                                            }, 1000);
 
         // Add an enemy every 5 seconds.
-        var enemyClock = setInterval(function() {enemyInit(canvas);}, 8000);
+        var enemyClock = setInterval(function() {if (!pause) enemyInit(canvas);}, 8000);
 
         // Switch to the coding HTML page after 10 seconds (will obviously be longer in the actual game).
-        setTimeout(function() {window.location.href = "./codeLevel1.php";}, 10000);
+        // setTimeout(function() {window.location.href = "./codeLevel1.php";}, 10000);
         var level = document.getElementById("level");
         setTimeout(function() { level.style.display = "none";}, 5000);
 
@@ -139,6 +194,7 @@
         let attackFrame = 0;
         var firstHit = false;
         var dying = false;
+        var pause = false;
 
         var walkingInterval;        
         var jumpInterval; 
@@ -165,10 +221,12 @@
                 var hitNum = 0; // The amount of times the enemy has been hit.
                 var enemyDown = 0; // The amount of time the enemy has been defeated for.
                 var bearInterval; // The interval for all bear animations.
-                bearInterval = setInterval(function() { var imgNum = (enemyFrame % 4) + 1;
-                                                        enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
-                                                        enemyFrame++; 
-                                                    }, 200);
+                bearInterval = setInterval(function() { if (!pause) {
+                                                            var imgNum = (enemyFrame % 4) + 1;
+                                                            enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
+                                                            enemyFrame++; 
+                                                        }
+                                                      }, 200);
                 enemyList.push({enemy: enemy, enemy_x: enemy_x, enemy_y: enemy_y, 
                 enemy_hit: enemy_hit, hitFrame: hitFrame, hitNum: hitNum, 
                 enemyDown: enemyDown, bearInterval: bearInterval});
@@ -182,10 +240,12 @@
                         clearInterval(enemyList[i].bearInterval);
                         enemyList[i].enemy.src = "Enemy Walking/enemy5.png";
                         var enemyFrame = 1;
-                        enemyList[i].bearInterval = setInterval(function() {var imgNum = (enemyFrame % 4) + 1;
-                                                                         enemyList[i].enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
-                                                                         enemyFrame++; 
-                                                                        }, 200);
+                        enemyList[i].bearInterval = setInterval(function() { if (!pause) {
+                                                                                var imgNum = (enemyFrame % 4) + 1;
+                                                                                enemyList[i].enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
+                                                                                enemyFrame++; 
+                                                                             }
+                                                                           }, 200);
                         var random = Math.random()*100;
                         enemyList[i].enemy_x = canvas.width + random;
                         enemyList[i].enemy_y = canvas.height/12 + 440;
@@ -200,26 +260,34 @@
         }
 
         function moveObject() {
-            if (dying) return;
             const LEFT = 37;
             const RIGHT = 39;
             const UP = 38;
+            const SHIFT = 16;
 
-            if (event.keyCode == LEFT) {
+            if (event.keyCode == LEFT && !dying && !pause) {
                 movingLeft = true;
                 runLeft();
-            }
-            else if (event.keyCode == RIGHT) {
+            } 
+            else if (event.keyCode == RIGHT && !dying && !pause) {
                 movingRight = true;
                 runRight();
             }
-            else if (event.keyCode == UP) {
+            else if (event.keyCode == UP && !dying && !pause) {
                 jumpUp();
+            }
+            if (event.keyCode == SHIFT && !pause) {
+                spellBox.style.display = "block";
+                pause = true;
+            }
+            else if (event.keyCode == SHIFT && pause) {
+                spellBox.style.display = "none";
+                pause = false;
             }
         }
 
         function bearHit() {
-            if (dying) return;
+            if (dying || pause) return;
 
             const SPACEBAR = 32;
             if (event.keyCode == SPACEBAR) {
@@ -302,7 +370,7 @@
 
         function runLeft() {
             // Change image every 0.5 second when button is first pressed down.
-            if (!startWalk && !startAttack && !dying && jumpFrame == 0) { 
+            if (!startWalk && !startAttack && !dying && !pause && jumpFrame == 0) { 
                 walkingInterval = setInterval(function(){   var imgNum = (walkFrame % 4) + 1;
                                                             hero.src = "Tiger Walking/tiger" + imgNum.toString() + ".png";
                                                             walkFrame++;
@@ -314,7 +382,7 @@
 
         function runRight() {
             // Change image every 0.5 second when button is first pressed down.
-            if (!startWalk && !startAttack && !dying && !startJump && jumpFrame == 0) {
+            if (!startWalk && !startAttack && !dying && !startJump && !pause && jumpFrame == 0) {
                 walkingInterval = setInterval(function(){   var imgNum = (walkFrame % 4) + 7;
                                                             hero.src = "Tiger Walking/tiger" + imgNum.toString() + ".png";
                                                             walkFrame++;
@@ -327,7 +395,7 @@
         // Sets the animation for the tiger jump during gameplay.
         function jumpUp() {
             // Makes sure that you only set the interval once.
-            if (!dying && jumpFrame == 0) {
+            if (!dying && !pause && jumpFrame == 0) {
                 if (jumpInterval != undefined) clearInterval(jumpInterval);
                 jumpInterval = setInterval(function() { jumpFrame++;
                                                         if (jumpFrame < 2) {
@@ -350,7 +418,7 @@
 
         // Stops moving if keyup.
         function stopMoveObject() {
-            if (dying) return;
+            if (dying || pause) return;
 
             const LEFT = 37;
             const RIGHT = 39;
@@ -384,23 +452,25 @@
             background.src = "Background1.png";
             for (let i = 0; i < enemyList.length; i++) {
                 // Spell 1 animation.
-                if (enemyList[i].hitNum >= 3 && enemyList[i].enemyDown == 0)  {
+                if (enemyList[i].hitNum >= 3 && enemyList[i].enemyDown == 0 && !pause)  {
                     clearInterval(enemyList[i].bearInterval);
                     enemyList[i].hitNum = 0;
                     var enemyFrame = 0;
-                    enemyList[i].bearInterval = setInterval(function(){ var imgNum = (enemyFrame % 18) + 1;
-                                                                     enemyList[i].enemy.src = "Spell 1/transform" + imgNum.toString() + ".png";
-                                                                     enemyFrame++;
-                                                                     if (enemyFrame == 18) {
-                                                                         enemyFrame = 15; // Loop the flapping animation.
-                                                                     }
-                                                                     enemyList[i].enemyDown++;
-                                                                     if (enemyFrame >= 15)
-                                                                     enemyList[i].enemy_y-=100; // Start going up!
-                                                                   }, 200);
+                    enemyList[i].bearInterval = setInterval(function(){ if (!pause) {
+                                                                            var imgNum = (enemyFrame % 18) + 1;
+                                                                            enemyList[i].enemy.src = "Spell 1/transform" + imgNum.toString() + ".png";
+                                                                            enemyFrame++;
+                                                                            if (enemyFrame == 18) {
+                                                                                enemyFrame = 15; // Loop the flapping animation.
+                                                                            }
+                                                                            enemyList[i].enemyDown++;
+                                                                            if (enemyFrame >= 15)
+                                                                            enemyList[i].enemy_y-=100; // Start going up!
+                                                                        }
+                                                                      }, 200);
                 }
                 if (!enemyList[i].enemy.src.includes("transform")) {
-                    if (enemyList[i].enemy_hit == 0) 
+                    if (enemyList[i].enemy_hit == 0 && !pause) 
                         enemyList[i].enemy_x -=5;
                         // Stop enemy from moving after hit for two seconds.
                     else if (enemyList[i].enemy_hit >= 10) {
@@ -408,9 +478,11 @@
                         clearInterval(enemyList[i].bearInterval);
                         var enemyFrame = 0;
                         enemyList[i].hitFrame = 0;
-                        enemyList[i].bearInterval = setInterval(function(){    var imgNum = (enemyFrame % 4) + 1;
+                        enemyList[i].bearInterval = setInterval(function(){ if (!pause) {   
+                                                                            var imgNum = (enemyFrame % 4) + 1;
                                                                             enemyList[i].enemy.src = "Enemy Walking/enemy" + imgNum.toString() + ".png";
                                                                             enemyFrame++; 
+                                                                          }
                                                                         }, 200);
                     }
                     var random = Math.random()*1000;
@@ -419,7 +491,7 @@
                 }
             }
 
-            if (movingLeft && !dying) {
+            if (movingLeft && !dying && !pause) {
                 hero_x-=4;
                 background_x+=4;
                 if (hero_x < 0) hero_x = 0; // Keep avatar in bounds
@@ -432,7 +504,7 @@
                     
                 }
             }
-            if (movingRight && !dying) {
+            if (movingRight && !dying && !pause) {
                 hero_x+=4;
                 background_x-=4;
                 if (hero_x > canvas.width - 400) hero_x = canvas.width - 400;
@@ -463,7 +535,7 @@
             }
 
             // Knocks back tiger.
-            if (closestBearFound && knockbackFrame == 0 && !dying && hero_y > canvas.height/12 + 440 - 10) {
+            if (closestBearFound && knockbackFrame == 0 && !dying && !pause && hero_y > canvas.height/12 + 440 - 10) {
                 var health = document.getElementById("bar");
                 tigerKnockback = setInterval(function() {   var imgNum = (knockbackFrame % 3) + 1;
                                                             hero.src = "Tiger Hit/tigerhit" + imgNum.toString() + ".png";
@@ -478,7 +550,7 @@
             }
 
             // Check if the health bar is empty. If so, then run the dying hero animation :,( and end the game.
-            if (bar_width <= 0 && !dying) {
+            if (bar_width <= 0 && !dying && !pause) {
                 var deadFrame = 0;
                 dying = true;
                 clearInterval(walkingInterval);
@@ -502,34 +574,33 @@
 
             // Move the tiger up if the jump has started, and down after some time.
             // 0.1*jumpFrame for acceleration.
-            if (jumpFrame > 1 && jumpFrame <= 5) hero_y = hero_y - 6 + 0.1*(jumpFrame + 6);
-            if (jumpFrame > 5) {
-                clearInterval(jumpInterval);
-                
-                if (movingLeft || hero.src.includes("TigerJump5") || hero.src.includes("TigerJump6"))
-                    hero.src = "Tiger Jump/TigerJump6.png";
-                else
-                    hero.src = "Tiger Jump/TigerJump3.png";
-
-                hero_y = hero_y + 0.1*jumpFrame;
-                if (hero_y >= canvas.height/12 + 440) {
-                    jumpFrame = 0;
-                    hero_y = canvas.height/12 + 440;
-                    if (movingLeft || hero.src.includes("TigerJump6"))
-                        hero.src = "Tiger Walking/tiger5.png";
+            if (!dying && !pause) {
+                if (jumpFrame > 1 && jumpFrame <= 5) hero_y = hero_y - 6 + 0.1*(jumpFrame + 6);
+                if (jumpFrame > 5) {
+                    clearInterval(jumpInterval);
+                    
+                    if (movingLeft || hero.src.includes("TigerJump5") || hero.src.includes("TigerJump6"))
+                        hero.src = "Tiger Jump/TigerJump6.png";
                     else
-                        hero.src = "Tiger Walking/tiger6.png";
+                        hero.src = "Tiger Jump/TigerJump3.png";
+
+                    hero_y = hero_y + 0.1*(jumpFrame-4);
+                    if (hero_y >= canvas.height/12 + 440) {
+                        jumpFrame = 0;
+                        hero_y = canvas.height/12 + 440;
+                        if (movingLeft || hero.src.includes("TigerJump6"))
+                            hero.src = "Tiger Walking/tiger5.png";
+                        else
+                            hero.src = "Tiger Walking/tiger6.png";
+                    }
+                    else jumpFrame++;
                 }
-                else jumpFrame++;
             }
-            console.log(jumpFrame);
 
-
-            
             ctx.drawImage(back_background, 0, 0);
 
             ctx.drawImage(clouds, clouds_x, 0);
-            clouds_x -= 0.5;
+            if (!pause) clouds_x -= 0.5;
             if (clouds_x <= -1390) clouds_x = 0; // Scroll clouds.
 
             ctx.drawImage(background, background_x, background_y);
@@ -537,8 +608,7 @@
             for (let i = 0; i < enemyList.length; i++) {
                 ctx.drawImage(enemyList[i].enemy, enemyList[i].enemy_x, enemyList[i].enemy_y, 150, 150);
             }
-            ctx.drawImage(foreground, background_x, background_y); 
-            
+            ctx.drawImage(foreground, background_x, background_y);     
         }
 
     </script> 

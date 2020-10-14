@@ -85,6 +85,10 @@
         echo "</div>";
     }
     ?>
+
+    <div class="HintBox"> 
+        <p1 id="HintBoxText"></p1>
+    </div>
    
 
     <script type = "module">
@@ -119,7 +123,7 @@
         }
 
         // All the explanations for the code -- tears :,(
-            var codeLine1 = document.getElementsByClassName("codeLine")[0];
+        var codeLine1 = document.getElementsByClassName("codeLine")[0];
         var codeLine2 = document.getElementsByClassName("codeLine")[1];
         var codeLine3 = document.getElementsByClassName("codeLine")[2];
         var codeLine4 = document.getElementsByClassName("codeLine")[3];

@@ -122,6 +122,25 @@ body {
     z-index: 2;
 } 
 
+#pauseButton {
+    font-size: 20px;
+    position: absolute;
+    z-index: 2;
+    color: white;
+    margin-top: 5.3%;
+    margin-left: 5%;
+}
+
+#playButton {
+    display: none;
+    font-size: 20px;
+    position: absolute;
+    z-index: 2;
+    color: white;
+    margin-top: 5.3%;
+    margin-left: 5%;
+}
+
 #endGameBack {
     display: none;
     position: fixed;
@@ -186,4 +205,24 @@ body {
     left: 0;
     background-color: rgba(0,0,0,0.2);
 }
+
+#spells {
+    display: none;
+    position: fixed;
+    font-family: 'Indie Flower', cursive; 
+    font-size: 55px;
+    padding: 5px;
+    width: 30%;
+    height: 30%;
+    margin-top: 30%;
+    margin-left: 36%;
+    border:5px solid black;
+    border-radius: 6px;
+    text-align: center;
+    align-content: center;
+    z-index: 10;
+    background-color: rgb(90, 88, 233);
+    color: white;
+}
+
 
