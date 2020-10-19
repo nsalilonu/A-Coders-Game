@@ -186,6 +186,8 @@ body {
     display: block;
     position: relative;
     float: center;
+    bottom: 12px;
+    right: 90px;
 }
 
 #congrats {
