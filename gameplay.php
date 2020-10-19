@@ -2,7 +2,7 @@
 <html>
 <?php 
         $referer = $_SERVER['HTTP_REFERER'];
-        if (isset($_COOKIE["level"]) && !strpos($referer, "index.html")) {
+        if (isset($_COOKIE["level"]) && strpos($referer, "codeLevel1.html")) {
             echo "<p1 id= 'level'>Level ".$_COOKIE["level"]."</p1>";
         }
         else {
