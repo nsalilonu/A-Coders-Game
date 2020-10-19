@@ -39,7 +39,7 @@
         <p class = "codeLine">11:    </p><p class = "symbol">}</p>
         <p class = "codeLine">12:    </p>
         <p class = "codeLine">13:    </p><p class = "keyword">function </p><p class = "functionName">stopMoveObject</p><p class = "symbol">() {</p>
-        <p class = "codeLine">14:    </p>    <p class ="keyword">const </p><p class = "constant">LEFT</p><p class = "symbol"> = </p><p class = "number">37</p><p class = "symbol">;</p>     <img id = "sideBanner" src = "Plan B.png">
+        <p class = "codeLine">14:    </p>    <p class ="keyword">const </p><p class = "constant">LEFT</p><p class = "symbol"> = </p><p class = "number">37</p><p class = "symbol">;</p>  
         <p class = "codeLine">15:    </p>    <p class ="keyword">const </p><p class = "constant">RIGHT</p><p class = "symbol"> = </p><p class = "number">39</p><p class = "symbol">;</p>
         <p class = "codeLine">16:    </p>
         <p class = "codeLine">17:    </p>    <p class = "loop">if </p><p class = "symbol">(</p><p class = "variable">event.keyCode</p><p class = "symbol"> == </p><p class = "constant">LEFT</p><p class = "symbol">) {</p>
@@ -102,8 +102,8 @@
                 echo "<div class = 'introBox'>"; 
                     echo "<span class='close'>&times;</span>";
                     echo "<p class = 'answerBoxText'><b>The Backwood Bears have had it with your schemes and plan their revenge!
-                        They use their dark magic to unleash chaos, and now you can't move! Don't worry, I've marked where
-                        they have been in red, and you can hover over the line numbers for more help! Why didn't I fix it myself? 
+                        Martin uses his dark magic to unleash chaos, and now you can't move! Don't worry, I've marked where
+                        he has been in red, and you can hover over the line numbers for more help! Why didn't I fix it myself? 
                         We've been over this, I'm not allowed to directly intervene...Now, now, don't be so mopey about it. How
                         would you like it if I unmarked the code? No? I thought so... </b></p>";
                     echo "<img src='codeLevel1Intro.png' style='width: 50%;'>";
@@ -117,6 +117,14 @@
     </div>
  
     <script type = "module">
+
+        var soundtrack = document.createElement("AUDIO");
+        soundtrack.src = "coding.mp3";
+        soundtrack.loop = true;
+        soundtrack.volume = 0.5;
+
+        window.addEventListener("mouseover", function() {soundtrack.play();});
+
         // Message for the first error in the code!
         var error1 = document.getElementById("error1");
         var answerBox1 = document.getElementsByClassName("answerBox")[0];

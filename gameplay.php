@@ -48,8 +48,7 @@
         </div>
         <button id="restart">Restart?</button>
     </div>
-    <i class="fas fa-volume-mute" id="muted"></i>
-    <i class="fas fa-volume-up" id="volume-on"></i>
+    
     <i class="fas fa-pause" id="pauseButton"></i>
     <i class="fas fa-play" id="playButton"></i>
     <div id = "spells">
@@ -136,6 +135,7 @@
         soundtrack.src = "soundtrack.mp3";
         soundtrack.loop = true;
         soundtrack.volume = 0.5;
+        window.addEventListener("mouseover", function() {soundtrack.play();});
         
         // Update the canvas every 10 milliseconds.
         var interval = setInterval(function () {update(); }, 10);
@@ -162,17 +162,6 @@
         var infoBox = document.getElementById("infoBox");
         var spellSelected = 1;
 
-        // Turn sound on.
-        muted.addEventListener('click', function()  {   muted.style.display = "none";
-                                                        sound.style.display = "block";
-                                                        soundtrack.play();
-                                                    });
-
-        // Turn sound off.
-        sound.addEventListener('click', function()  {   muted.style.display = "block";
-                                                        sound.style.display = "none";
-                                                        soundtrack.pause();
-                                                    });
 
         // Pause or unpause the game.
         pauseButton.addEventListener('click', function(){   pause = true;
@@ -233,7 +222,7 @@
         var enemyClock = setInterval(function() {if (!pause) enemyInit(canvas);}, 8000);
 
         // Switch to the coding HTML page after 10 seconds (will obviously be longer in the actual game).
-        // setTimeout(function() {window.location.href = "./codeLevel1.php";}, 10000);
+        setTimeout(function() {window.location.href = "./codeLevel1.php";}, 60000);
         var level = document.getElementById("level");
         setTimeout(function() { level.style.display = "none";}, 5000);
 
@@ -508,6 +497,10 @@
             for (let i = 0; i < enemyList.length; i++) {
                 // Spell 1 animation.
                 if (enemyList[i].hitNum >= 3 && enemyList[i].enemyDown == 0 && !pause)  {
+                    var points = document.getElementById("time");
+                    seconds += 100;
+                    points.innerHTML = "Points: "+ seconds;
+                    
                     clearInterval(enemyList[i].bearInterval);
                     enemyList[i].hitNum = 0;
                     var enemyFrame = 0;

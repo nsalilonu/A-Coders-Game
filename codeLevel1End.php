@@ -26,7 +26,7 @@
     <div class = "endCode">
         <h1 style= "font-size: 40px; font-family: 'Nanum Myeongjo', serif;">Magnificent! You finished Level 1!</h1>
         <p1 style= "font-size: 25px; font-family: 'Indie Flower', cursive;">You can move left again! Lucky for you, you are no more damaged than you left off. 
-            The Backwood Bear leader was far too busy giving a dramatic evil villian victory speech, and his henchman too busy pretending 
+            Martin was far too busy giving a dramatic evil villian victory speech, and his henchman too busy pretending 
             to listen to him. Yes, pretending... I'm all-knowing in this universe after all, and I'm quite sure I saw Jerry playing Candy 
             Crush Saga under his trench coat in the back. We see you, Jerry. 
             <br>
@@ -38,7 +38,39 @@
         <button class ="continue"><b>Continue</b></button>
     </div>
 
+    <canvas id="canvas"></canvas>
+
     <script type="module">
+        var soundtrack = document.createElement("AUDIO");
+        soundtrack.src = "coding.mp3";
+        soundtrack.loop = true;
+        soundtrack.volume = 0.5;
+
+        var canvas = document.getElementById("canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var ctx = canvas.getContext("2d");
+
+        // Initialize the hero.
+        var hero_x = 700;
+        var hero_y = 0;
+        var hero = new Image();
+        var runFrame = 0;
+       
+        setInterval(function()  { var imgNum = (runFrame % 4) + 1;
+                                  hero.src = "Running/run"+imgNum.toString()+".png";
+                                  runFrame++;
+                                }, 200);
+
+        setInterval(function() {update();}, 10);
+
+        function update() {
+            // Clear the canvas.
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(hero, hero_x, hero_y, 200, 200);
+        }
+    
+        window.addEventListener("mouseover", function() {soundtrack.play();});
         var continueGame = document.getElementsByClassName("continue")[0];
         continueGame.addEventListener("click", function() {window.location.href = "./gameplay.php";}, false);
     </script>

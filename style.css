@@ -102,33 +102,14 @@ body {
     background-color: rgb(166, 165, 245);
 }
 
-#volume-on {
-    z-index: 2;
-    font-size: 30px;
-    position: absolute;
-    display: none;
-    margin-top: 5%;
-    margin-left: 1%;
-    color: white;
-} 
-
-#muted {
-    font-size: 30px;
-    position: absolute;
-    display: block;
-    margin-top: 5%;
-    margin-left: 1%;
-    color: white;
-    z-index: 2;
-} 
 
 #pauseButton {
     font-size: 20px;
     position: absolute;
     z-index: 2;
     color: white;
-    margin-top: 5.3%;
-    margin-left: 5%;
+    margin-top: 5%;
+    margin-left: 1%;
 }
 
 #playButton {
@@ -137,8 +118,8 @@ body {
     position: absolute;
     z-index: 2;
     color: white;
-    margin-top: 5.3%;
-    margin-left: 5%;
+    margin-top: 5%;
+    margin-left: 1%;
 }
 
 #endGameBack {

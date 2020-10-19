@@ -71,7 +71,8 @@
         soundtrack.src = "Intro__A_Coder's_Game.mp3";
         soundtrack.loop = true;
         soundtrack.volume = 0.25;
-        soundtrack.playbackRate = 0.9;
+
+        window.addEventListener("mouseover", function() {soundtrack.play();});
 
         // Update the canvas every 10 milliseconds.
         var interval = setInterval(function () {update(); }, 10);
@@ -313,7 +314,6 @@
 
             switch(introNum) {
                 case 1:
-                    soundtrack.play();
                     next.style.display = "none";
                     monologueText.innerHTML = "If you can hear me, try moving left with the left arrow key.";
                     if (movingLeft) {

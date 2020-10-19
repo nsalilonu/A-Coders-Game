@@ -29,7 +29,7 @@
         <p class = "codeLine">11:    </p><p class = "symbol">}</p>
         <p class = "codeLine">12:    </p>
         <p class = "codeLine">13:    </p><p class = "keyword">function </p><p class = "functionName">stopMoveObject</p><p class = "symbol">() {</p>
-        <p class = "codeLine">14:    </p>    <p class ="keyword">const </p><p class = "constant">LEFT</p><p class = "symbol"> = </p><p class = "number">37</p><p class = "symbol">;</p>     <img id = "sideBanner" src = "Plan B.png">
+        <p class = "codeLine">14:    </p>    <p class ="keyword">const </p><p class = "constant">LEFT</p><p class = "symbol"> = </p><p class = "number">37</p><p class = "symbol">;</p>  
         <p class = "codeLine">15:    </p>    <p class ="keyword">const </p><p class = "constant">RIGHT</p><p class = "symbol"> = </p><p class = "number">39</p><p class = "symbol">;</p>
         <p class = "codeLine">16:    </p>
         <p class = "codeLine">17:    </p>    <p class = "loop">if </p><p class = "symbol">(</p><p class = "variable">event.keyCode</p><p class = "symbol"> == </p><p class = "constant">LEFT</p><p class = "symbol">) {</p>
@@ -90,6 +90,12 @@
     </div>
 
     <script type = "module">
+        var soundtrack = document.createElement("AUDIO");
+        soundtrack.src = "coding.mp3";
+        soundtrack.loop = true;
+        soundtrack.volume = 0.5;
+
+        window.addEventListener("mouseover", function() {soundtrack.play();});
         // Message for the first error in the code!
         var answerBox = document.getElementsByClassName("answerBox")[0];
 
