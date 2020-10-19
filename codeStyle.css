@@ -184,8 +184,7 @@ body {
 
 #answer2 {
     display: block;
-    position: relative;
-    float: center;
+    position: absolute;
     bottom: 12px;
     right: 90px;
 }
