@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html>
 <?php 
-        if (isset($_COOKIE["level"])) {
+        $referer = $_SERVER['HTTP_REFERER'];
+        if (isset($_COOKIE["level"]) && !strpos($referer, "index.html")) {
             echo "<p1 id= 'level'>Level ".$_COOKIE["level"]."</p1>";
         }
         else {
             setcookie("level", "1", 0, "/");
+            echo "<p1 id= 'level'>Level 1</p1>";
         }
         setcookie("mistakes", "0", 0, "/");
+
+        if (isset($_COOKIE["intro"]) && strpos($referer, "intro.php"))
+        echo "<p1 id='introset' style='display:none;'>complete</p1>"; // When you have completed the intro, only show quick info
+        else 
+        echo "<p1 id='introset' style='display:none;'>incomplete</p1>"; // When you haven't, redirect user to the intro page.
 ?>
 
 
@@ -58,6 +65,32 @@
                 <img src="icon2.png" id = "spell2Select" style="height:100px; width: 100px; border-radius: 6px; border: 3px solid black; display: none;">
             </td>
         </table>
+    </div>
+
+    <div id="pauseBox">
+        Ahh, taking a break now, are we? That's ok, there's no rush. It's not like the world as you know
+        it may come to an end if you don't do something about the Backwood Bear gang. I'm sure they'll 
+        just tire themselves out as you prioritize your "self-care".
+        <br>
+        Well, while you're here, I may as well offer you a few things to do...
+        <br>
+        <button id="save"><b>Save</b></button>
+        <button id="gameplayIntro"><b>How to Play</b></button>
+        <button id="saveExit"><b>Save and Exit</b></button>
+    </div>
+
+    <div id="infoBox">
+        <span class="close">&times;</span>
+        <p1>
+        Well, you've heard my intro, so I'll give you the highlights...
+        <br>
+        <b>Move:</b> Use the arrow keys. You know, the ones that explicitly indicate direction? 
+        <br>
+        <b>Select Spells:</b> Shift. Don't press it too many times! You'll get Sticky Keys. Who in the world invented that? No one ever
+        intends to invoke this mysterious command.
+        <br>
+        That's it. You wouldn't think it would be too hard to remember, but perhaps the bears have knocked you over one too many times...
+        </p1>
     </div>
 
 
@@ -123,6 +156,10 @@
         var spell2 = document.getElementById("spell2");
         var spell2Select = document.getElementById("spell2Select");
         var level = document.getElementById("level");
+        var pauseBox = document.getElementById("pauseBox");
+        var gameplayIntro = document.getElementById("gameplayIntro");
+        var introset = document.getElementById("introset");
+        var infoBox = document.getElementById("infoBox");
         var spellSelected = 1;
 
         // Turn sound on.
@@ -141,15 +178,33 @@
         pauseButton.addEventListener('click', function(){   pause = true;
                                                             pauseButton.style.display = "none";
                                                             playButton.style.display = "block";
+                                                            pauseBox.style.display = "block";
                                                         });
                                                             // Pause or unpause the game.
         playButton.addEventListener('click', function(){    pause = false;
                                                             pauseButton.style.display = "block";
                                                             playButton.style.display = "none";
+                                                            pauseBox.style.display = "none";
+                                                            infoBox.style.display = "none";
                                                        });
         // Reload the page in the event that the user loses and wants to restart.
         restart.addEventListener('click', function() {location.reload();});
-        
+
+        // Go to the intro or show Quick Info depending on the cookie when the player clicks "How to Play"
+        gameplayIntro.addEventListener('click', function() {    if (introset.innerHTML == "complete") {
+                                                                    infoBox.style.display = "block";
+                                                                    pauseBox.style.display = "none";
+                                                                }
+                                                                else if (introset.innerHTML == "incomplete") {
+                                                                    window.location.href = "./intro.php";
+                                                                }
+                                                            });
+        // Close the modal if the user clicks on the 'X'.
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            infoBox.style.display = "none";
+            pauseBox.style.display = "block";
+        }
 
         // Handle the spells.
         if (level.innerHTML.includes("Level 2")) spell2.style.display = "block";
@@ -456,6 +511,9 @@
                     clearInterval(enemyList[i].bearInterval);
                     enemyList[i].hitNum = 0;
                     var enemyFrame = 0;
+                    var spellStarted = false;
+                    
+                    if (spellSelected == 1) {
                     enemyList[i].bearInterval = setInterval(function(){ if (!pause) {
                                                                             var imgNum = (enemyFrame % 18) + 1;
                                                                             enemyList[i].enemy.src = "Spell 1/transform" + imgNum.toString() + ".png";
@@ -466,8 +524,23 @@
                                                                             enemyList[i].enemyDown++;
                                                                             if (enemyFrame >= 15)
                                                                             enemyList[i].enemy_y-=100; // Start going up!
-                                                                        }
+                                                                            }
                                                                       }, 200);
+                    }
+                    else if (spellSelected == 2) {
+                        enemyList[i].bearInterval = setInterval(function(){ if (!pause) {
+                                                                                var imgNum = (enemyFrame % 11) + 1;
+                                                                                enemyList[i].enemy.src = "Spell 2/transform" + imgNum.toString() + ".png";
+                                                                                enemyFrame++;
+                                                                                if (enemyFrame == 11) {
+                                                                                    enemyFrame = 7; // Loop the walking in shame animation.
+                                                                                }
+                                                                                enemyList[i].enemyDown++;
+                                                                                if (enemyFrame >= 7)
+                                                                                enemyList[i].enemy_x+=50; // Start walking right!
+                                                                            }
+                                                                        }, 200);
+                    }
                 }
                 if (!enemyList[i].enemy.src.includes("transform")) {
                     if (enemyList[i].enemy_hit == 0 && !pause) 
@@ -550,7 +623,7 @@
             }
 
             // Check if the health bar is empty. If so, then run the dying hero animation :,( and end the game.
-            if (bar_width <= 0 && !dying && !pause) {
+            if (bar_width <= 0 && !dying && !pause && jumpFrame == 0) {
                 var deadFrame = 0;
                 dying = true;
                 clearInterval(walkingInterval);

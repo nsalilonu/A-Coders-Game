@@ -225,4 +225,146 @@ body {
     color: white;
 }
 
+#pauseBox {
+    display: none;
+    position: fixed;
+    font-family: 'Indie Flower', cursive; 
+    font-size: 25px;
+    padding: 15px;
+    width: 45%;
+    height: 37%;
+    margin-top: 15%;
+    margin-left: 27%;
+    border:5px solid black;
+    border-radius: 6px;
+    text-align: center;
+    align-content: center;
+    z-index: 10;
+    background-color: rgb(90, 88, 233);
+    color: white;
+}
+
+#save {
+    font-family: 'Indie Flower', cursive; 
+    font-size: 30px;
+    text-align: center;
+    color: white;
+    background-color: rgb(76, 87, 192);
+    border-color: black;
+    border-radius: 12px;
+    border-width: 5px;
+    padding: 5px; 
+}
+
+#save:hover {
+    background-color: rgb(166, 165, 245);
+}
+
+#gameplayIntro {
+    font-family: 'Indie Flower', cursive; 
+    font-size: 30px;
+    text-align: center;
+    color: white;
+    background-color: rgb(76, 87, 192);
+    border-color: black;
+    border-radius: 12px;
+    border-width: 5px;
+    padding: 5px; 
+}
+
+#gameplayIntro:hover {
+    background-color: rgb(166, 165, 245);
+}
+
+#saveExit {
+    font-family: 'Indie Flower', cursive; 
+    font-size: 30px;
+    text-align: center;
+    color: white;
+    background-color: rgb(76, 87, 192);
+    border-color: black;
+    border-radius: 12px;
+    border-width: 5px;
+    padding: 5px; 
+}
+
+#saveExit:hover {
+    background-color: rgb(166, 165, 245);
+}
+
+#infoBox {
+    display: none;
+    position: fixed;
+    font-family: 'Indie Flower', cursive; 
+    font-size: 25px;
+    padding: 15px;
+    width: 45%;
+    height: 39%;
+    margin-top: 15%;
+    margin-left: 27%;
+    border:5px solid black;
+    border-radius: 6px;
+    text-align: center;
+    align-content: center;
+    z-index: 10;
+    background-color: rgb(90, 88, 233);
+    color: white;
+}
+
+.close {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    color: black;
+    font-size: 50px;
+}
+
+.close:hover{
+    color:rgb(190, 190, 190);
+}
+
+#monologue {
+    display: block;
+    position: fixed;
+    font-family: 'Indie Flower', cursive; 
+    font-size: 25px;
+    padding: 15px;
+    width: 35%;
+    margin-top: 15%;
+    margin-left: 29%;
+    border:5px solid black;
+    border-radius: 6px;
+    text-align: center;
+    align-content: center;
+    z-index: 10;
+    background-color: rgb(90, 88, 233);
+    color: white;
+}
+
+#next {
+    display: block;
+    position: absolute;
+    font-size: 15px;
+    bottom: 5px;
+    right: 5px;
+    color: greenyellow;
+}
+
+#startGame {
+    font-family: 'Indie Flower', cursive; 
+    display: none;
+    position: relative;
+    float: right;
+    bottom: -10px;
+    font-size: 20px;
+    background-color: rgb(53, 50, 228);
+    border:5px solid black;
+    border-radius: 6px;
+    color: white;
+}
+
+#startGame:hover {
+    background-color: rgb(123, 120, 250);
+}
+
 
