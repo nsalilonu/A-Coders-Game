@@ -222,7 +222,7 @@
         var enemyClock = setInterval(function() {if (!pause) enemyInit(canvas);}, 8000);
 
         // Switch to the coding HTML page after 10 seconds (will obviously be longer in the actual game).
-        setTimeout(function() {window.location.href = "./codeLevel1.php";}, 60000);
+        setTimeout(function() {if (level.innerHTML.includes("Level 1")) window.location.href = "./codeLevel1.php";}, 60000);
         var level = document.getElementById("level");
         setTimeout(function() { level.style.display = "none";}, 5000);
 

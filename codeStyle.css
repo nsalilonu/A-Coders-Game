@@ -177,10 +177,15 @@ body {
 
 #answer1 {
     display: block;
+    position: absolute;
+    bottom: 12px;
+    right: 90px;
 }
 
 #answer2 {
     display: block;
+    position: relative;
+    float: center;
 }
 
 #congrats {
@@ -205,8 +210,12 @@ body {
     font-family: 'Indie Flower', cursive;
     border: 3px solid rgb(0, 0, 0);
     border-radius: 6px;
-    background-color: rgb(0, 139, 53);
-    font-size: 20px;
+    background-color: rgb(53, 173, 99);
+    font-size: 25px;
+    position: absolute;
+    right: 30px;
+    bottom: 12px;
+    color: white;
 }
 
 #submitButton:hover {
