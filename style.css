@@ -4,7 +4,7 @@ body {
 
 #time {
     position: fixed;
-    font-family: 'Indie Flower', cursive;
+    font-family: 'Itim', cursive;
     display: block;
     margin-left: 0%;
     margin-top: 0%;
@@ -15,9 +15,9 @@ body {
 
 #health {
     position: fixed;
-    font-family: 'Indie Flower', cursive;
+    font-family: 'Itim', cursive;
     display: block;
-    margin-left: 69%;
+    margin-left: 64%;
     margin-top: 0%;
     color: white;
     padding: 3px;
@@ -27,7 +27,7 @@ body {
 #progress {
     background-color: rgb(144, 191, 230);
     position: fixed;
-    margin-left: 77%;
+    margin-left: 74%;
     padding: 5px;
     margin-top: 15px;
     width: 330px;
@@ -41,7 +41,7 @@ body {
     position: fixed;
     width: 330px;
     padding: 5px;  
-    margin-left: 77%;
+    margin-left: 74%;
     margin-top: 15px;
     display: block;
     height: 20px;
@@ -49,19 +49,22 @@ body {
 }
 
 #header {
-    font-family: 'Indie Flower', cursive;
+    font-family: 'Itim', cursive;
     font-size: 90px;
     text-align: center;
-    color: rgb(255, 255, 255);
     display: block;
     position: fixed;
     border-color: transparent;
     margin-left: 33%;
     margin-top: 15%;
+    animation-name: fade;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
 }
 
 #play {
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     font-size: 50px;
     width: 300px;
     text-align: center;
@@ -82,7 +85,7 @@ body {
 }
 
 #intro {
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     font-size: 50px;
     width: 300px;
     text-align: center;
@@ -109,7 +112,27 @@ body {
     z-index: 2;
     color: white;
     margin-top: 5%;
-    margin-left: 1%;
+    margin-left: 3%;
+}
+
+#muted {
+    display: block;
+    font-size: 35px;
+    position: absolute;
+    z-index: 2;
+    color: white;
+    margin-top: 5%;
+    margin-left: 1%; 
+}
+
+#sound {
+    display: none;
+    font-size: 35px;
+    position: absolute;
+    z-index: 2;
+    color: white;
+    margin-top: 5%;
+    margin-left: 1%; 
 }
 
 #playButton {
@@ -147,14 +170,14 @@ body {
 }
 
 #endGameTxt {
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     font-size: 30px;
     text-align: center;
     color: rgb(255, 255, 255);
 }
 
 #restart {
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     font-size: 50px;
     width: 300px;
     text-align: center;
@@ -175,7 +198,7 @@ body {
 #level {
     display: block;
     position: fixed;
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     font-size: 70px;
     width: 100%;
     height: 100%;
@@ -190,7 +213,7 @@ body {
 #spells {
     display: none;
     position: fixed;
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     font-size: 55px;
     padding: 5px;
     width: 30%;
@@ -209,7 +232,7 @@ body {
 #pauseBox {
     display: none;
     position: fixed;
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     font-size: 25px;
     padding: 15px;
     width: 45%;
@@ -226,7 +249,7 @@ body {
 }
 
 #save {
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     font-size: 30px;
     text-align: center;
     color: white;
@@ -242,7 +265,7 @@ body {
 }
 
 #gameplayIntro {
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     font-size: 30px;
     text-align: center;
     color: white;
@@ -258,7 +281,7 @@ body {
 }
 
 #saveExit {
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     font-size: 30px;
     text-align: center;
     color: white;
@@ -276,7 +299,7 @@ body {
 #infoBox {
     display: none;
     position: fixed;
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     font-size: 25px;
     padding: 15px;
     width: 45%;
@@ -307,7 +330,7 @@ body {
 #monologue {
     display: block;
     position: fixed;
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     font-size: 25px;
     padding: 15px;
     width: 35%;
@@ -325,14 +348,14 @@ body {
 #next {
     display: block;
     position: absolute;
-    font-size: 15px;
+    font-size: 25px;
     bottom: 5px;
     right: 5px;
     color: greenyellow;
 }
 
 #startGame {
-    font-family: 'Indie Flower', cursive; 
+    font-family: 'Itim', cursive; 
     display: none;
     position: relative;
     float: right;
@@ -346,6 +369,11 @@ body {
 
 #startGame:hover {
     background-color: rgb(123, 120, 250);
+}
+
+@keyframes fade {
+    from {color: rgb(255, 255, 255);}
+    to {color: rgba(78, 78, 78, 0.2);}
 }
 
 

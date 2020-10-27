@@ -8,7 +8,7 @@
         <meta http-equiv="Pragma" content="no-cache">
         <meta http-equiv="Expires" content="-1">
         <meta http-equiv="cache-control" content="no-store">
-        <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
         <script src="https://kit.fontawesome.com/3f70d76f1c.js" crossorigin="anonymous"></script>
         <link rel="icon" type="image/x-icon" href="./favicon.ico" />
         <title id="title">  A Coder's Game </title>
@@ -23,7 +23,8 @@
     <p1 id= "health">Health:</p1>
     <div id= "progress"></div>
     <div id= "bar"></div>
-
+    <i class="fas fa-volume-up" id="sound"></i>
+    <i class="fas fa-volume-mute" id="muted"></i>
 
     <div id = "spells">
         <p1>Spells</p1>
@@ -41,8 +42,7 @@
     </div>
 
     <div id="monologue">
-        <p1 id="monologueText">Ok, this is the last time I do this. Then I'm giving up!</p1>
-        <i class="fas fa-forward" id="next"></i>
+        <p1 id="monologueText">Ok, this is the last time I do this. Then I'm giving up!<br> (Click to continue)</p1>
         <button id="startGame"><b>To the Wood!</b></button>
     </div>
 
@@ -67,21 +67,28 @@
         var hero = new Image();
         hero.src = "Tiger Hit/tigerhit9.png";
 
+        var dummy = new Image();
+        dummy.src = "Dummy/dummy.png";
+        var dummyTimeout;
+
+        // An array of magic fireballs that haven't collided with a bear.
+        var magic = [];
+
         var soundtrack = document.createElement("AUDIO");
         soundtrack.src = "Intro__A_Coder's_Game.mp3";
         soundtrack.loop = true;
         soundtrack.volume = 0.25;
 
-        window.addEventListener("mouseover", function() {soundtrack.play();});
-
         // Update the canvas every 10 milliseconds.
         var interval = setInterval(function () {update(); }, 10);
 
+        // Allows the player to proceed in the intro by clicking anywhere.
+        var proceed = true;
+
         // Intro bit:
-        var next = document.getElementById("next");
         var monologueText = document.getElementById("monologueText");
-        var introNum = 0;
-        next.addEventListener('click', function() { introNum++; });                                     
+        var introNum = 20;
+        window.addEventListener('click', function() { if (proceed) introNum++; });                                     
 
         // Respond to different keyboard presses.
         window.addEventListener('keydown', moveObject, false);
@@ -93,14 +100,29 @@
         var spell2 = document.getElementById("spell2");
         var spell2Select = document.getElementById("spell2Select");
         var spellBox = document.getElementById("spells");
+        var muted = document.getElementById("muted");
+        var sound = document.getElementById("sound");
 
+        // Handle the sound:
+        muted.addEventListener('click', function() {    if (proceed) introNum--;  
+                                                        muted.style.display = "none";
+                                                        sound.style.display = "block";
+                                                        soundtrack.play();
+                                                    });
+        sound.addEventListener('click', function() {    if (proceed) introNum--; 
+                                                        muted.style.display = "block";
+                                                        sound.style.display = "none";
+                                                        soundtrack.pause();
+                                                    });
         // Handle the spells.
-        spell1.addEventListener('click', function() {   spell1Select.style.display = "block";
+        spell1.addEventListener('click', function() {   if (proceed) introNum--; 
+                                                        spell1Select.style.display = "block";
                                                         spell1.style.display = "none";
                                                         spell2Select.style.display = "none";
                                                         spell2.style.display = "block";
                                                     });
-        spell2.addEventListener('click', function() {   spell2Select.style.display = "block";
+        spell2.addEventListener('click', function() {   if (proceed) introNum--; 
+                                                        spell2Select.style.display = "block";
                                                         spell2.style.display = "none";
                                                         spell1Select.style.display = "none";
                                                         spell1.style.display = "block";
@@ -190,6 +212,21 @@
                                             } 
                                             
                                         }, 500);
+                    
+                    setTimeout(function() { // Make a new magic fireball.
+                                            var magicBall = new Image();
+                                            var magicBall_x = hero_x + 150;
+                                            var magicBall_y = hero_y + 10;
+                                            var frame = 0;
+                                            var magicBallInterval = setInterval(function() {var imgNum = (frame % 3) + 1;
+                                                                                            magicBall.src = "Magic/magic" + imgNum.toString() + ".png";
+                                                                                            console.log(magicBall.src);
+                                                                                           frame++;
+                                                                                           }, 150);
+                                            var collided = false;
+                                            magic.push({magicBall: magicBall, x: magicBall_x, y: magicBall_y, interval: magicBallInterval, frame: frame, collided: collided});
+                                            }, 100);
+                           
                     startAttack = true;
                 }           
             }
@@ -278,11 +315,13 @@
 
             if (movingLeft && !pause) {
                 hero_x-=4;
-                if (hero_x < 300) hero_x = 300; // Keep avatar in bounds
+                if (hero_x < 300 && introNum < 20) hero_x = 300; // Keep avatar in bounds
+                if (hero_x < 0) hero_x = 0;
             }
             if (movingRight && !pause) {
                 hero_x+=4;
-                if (hero_x > canvas.width - 470) hero_x = canvas.width - 470; 
+                if (hero_x > canvas.width - 470 && introNum < 20) hero_x = canvas.width - 470; 
+                if (hero_x > canvas.width - 200) hero_x = canvas.width - 200;
             }
 
             
@@ -300,9 +339,17 @@
                         hero.src = "Tiger Jump/TigerJump3.png";
 
                     hero_y = hero_y + 0.1*(jumpFrame-4);
-                    if (hero_y >= canvas.height/12 + 310) {
+                    if (hero_y >= canvas.height/12 + 310 && introNum < 20) {
                         jumpFrame = 0;
                         hero_y = canvas.height/12 + 310;
+                        if (movingLeft || hero.src.includes("TigerJump6"))
+                            hero.src = "Tiger Walking/tiger5.png";
+                        else
+                            hero.src = "Tiger Walking/tiger6.png";
+                    }
+                    else if (hero_y >= canvas.height/12 + 478 && introNum >= 20) {
+                        jumpFrame = 0;
+                        hero_y = canvas.height/12 + 478;
                         if (movingLeft || hero.src.includes("TigerJump6"))
                             hero.src = "Tiger Walking/tiger5.png";
                         else
@@ -314,11 +361,11 @@
 
             switch(introNum) {
                 case 1:
-                    next.style.display = "none";
-                    monologueText.innerHTML = "If you can hear me, try moving left with the left arrow key.";
+                    proceed = false;
+                    monologueText.innerHTML = "If you can hear me, try moving left with the LEFT ARROW KEY.";
                     if (movingLeft) {
                     monologueText.innerHTML = `So THAT time it worked?! Of course NOW it works! So many days of work...could this
-                                            be it? Ok, let's not get ahead of ourselves...try moving right with the right arrow key...?`;
+                                            be it? Ok, let's not get ahead of ourselves...try moving right with the RIGHT ARROW KEY...?`;
                     introNum++;
                     }
                     break;
@@ -327,7 +374,7 @@
                 case 2: 
                     if (movingRight) {
                     monologueText.innerHTML = `Marvelous! This is extrodinary! I did it! I did it! Ok...ok...wait...we're not 
-                                                out of the woods yet. Can you jump with the up arrow key?`;
+                                                out of the woods yet. Can you jump with the UP ARROW KEY?`;
                     introNum++;
                     }
                     break;
@@ -338,7 +385,7 @@
                     monologueText.innerHTML = `HaHA! YES!!! YES!!! I've still got it!!! I...ahh..ahem...cough...forgive me, I got a bit overexcited
                                                 there. Now that you are alive and have consciousness, I suppose you have a couple of questions regarding the 
                                                 purpose of your existence.`;
-                    next.style.display = "block";
+                    proceed = true;
                     }
                     break; 
 
@@ -426,82 +473,145 @@
                     break;
                 
                 case 20:
-                    next.style.display = "none";
-                    monologueText.innerHTML = `Should you choose to go on to help me, I gave you a little wand to protect you! Try
-                                               waving it with SPACEBAR.`;
-                    introNum++;
-                    break;
-
+                monologueText.innerHTML = `Should you choose to go on to help me, you should know that Martin's gang will stop at nothing to 
+                                           corrupt the world I have made. It's important that you know how to protect yourself. So let's do
+                                           a bit of practice!`;
+                background.src = "training.png";
+                hero_y+=168;
+                introNum++;
+                break;
+                
                 case 21:
-                    if (startAttack) {
-                    monologueText.innerHTML = `Excellent job! When you wave the wand enough times at Martin's gang, they will be transformed in such
-                                               a way that they're harmless. <br>You want a sword?! <b>NO!</b> You could kill someone with that! We're not killing
-                                               anybody! All life is precious!`;
-                    next.style.display = "block";
-                    }
                     break;
 
                 case 22:
-                    next.style.display = "none";
-                    monologueText.innerHTML = `Can you smack them with the wand? Of course not! His gang isn't some naughty puppy that wet the
-                                               carpet! Now, you can select different spells by pressing the SHIFT key. Try that!`;
-                    introNum++;
+                    monologueText.innerHTML = `Here, I have a teddy...you can pretend it's a Backwood Bear gang member. Yes, I know
+                    it's rather rough around the edges. I made it for Martin when he asked for someone to play with that was like him.
+                    He responded...rather poorly...`;
                     break;
                 
-                case 23: 
-                    if (pause) {
-                        monologueText.innerHTML = `Fantastic! As you can see, nothing can move when you are selecting spells. It's the 
-                                                   most safety I can offer you. Now press SHIFT again.`;
-                        introNum++;
-                    }
-                    break;
-                
-                case 24: 
-                    if (!pause) {
-                        monologueText.innerHTML = `And you can move once more! Not too much trouble, is it? To motivate you, I'm giving 
-                                                   you little points in the corner that will increase as you go along and defeat more 
-                                                   of Martin's gang!`;
-                        next.style.display = "block";
-                    }
-                    break;
-                
-                case 25: 
-                    monologueText.innerHTML = `What? You'd rather have a spell that provides you with an unlimited supply of warm
-                                                chocolate chip cookies? Wow, you ARE different from Martin. Very well,
-                                                you get ONE cookie, and we'll see about some more later, OK?`;
-                    break;
-                
-                case 26:                     
-                    var eat = setInterval(function()  { var imgNum = (eatFrame % 10) + 1;
-                                                        hero.src = "Cookie/eat" + imgNum.toString() + ".png";
-                                                        eatFrame++;
-                                                      }, 200)
-                    setTimeout(function() { clearInterval(eat);
-                                            hero.src = "Tiger Walking/tiger5.png";
-                                          }, 2300);
+                case 23:
+                    proceed = false;
+                    monologueText.innerHTML = `You've a little wand there. Try waving it with SPACEBAR.`;
                     introNum++;
                     break;
 
-                case 27: 
- 
-                    monologueText.innerHTML = `Lastly, keep an eye on your health! Martin's gang is not quite so opposed to violence
-                                              as we are. Well, as I am. We'll work on your more "brute justice" tendencies.`;
+                case 24:
+                    if (startAttack) {
+                    monologueText.innerHTML = `Excellent job! When you wave the wand enough times at Martin's gang, they will be transformed in such
+                                               a way that they're harmless. Try doing it now!`;
+                    proceed = true;
+                    }
                     break;
                 
-                case 28: 
-                    monologueText.innerHTML = `Now, to the wood! Oh, you thought this was it? No, this is a rather pleasant clearing to
-                                              ease your transition. You'll see where you'll be in a moment, if you choose to come.`;
-                    var startGame = document.getElementById("startGame");
-                    startGame.style.display = "block";
-                    next.style.display = "none";
-                    startGame.addEventListener("click", function() {window.location.href = "./gameplay.php";});
+                case 25:
+                    monologueText.innerHTML = `Now, isn't that fun? How do you like it? <br>You want a sword?! <br> <b>NO!</b> <br> You could kill someone 
+                    with that! We're not killing anybody! All life is precious!`;
                     break;
+                
+                
+                
+                // case 20:
+                //     proceed = false;
+                //     monologueText.innerHTML = `Should you choose to go on to help me, I gave you a little wand to protect you! Try
+                //                                waving it with SPACEBAR.`;
+                    
+                //     introNum++;
+                //     break;
+
+                // case 21:
+                
+
+                // case 22:
+                //     proceed = false;
+                //     monologueText.innerHTML = `Can you smack them with the wand? Of course not! His gang isn't some naughty puppy that wet the
+                //                                carpet! Now, you can select different spells by pressing the SHIFT key. Try that!`;
+                    
+                //     introNum++;
+                //     break;
+                
+                // case 23: 
+                //     if (pause) {
+                //         monologueText.innerHTML = `Fantastic! As you can see, nothing can move when you are selecting spells. It's the 
+                //                                    most safety I can offer you. Now press SHIFT again.`;
+                //         introNum++;
+                //     }
+                //     break;
+                
+                // case 24: 
+                //     if (!pause) {
+                //         monologueText.innerHTML = `And you can move once more! Not too much trouble, is it? To motivate you, I'm giving 
+                //                                    you little points in the corner that will increase as you go along and defeat more 
+                //                                    of Martin's gang!`;
+                //         proceed = true;
+                //     }
+                //     break;
+                
+                // case 25: 
+                //     monologueText.innerHTML = `What? You'd rather have a spell that provides you with an unlimited supply of warm
+                //                                 chocolate chip cookies? Wow, you ARE different from Martin. Very well,
+                //                                 you get ONE cookie, and we'll see about some more later, OK?`;
+                //     break;
+                
+                // case 26:                     
+                //     var eat = setInterval(function()  { var imgNum = (eatFrame % 10) + 1;
+                //                                         hero.src = "Cookie/eat" + imgNum.toString() + ".png";
+                //                                         eatFrame++;
+                //                                       }, 200)
+                //     setTimeout(function() { clearInterval(eat);
+                //                             hero.src = "Tiger Walking/tiger5.png";
+                //                           }, 2300);
+                //     introNum++;
+                //     break;
+
+                // case 27: 
+ 
+                //     monologueText.innerHTML = `Lastly, keep an eye on your health! Martin's gang is not quite so opposed to violence
+                //                               as we are. Well, as I am. We'll work on your more "brute justice" tendencies.`;
+                //     break;
+                
+                // case 28: 
+                //     monologueText.innerHTML = `Now, to the wood! Oh, you thought this was it? No, this is a rather pleasant clearing to
+                //                               ease your transition. You'll see where you'll be in a moment, if you choose to come.`;
+                //     var startGame = document.getElementById("startGame");
+                //     startGame.style.display = "block";
+                //     proceed = false;
+                //     startGame.addEventListener("click", function() {window.location.href = "./gameplay.php";});
+                //     break;
             }
 
-            ctx.drawImage(background, background_x, background_y);
+            ctx.drawImage(background, background_x, background_y, window.innerWidth, window.innerHeight);
             ctx.drawImage(hero, hero_x, hero_y, 150, 150);
+            if (introNum >= 22) ctx.drawImage(dummy, canvas.width - 400, 400, 300, 300); 
+            for (let i = 0; i < magic.length; i++) {
+                // Move magic ball if it hasn't collided with the dummy.
+                if (!magic[i].collided) magic[i].x += 8;
+                
+                ctx.drawImage(magic[i].magicBall, magic[i].x, magic[i].y, 80, 80);
+                
+                // Check if magic ball has collided with dummy.
+                if (magic[i].x >= canvas.width - 400  && magic[i].y >= 400 && !magic[i].collided) {
+                    var blast = magic[i];
 
-            
+                    blast.collided = true;
+                    clearInterval(blast.interval); // Clear moving ball interval.
+                    
+                    // Make the dummy knock back when the magic ball collides, but only reset if no balls have hit it in 600 ms.
+                    if (dummyTimeout != undefined) clearTimeout(dummyTimeout);
+                    dummy.src = "Dummy/dummyHit.png";
+                    dummyTimeout = setTimeout(function() {dummy.src = "Dummy/dummy.png";}, 480);
+
+                    // Make magic ball disappear when it collides with the dummy.
+                    blast.frame = 4;
+                    blast.interval = setInterval(function() {   blast.magicBall.src = "Magic/magic" + blast.frame.toString() + ".png";
+                                                                blast.frame++;
+                                                            }, 150);
+
+                    setTimeout(function() { clearInterval(blast.interval);
+                                            magic.splice(i, 1);     
+                                          }, 480);
+                }
+            }
         }
 
         </script>

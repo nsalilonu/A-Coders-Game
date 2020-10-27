@@ -13,7 +13,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="-1">
     <meta http-equiv="cache-control" content="no-store">
-    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/3f70d76f1c.js" crossorigin="anonymous"></script>
@@ -25,7 +25,7 @@
 <body style="background-color: rgb(113, 14, 126);">
     <div class = "endCode">
         <h1 style= "font-size: 40px; font-family: 'Nanum Myeongjo', serif;">Magnificent! You finished Level 1!</h1>
-        <p1 style= "font-size: 25px; font-family: 'Indie Flower', cursive;">You can move left again! Lucky for you, you are no more damaged than you left off. 
+        <p1 style= "font-size: 25px; font-family: 'Itim', cursive;">You can move left again! Lucky for you, you are no more damaged than you left off. 
             Martin was far too busy giving a dramatic evil villian victory speech, and his henchman too busy pretending 
             to listen to him. Yes, pretending... I'm all-knowing in this universe after all, and I'm quite sure I saw Jerry playing Candy 
             Crush Saga under his trench coat in the back. We see you, Jerry. 
