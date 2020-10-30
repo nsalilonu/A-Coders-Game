@@ -11,7 +11,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
         <script src="https://kit.fontawesome.com/3f70d76f1c.js" crossorigin="anonymous"></script>
         <link rel="icon" type="image/x-icon" href="./favicon.ico" />
-        <title id="title">  A Coder's Game </title>
+        <title id="title"> Bearly Coding </title>
     </head>
 
     <link href="style.css" type="text/css" rel="stylesheet" />
@@ -31,12 +31,8 @@
         <br>
         <table>
             <td>
-                <img src="icon1.png" id = "spell1" style="height:100px; width: 100px; border-radius: 6px; display: none;">
-                <img src="icon1.png" id = "spell1Select" style="height:100px; width: 100px; border-radius: 6px; border: 3px solid black;"> 
-            </td>
-            <td>
-                <img src="icon2.png" id = "spell2" style="height:100px; width: 100px; border-radius: 6px; display: none;">
-                <img src="icon2.png" id = "spell2Select" style="height:100px; width: 100px; border-radius: 6px; border: 3px solid black; display: none;">
+                <img src="icon0.png" id = "spell1" style="height:100px; width: 100px; border-radius: 6px; display: none;">
+                <img src="icon0.png" id = "spell1Select" style="height:100px; width: 100px; border-radius: 6px; border: 3px solid black;"> 
             </td>
         </table>
     </div>
@@ -59,17 +55,19 @@
         background.src = "introBackground.png";
         var background_x = -15;
         var background_y = 0;
+        var knockbackFrame;
         background.onload = function(){ctx.drawImage(background, background_x, background_y, window.innerWidth, window.innerHeight);};
 
         // Initialize the hero.
         var hero_x = 700;
-        var hero_y = canvas.height/12 + 310;
+        var hero_y = canvas.height/12 + 317;
         var hero = new Image();
         hero.src = "Tiger Hit/tigerhit9.png";
 
         var dummy = new Image();
         dummy.src = "Dummy/dummy.png";
-        var dummyTimeout;
+        var dummyInterval;
+        var dummyHit = 0;
 
         // An array of magic fireballs that haven't collided with a bear.
         var magic = [];
@@ -87,7 +85,7 @@
 
         // Intro bit:
         var monologueText = document.getElementById("monologueText");
-        var introNum = 20;
+        var introNum = 0;
         window.addEventListener('click', function() { if (proceed) introNum++; });                                     
 
         // Respond to different keyboard presses.
@@ -97,8 +95,6 @@
 
         var spell1 = document.getElementById("spell1");
         var spell1Select = document.getElementById("spell1Select");
-        var spell2 = document.getElementById("spell2");
-        var spell2Select = document.getElementById("spell2Select");
         var spellBox = document.getElementById("spells");
         var muted = document.getElementById("muted");
         var sound = document.getElementById("sound");
@@ -118,14 +114,6 @@
         spell1.addEventListener('click', function() {   if (proceed) introNum--; 
                                                         spell1Select.style.display = "block";
                                                         spell1.style.display = "none";
-                                                        spell2Select.style.display = "none";
-                                                        spell2.style.display = "block";
-                                                    });
-        spell2.addEventListener('click', function() {   if (proceed) introNum--; 
-                                                        spell2Select.style.display = "block";
-                                                        spell2.style.display = "none";
-                                                        spell1Select.style.display = "none";
-                                                        spell1.style.display = "block";
                                                     });
 
         // Initialize other variables.
@@ -140,6 +128,7 @@
         var firstHit = false;
         var pause = false;
         var eatFrame = 0;
+        var seconds = 0;
 
 
         var walkingInterval;        
@@ -178,7 +167,7 @@
         }
 
         function bearHit() {
-            if (pause) return;
+            if (pause || introNum < 23) return;
 
             const SPACEBAR = 32;
             if (event.keyCode == SPACEBAR && introNum >= 21) {
@@ -213,6 +202,7 @@
                                             
                                         }, 500);
                     
+                    
                     setTimeout(function() { // Make a new magic fireball.
                                             var magicBall = new Image();
                                             var magicBall_x = hero_x + 150;
@@ -220,12 +210,14 @@
                                             var frame = 0;
                                             var magicBallInterval = setInterval(function() {var imgNum = (frame % 3) + 1;
                                                                                             magicBall.src = "Magic/magic" + imgNum.toString() + ".png";
-                                                                                            console.log(magicBall.src);
                                                                                            frame++;
                                                                                            }, 150);
                                             var collided = false;
-                                            magic.push({magicBall: magicBall, x: magicBall_x, y: magicBall_y, interval: magicBallInterval, frame: frame, collided: collided});
+                                            var hitNum = 0;
+                                            magic.push({magicBall: magicBall, x: magicBall_x, y: magicBall_y, interval: magicBallInterval, frame: frame, collided: collided,
+                                                        hitNum: hitNum});
                                             }, 100);
+                    
                            
                     startAttack = true;
                 }           
@@ -339,9 +331,9 @@
                         hero.src = "Tiger Jump/TigerJump3.png";
 
                     hero_y = hero_y + 0.1*(jumpFrame-4);
-                    if (hero_y >= canvas.height/12 + 310 && introNum < 20) {
+                    if (hero_y >= canvas.height/12 + 317 && introNum < 20) {
                         jumpFrame = 0;
-                        hero_y = canvas.height/12 + 310;
+                        hero_y = canvas.height/12 + 317;
                         if (movingLeft || hero.src.includes("TigerJump6"))
                             hero.src = "Tiger Walking/tiger5.png";
                         else
@@ -500,84 +492,110 @@
                     if (startAttack) {
                     monologueText.innerHTML = `Excellent job! When you wave the wand enough times at Martin's gang, they will be transformed in such
                                                a way that they're harmless. Try doing it now!`;
-                    proceed = true;
+                    introNum++;
                     }
                     break;
-                
+
                 case 25:
+                        if (dummyHit == 4) {
+                        monologueText.innerHTML = `Marvelous! I'll give you little points in the corner that will increase 
+                                                   as you defeat more of Martin's gang, and a point for just being your fabulous self every second!`;
+                        seconds += 100;
+                        setInterval(function() { if (!pause) { 
+                                                    var points = document.getElementById("time");
+                                                    seconds++;
+                                                    points.innerHTML = "Points:      " + seconds;
+                                                 }     
+                                               }, 1000);
+                    proceed = true;
+                    introNum++;
+                        }
+                    break;
+
+                case 26:
+                    break;
+
+                case 27:
                     monologueText.innerHTML = `Now, isn't that fun? How do you like it? <br>You want a sword?! <br> <b>NO!</b> <br> You could kill someone 
                     with that! We're not killing anybody! All life is precious!`;
                     break;
                 
-                
-                
-                // case 20:
-                //     proceed = false;
-                //     monologueText.innerHTML = `Should you choose to go on to help me, I gave you a little wand to protect you! Try
-                //                                waving it with SPACEBAR.`;
+
+                case 28:
+                    proceed = false;
+                    monologueText.innerHTML = `Can you smack them with the wand? Of course not! His gang isn't some naughty puppy that wet the
+                                               carpet! Now, you can select different spells by pressing the SHIFT key. Try that!`;
                     
-                //     introNum++;
-                //     break;
-
-                // case 21:
+                    introNum++;
+                    break;
                 
+                case 29: 
+                    if (pause) {
+                        monologueText.innerHTML = `Fantastic! As you can see, nothing can move when you are selecting spells. It's the 
+                                                   most safety I can offer you. Now press SHIFT again.`;
+                        introNum++;
+                    }
+                    break;
+                
+                case 30:
+                    if (!pause) {
+                        monologueText.innerHTML = `And now you can move again! But so can everything else. And if you get too close...well, 
+                        try it now. Don't worry, I will make sure that you're okay.`
+                        introNum++;
+                    }
+                    break;
+                case 31: 
+                    if (hero_x >= canvas.width - 450) {
+                        hero_x = canvas.width - 450;
+                        var health = document.getElementById("bar");
+                        var knockbackFrame = 0;
+                        var tigerKnockback = setInterval(function() {   
+                                                            var imgNum = (knockbackFrame % 3) + 1;
+                                                            hero.src = "Tiger Hit/tigerhit" + imgNum.toString() + ".png";
+                                                            hero_x -= 20;
+                                                            bar_width -= 4;
+                                                            health.style.width = bar_width.toString()+"px";
+                                                            knockbackFrame++; 
+                                                            }, 100);
 
-                // case 22:
-                //     proceed = false;
-                //     monologueText.innerHTML = `Can you smack them with the wand? Of course not! His gang isn't some naughty puppy that wet the
-                //                                carpet! Now, you can select different spells by pressing the SHIFT key. Try that!`;
+                    setTimeout(function(){  clearInterval(tigerKnockback);
+                                        hero.src = "Tiger Walking/tiger6.png";
+                                        proceed = true; 
+                                        }, 600);
+                    introNum++;
+                    }
                     
-                //     introNum++;
-                //     break;
+                    break;
                 
-                // case 23: 
-                //     if (pause) {
-                //         monologueText.innerHTML = `Fantastic! As you can see, nothing can move when you are selecting spells. It's the 
-                //                                    most safety I can offer you. Now press SHIFT again.`;
-                //         introNum++;
-                //     }
-                //     break;
+                case 32:
+                    monologueText.innerHTML = `Sorry about that. Did it hurt? Here you go, I'll make it better. And here's a cookie
+                                                for being so brave.`;
+                    break;
                 
-                // case 24: 
-                //     if (!pause) {
-                //         monologueText.innerHTML = `And you can move once more! Not too much trouble, is it? To motivate you, I'm giving 
-                //                                    you little points in the corner that will increase as you go along and defeat more 
-                //                                    of Martin's gang!`;
-                //         proceed = true;
-                //     }
-                //     break;
-                
-                // case 25: 
-                //     monologueText.innerHTML = `What? You'd rather have a spell that provides you with an unlimited supply of warm
-                //                                 chocolate chip cookies? Wow, you ARE different from Martin. Very well,
-                //                                 you get ONE cookie, and we'll see about some more later, OK?`;
-                //     break;
-                
-                // case 26:                     
-                //     var eat = setInterval(function()  { var imgNum = (eatFrame % 10) + 1;
-                //                                         hero.src = "Cookie/eat" + imgNum.toString() + ".png";
-                //                                         eatFrame++;
-                //                                       }, 200)
-                //     setTimeout(function() { clearInterval(eat);
-                //                             hero.src = "Tiger Walking/tiger5.png";
-                //                           }, 2300);
-                //     introNum++;
-                //     break;
+                case 33:  
+                    proceed = false;
+                    var health = document.getElementById("bar");
+                    bar_width = 330;
+                    health.style.width = bar_width.toString()+"px";                  
+                    var eat = setInterval(function()  { var imgNum = (eatFrame % 10) + 1;
+                                                        hero.src = "Cookie/eat" + imgNum.toString() + ".png";
+                                                        eatFrame++;
+                                                      }, 200)
+                    setTimeout(function() { clearInterval(eat);
+                                            hero.src = "Tiger Walking/tiger5.png";
+                                            proceed = true;
+                                          }, 2300);
+                    introNum++;
+                    break;
 
-                // case 27: 
- 
-                //     monologueText.innerHTML = `Lastly, keep an eye on your health! Martin's gang is not quite so opposed to violence
-                //                               as we are. Well, as I am. We'll work on your more "brute justice" tendencies.`;
-                //     break;
-                
-                // case 28: 
-                //     monologueText.innerHTML = `Now, to the wood! Oh, you thought this was it? No, this is a rather pleasant clearing to
-                //                               ease your transition. You'll see where you'll be in a moment, if you choose to come.`;
-                //     var startGame = document.getElementById("startGame");
-                //     startGame.style.display = "block";
-                //     proceed = false;
-                //     startGame.addEventListener("click", function() {window.location.href = "./gameplay.php";});
-                //     break;
+                case 34: 
+                    monologueText.innerHTML = `Now, to the wood! Oh, you thought this was it? No, this is a rather pleasant clearing to
+                                              ease your transition. You'll see where you'll be in a moment, if you choose to come.`;
+                    var startGame = document.getElementById("startGame");
+                    startGame.style.display = "block";
+                    proceed = false;
+                    startGame.addEventListener("click", function() {window.location.href = "./gameplay.php";});
+                    break;
             }
 
             ctx.drawImage(background, background_x, background_y, window.innerWidth, window.innerHeight);
@@ -594,12 +612,32 @@
                     var blast = magic[i];
 
                     blast.collided = true;
-                    clearInterval(blast.interval); // Clear moving ball interval.
+                    clearInterval(blast.interval); // Clear moving ball interval. 
                     
+                    
+
+                    // If the dummy has been hit 3 times, make it transform.
+                    if (dummyHit == 3) {
+                        dummy.src = "Dummy/dummyHit.png";
+                        if (dummyInterval != undefined) clearTimeout(dummyInterval);
+                        dummyHit++;
+                        var dummyFrame = 0; 
+                        dummyInterval = setInterval(function() {var imgNum = (dummyFrame % 4) + 1;
+                                                                dummy.src = "Spell 0/transform" + imgNum.toString() + ".png";
+                                                                dummyFrame++;
+                                                                }, 150);
+                        setTimeout(function() {clearInterval(dummyInterval);
+                                               dummy.src = "Spell 0/transform4.png";
+                                              }, 600);
+                    }
+
                     // Make the dummy knock back when the magic ball collides, but only reset if no balls have hit it in 600 ms.
-                    if (dummyTimeout != undefined) clearTimeout(dummyTimeout);
-                    dummy.src = "Dummy/dummyHit.png";
-                    dummyTimeout = setTimeout(function() {dummy.src = "Dummy/dummy.png";}, 480);
+                    else if (dummyHit < 3) {
+                        dummy.src = "Dummy/dummyHit.png";
+                        if (dummyInterval != undefined) clearTimeout(dummyInterval);
+                        dummyHit++;
+                        dummyInterval = setTimeout(function() {dummy.src = "Dummy/dummy.png";}, 480);
+                    }
 
                     // Make magic ball disappear when it collides with the dummy.
                     blast.frame = 4;
@@ -610,6 +648,7 @@
                     setTimeout(function() { clearInterval(blast.interval);
                                             magic.splice(i, 1);     
                                           }, 480);
+                    
                 }
             }
         }

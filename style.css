@@ -111,8 +111,8 @@ body {
     position: absolute;
     z-index: 2;
     color: white;
-    margin-top: 5%;
-    margin-left: 3%;
+    margin-top: 5.4%;
+    margin-left: 5%;
 }
 
 #muted {
@@ -141,8 +141,8 @@ body {
     position: absolute;
     z-index: 2;
     color: white;
-    margin-top: 5%;
-    margin-left: 1%;
+    margin-top: 5.4%;
+    margin-left: 5%;
 }
 
 #endGameBack {

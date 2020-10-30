@@ -25,7 +25,7 @@
     <meta http-equiv="cache-control" content="no-store">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/3f70d76f1c.js" crossorigin="anonymous"></script>
-    <title id="title">  A Coder's Game </title>
+    <title id="title"> Bearly Coding </title>
 </head>
 
 
@@ -51,6 +51,9 @@
     
     <i class="fas fa-pause" id="pauseButton"></i>
     <i class="fas fa-play" id="playButton"></i>
+    <i class="fas fa-volume-up" id="sound"></i>
+    <i class="fas fa-volume-mute" id="muted"></i>
+
     <div id = "spells">
         <p1>Spells</p1>
         <br>
@@ -111,6 +114,9 @@
         var hero = new Image();
         hero.src = "Tiger Walking/tiger5.png";
 
+        
+        var magic = []; // An array of magic fireballs.
+        var collidedBalls = []; // An array of the indices of fireballs that have collided with the bear.
 
         var background = new Image();
         background.src = "Background1.png";
@@ -135,10 +141,6 @@
         soundtrack.src = "soundtrack.mp3";
         soundtrack.loop = true;
         soundtrack.volume = 0.5;
-        window.addEventListener("mouseover", function() {soundtrack.play();});
-        
-        // Update the canvas every 10 milliseconds.
-        var interval = setInterval(function () {update(); }, 10);
 
         // Respond to different keyboard presses.
         window.addEventListener('keydown', moveObject, false);
@@ -146,7 +148,7 @@
         window.addEventListener('keypress', bearHit, false);
 
         var muted = document.getElementById("muted");
-        var sound = document.getElementById("volume-on");
+        var sound = document.getElementById("sound");
         var pauseButton = document.getElementById("pauseButton");
         var playButton = document.getElementById("playButton");
         var restart = document.getElementById("restart");
@@ -163,6 +165,15 @@
         var spellSelected = 1;
 
 
+        // Handle the sound:
+        muted.addEventListener('click', function() {    muted.style.display = "none";
+                                                        sound.style.display = "block";
+                                                        soundtrack.play();
+                                                    });
+        sound.addEventListener('click', function() {    muted.style.display = "block";
+                                                        sound.style.display = "none";
+                                                        soundtrack.pause();
+                                                    });
         // Pause or unpause the game.
         pauseButton.addEventListener('click', function(){   pause = true;
                                                             pauseButton.style.display = "none";
@@ -218,11 +229,8 @@
                                                 }     
                                            }, 1000);
 
-        // Add an enemy every 5 seconds.
-        var enemyClock = setInterval(function() {if (!pause) enemyInit(canvas);}, 8000);
-
         // Switch to the coding HTML page after 10 seconds (will obviously be longer in the actual game).
-        setTimeout(function() {if (level.innerHTML.includes("Level 1")) window.location.href = "./codeLevel1.php";}, 60000);
+        // setTimeout(function() {if (level.innerHTML.includes("Level 1")) window.location.href = "./codeLevel1.php";}, 60000);
         var level = document.getElementById("level");
         setTimeout(function() { level.style.display = "none";}, 5000);
 
@@ -247,6 +255,11 @@
         walking.src = "footstep.mp3";
         walking.volume = 0.2;
         walking.playbackRate = 1.9;
+
+        // Update the canvas every 10 milliseconds.
+        var interval = setInterval(function () {update(); }, 10);
+        // Add an enemy every 5 seconds.
+        var enemyClock = setInterval(function() {if (!pause) enemyInit(canvas);}, 8000);
 
         function enemyInit(canvas) {
             // Only have 10 images in the array at a time.
@@ -339,13 +352,11 @@
                 if (!startAttack && !dying){
                     clearInterval(walkingInterval);
                     startWalk = false;
-                    heroAttack = setInterval(function() {   //var imgNum = (attackFrame % 7) + 1;
-                                                            var imgNum = 7;
+                    heroAttack = setInterval(function() {   var imgNum = 7;
                                                             if (movingLeft || hero.src.includes("tiger5.png") || hero.src.includes("LTigerAttack")) 
                                                                 hero.src = "Tiger Attack/LTigerAttack" + imgNum.toString() +".png";
                                                             else 
                                                                 hero.src = "Tiger Attack/RTigerAttack" + imgNum.toString() +".png";
-                                                            //attackFrame++;
                                                             
                                                         }, 100);
                                                         
@@ -371,44 +382,39 @@
                     startAttack = true;
                 }
 
-                // Make bear fall back if hero hits it.
-                var closestBear;
-                var closest = 400;
-                var closestBearFound = false;
-                for (let i = 0; i < enemyList.length; i++) {
-                    if (!enemyList[i].enemy.src.includes("transform")) {
-                        // Look for the closest bear.
-                        if (Math.abs(hero_x - enemyList[i].enemy_x) < closest) {
-                            closest = Math.abs(hero_x - enemyList[i].enemy_x);
-                            closestBearFound = true;
-                            closestBear = i;
-                        }
-                    }
-                }
-
-                // Run animation for bear and move it back if it is the closest to the tiger when spacebar is pressed.
-                // And make sure the user isn't holding spacebar by only setting the interval after 100 ms from when the spacebar was pressed.
-                // AND make sure the user is facing the bear it wants to hit.
-                
-                if (closestBearFound && !firstHit && !dying && hero.src.includes("RTigerAttack")) {
-                enemyList[closestBear].enemy_hit = 0;
-                enemyList[closestBear].hitFrame = 0;
-                clearInterval(enemyList[closestBear].bearInterval); // Stops previous animation
-                enemyList[closestBear].bearInterval = setInterval(function (){   if (enemyList[closestBear].hitFrame < 3) {
-                                                                            var imgNum = (enemyList[closestBear].hitFrame % 3) + 1;
-                                                                            enemyList[closestBear].enemy.src = "Enemy Hit/enemyhit" + imgNum.toString() + ".png";
-                                                                            enemyList[closestBear].enemy_x += 100;
-                                                                            enemyList[closestBear].hitFrame++;
-                                                                            }
-                                                                            else
-                                                                                enemyList[closestBear].enemy.src = "Enemy Hit/enemyhit3.png";
-
-                                                                            enemyList[closestBear].enemy_hit++;
-                                                                        }, 100);
-                enemyList[closestBear].hitNum++;
-                firstHit = true;
-                }
-                            
+                setTimeout(function() { // Make a new magic fireball.
+                                        if (magic.length < 10) {
+                                            let magicBall = new Image();
+                                            let magicBall_x = hero_x + 150;
+                                            let magicBall_y = hero_y + 10;
+                                            let frame = 0;
+                                            let magicBallInterval = setInterval(function() {var imgNum = (frame % 3) + 1;
+                                                                                            magicBall.src = "Magic/magic" + imgNum.toString() + ".png";
+                                                                                            frame++;
+                                                                                        }, 150);
+                                            let collided = false;
+                                            magic.push({magicBall: magicBall, x: magicBall_x, y: magicBall_y, interval: magicBallInterval, frame: frame, collided: collided});
+                                        }
+                                        // If the array is full, use a ball that is invisible.
+                                        else {
+                                            for (let i = 0; i < magic.length; i++) {
+                                                if (magic[i].magicBall.src.includes("magic7")) {
+                                                    magic[i].magicBall.src = "Magic/magic1.png";
+                                                    magic[i].x = hero_x + 150;
+                                                    magic[i].y = hero_y + 10;
+                                                    magic[i].frame = 0;
+                                                    clearInterval(magic[i].interval);
+                                                    magic[i].interval = setInterval(function() {var imgNum = (newMagicBall.frame % 3) + 1;
+                                                                                                    newMagicBall.magicBall.src = "Magic/magic" + imgNum.toString() + ".png";
+                                                                                                    newMagicBall.frame++;
+                                                                                                    }, 150);
+                                                    magic[i].collided = false;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                      }, 100); 
+                                                       
             }
         }
 
@@ -485,6 +491,69 @@
 
             if (event.keyCode == SPACEBAR) {
                 firstHit = false;
+            }
+        }
+
+
+        function handleMagic() {
+            // Check for the closest bear on screen.
+            let closest = 800;
+            let closestBearFound = false;
+            let closestBear;
+            for (let i = 0; i < enemyList.length; i++) {
+                if (!enemyList[i].enemy.src.includes("transform")) {
+                    // Look for the closest bear if the bear is in front of the tiger.
+                    if ((enemyList[i].enemy_x - hero_x) < closest && (enemyList[i].enemy_x - hero_x) > 0) {
+                        closest = enemyList[i].enemy_x - hero_x;
+                        closestBearFound = true;
+                        closestBear = i;
+                    }
+                }
+            }
+            
+            // Handle the magic ball.
+            for (let i = 0; i < magic.length; i++) {
+                // Handle magic ball collisions.
+                if (closestBearFound && !dying && !pause) {
+                    let enemyPos = enemyList[closestBear].enemy_x;
+                    if (magic[i].x >= enemyPos - 20  && magic[i].x <= enemyPos + 20 &&  magic[i].y >= 300 && !magic[i].collided) {
+                        magic[i].collided = true;
+                        clearInterval(magic[i].interval);
+                        magic[i].frame = 0;
+                        magic[i].interval = setInterval(function() {var imgNum = (magic[i].frame % 4) + 4;
+                                                                    magic[i].magicBall.src = "Magic/magic"+ imgNum.toString() + ".png";
+                                                                    magic[i].frame++;
+                                                                   }, 150);
+                        setTimeout(function() {clearInterval(magic[i].interval);}, 620);
+                        
+                        // Knock back the enemy.
+                        if (!pause) {
+                            enemyList[closestBear].enemy_hit = 0;
+                            enemyList[closestBear].hitFrame = 0;
+                            clearInterval(enemyList[closestBear].bearInterval); // Stops previous animation
+                            enemyList[closestBear].bearInterval = setInterval(function (){  if (enemyList[closestBear].hitFrame < 3) {
+                                                                                            var imgNum = (enemyList[closestBear].hitFrame % 3) + 1;
+                                                                                            enemyList[closestBear].enemy.src = "Enemy Hit/enemyhit" + imgNum.toString() + ".png";
+                                                                                            enemyList[closestBear].enemy_x += 100;
+                                                                                            enemyList[closestBear].hitFrame++;
+                                                                                        }
+                                                                                        else
+                                                                                            enemyList[closestBear].enemy.src = "Enemy Hit/enemyhit3.png";
+
+                                                                                        enemyList[closestBear].enemy_hit++;
+                                                                                    }, 100);
+                            enemyList[closestBear].hitNum++;
+                        }
+                    }
+                }
+                // Move the magic ball.
+                if (magic[i].x < canvas.width && !pause) {
+                    magic[i].x+=8;
+                }
+                // Make magic balls that are off the canvas invisible.
+                if (magic[i].x >= canvas.width) {
+                    magic[i].magicBall.src = "Magic/magic7.png";
+                }
             }
         }
 
@@ -614,7 +683,7 @@
                 setTimeout(function(){  clearInterval(tigerKnockback);
                                         hero.src = "Tiger Walking/tiger6.png"; }, 600);
             }
-
+            
             // Check if the health bar is empty. If so, then run the dying hero animation :,( and end the game.
             if (bar_width <= 0 && !dying && !pause && jumpFrame == 0) {
                 var deadFrame = 0;
@@ -663,6 +732,8 @@
                 }
             }
 
+            handleMagic();
+
             ctx.drawImage(back_background, 0, 0);
 
             ctx.drawImage(clouds, clouds_x, 0);
@@ -673,6 +744,9 @@
             ctx.drawImage(hero, hero_x, hero_y, 150, 150);
             for (let i = 0; i < enemyList.length; i++) {
                 ctx.drawImage(enemyList[i].enemy, enemyList[i].enemy_x, enemyList[i].enemy_y, 150, 150);
+            }
+            for (let i = 0; i < magic.length; i++) {
+                ctx.drawImage(magic[i].magicBall, magic[i].x, magic[i].y, 80, 80);
             }
             ctx.drawImage(foreground, background_x, background_y);     
         }

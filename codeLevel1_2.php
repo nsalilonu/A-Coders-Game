@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/3f70d76f1c.js" crossorigin="anonymous"></script>
-    <title id="title">  A Coder's Game </title>
+    <title id="title"> Bearly Coding </title>
 </head>
 
 <link href="codeStyle.css" type="text/css" rel="stylesheet" />
