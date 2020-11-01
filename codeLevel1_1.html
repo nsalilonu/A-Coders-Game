@@ -189,6 +189,12 @@
                 return false;
             }
             else {
+                if (isNaN(answer2.value)) {
+                    alert("My dear, I'm afraid that this is not algebra. You cannot subtract from something that is not a number.");
+                    pointNum -= 1;
+                    points.innerHTML = "Points: " + pointNum.toString();
+                    return false;
+                }
                 let answer2Value = parseInt(answer2.value);
                 if (answer2Value >= 6) {
                     pointNum+=100;
