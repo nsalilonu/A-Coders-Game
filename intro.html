@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html>
-    <?php
-    setcookie("intro", "1", 0, "/"); // The intro will run if the user hasn't visited this page. Otherwise, they will see quick instructions.
-    ?>
     <head>
         <!-- the next three lines try to discourage browser from keeping page in cache -->
         <meta http-equiv="Pragma" content="no-cache">
@@ -77,6 +74,8 @@
         soundtrack.loop = true;
         soundtrack.volume = 0.25;
 
+        // Set the introset cookie to complete when the user gets to the intro page.
+        document.cookie = "introset=complete;expires=;path=./gameplay.html";
         // Update the canvas every 10 milliseconds.
         var interval = setInterval(function () {update(); }, 10);
 
@@ -203,20 +202,38 @@
                                         }, 500);
                     
                     
-                    setTimeout(function() { // Make a new magic fireball.
-                                            var magicBall = new Image();
-                                            var magicBall_x = hero_x + 150;
-                                            var magicBall_y = hero_y + 10;
-                                            var frame = 0;
-                                            var magicBallInterval = setInterval(function() {var imgNum = (frame % 3) + 1;
+                                        setTimeout(function() { // Make a new magic fireball.
+                                        if (magic.length < 10) {
+                                            let magicBall = new Image();
+                                            let magicBall_x = hero_x + 150;
+                                            let magicBall_y = hero_y + 10;
+                                            let frame = 0;
+                                            let magicBallInterval = setInterval(function() {var imgNum = (frame % 3) + 1;
                                                                                             magicBall.src = "Magic/magic" + imgNum.toString() + ".png";
-                                                                                           frame++;
-                                                                                           }, 150);
-                                            var collided = false;
-                                            var hitNum = 0;
-                                            magic.push({magicBall: magicBall, x: magicBall_x, y: magicBall_y, interval: magicBallInterval, frame: frame, collided: collided,
-                                                        hitNum: hitNum});
-                                            }, 100);
+                                                                                            frame++;
+                                                                                        }, 150);
+                                            let collided = false;
+                                            magic.push({magicBall: magicBall, x: magicBall_x, y: magicBall_y, interval: magicBallInterval, frame: frame, collided: collided});
+                                        }
+                                        // If the array is full, use a ball that is invisible.
+                                        else {
+                                            for (let i = 0; i < magic.length; i++) {
+                                                if (magic[i].magicBall.src.includes("magic7")) {
+                                                    magic[i].magicBall.src = "Magic/magic1.png";
+                                                    magic[i].x = hero_x + 150;
+                                                    magic[i].y = hero_y + 10;
+                                                    magic[i].frame = 0;
+                                                    clearInterval(magic[i].interval);
+                                                    magic[i].interval = setInterval(function() {var imgNum = (magic[i].frame % 3) + 1;
+                                                                                                    magic[i].magicBall.src = "Magic/magic" + imgNum.toString() + ".png";
+                                                                                                    magic[i].frame++;
+                                                                                                    }, 150);
+                                                    magic[i].collided = false;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                      }, 100); 
                     
                            
                     startAttack = true;
@@ -594,28 +611,35 @@
                     var startGame = document.getElementById("startGame");
                     startGame.style.display = "block";
                     proceed = false;
-                    startGame.addEventListener("click", function() {window.location.href = "./gameplay.php";});
+                    startGame.addEventListener("click", function() {window.location.href = "./gameplay.html";});
                     break;
             }
 
             ctx.drawImage(background, background_x, background_y, window.innerWidth, window.innerHeight);
             ctx.drawImage(hero, hero_x, hero_y, 150, 150);
             if (introNum >= 22) ctx.drawImage(dummy, canvas.width - 400, 400, 300, 300); 
+
+            // Handle magic ball collisions
             for (let i = 0; i < magic.length; i++) {
                 // Move magic ball if it hasn't collided with the dummy.
-                if (!magic[i].collided) magic[i].x += 8;
+                if (!magic[i].collided) {
+                    magic[i].x += 8;
+                }
                 
                 ctx.drawImage(magic[i].magicBall, magic[i].x, magic[i].y, 80, 80);
                 
                 // Check if magic ball has collided with dummy.
                 if (magic[i].x >= canvas.width - 400  && magic[i].y >= 400 && !magic[i].collided) {
-                    var blast = magic[i];
-
-                    blast.collided = true;
-                    clearInterval(blast.interval); // Clear moving ball interval. 
+                    magic[i].collided = true;
+                    clearInterval(magic[i].interval);
+                    magic[i].frame = 0;
+                    magic[i].interval = setInterval(function() {var imgNum = (magic[i].frame % 4) + 4;
+                                                                magic[i].magicBall.src = "Magic/magic"+ imgNum.toString() + ".png";
+                                                                magic[i].frame++;
+                                                                }, 150);
+                    setTimeout(function() {clearInterval(magic[i].interval);}, 620);
                     
-                    
-
+                    // Knock back the enemy.
                     // If the dummy has been hit 3 times, make it transform.
                     if (dummyHit == 3) {
                         dummy.src = "Dummy/dummyHit.png";
@@ -638,19 +662,9 @@
                         dummyHit++;
                         dummyInterval = setTimeout(function() {dummy.src = "Dummy/dummy.png";}, 480);
                     }
-
-                    // Make magic ball disappear when it collides with the dummy.
-                    blast.frame = 4;
-                    blast.interval = setInterval(function() {   blast.magicBall.src = "Magic/magic" + blast.frame.toString() + ".png";
-                                                                blast.frame++;
-                                                            }, 150);
-
-                    setTimeout(function() { clearInterval(blast.interval);
-                                            magic.splice(i, 1);     
-                                          }, 480);
-                    
+                   
                 }
-            }
+            }   
         }
 
         </script>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <!-- the next three lines try to discourage browser from keeping page in cache -->
     <meta http-equiv="Pragma" content="no-cache">
@@ -15,13 +14,18 @@
 <link href="codeStyle.css" type="text/css" rel="stylesheet" />
 
 <body style="background-color: rgb(0, 0, 0);">
+    <div id="points">Points: </div>
+    <i class="fas fa-volume-up" id="sound"></i>
+    <i class="fas fa-volume-mute" id="muted"></i>
+    <i class="far fa-question-circle" id="help"></i>
+
     <pre>
         <p class = "codeLine">1:     </p><p class ="keyword">function </p><p class = "functionName">moveObject</p><p class = "symbol">() {</p> 
         <p class = "codeLine">2:     </p>    <p class ="keyword">const </p><p class = "constant">LEFT</p><p class = "symbol"> = </p><p class = "number">37</p><p class = "symbol">;</p>
         <p class = "codeLine">3:     </p>    <p class ="keyword">const </p><p class = "constant">RIGHT</p><p class = "symbol"> = </p><p class = "number">39</p><p class = "symbol">;</p>
         <p class = "codeLine">4:     </p>    
         <p class = "codeLine">5:     </p>    <p class = "loop">if </p><p class = "symbol">(</p><p class = "variable">event.keyCode</p><p class = "symbol"> == </p><p class = "constant">LEFT</p><p class = "symbol">) {</p>
-        <p class = "codeLine">6:     </p>        <p class = "variable">movingLeft</p><p class = "symbol"> = </p><p class = "keyword">true</p><p class = "symbol">;</p>
+        <p class = "codeLine">6:     </p>        <p class = "variable">movingLeft</p><p class = "symbol"> = </p><p id = "error1">false</p><p class = "symbol">;</p>
         <p class = "codeLine">7:     </p>    <p class = "symbol">}</p>
         <p class = "codeLine">8:     </p>    <p class = "loop">else if </p><p class = "symbol">(</p><p class = "variable">event.keyCode</p><p class = "symbol"> == </p><p class = "constant">RIGHT</p><p class = "symbol">) {</p>
         <p class = "codeLine">9:     </p>        <p class = "variable">movingRight</p><p class = "symbol"> = </p><p class = "keyword">true</p><p class = "symbol">;</p>
@@ -56,77 +60,189 @@
 
     <div class = "answerBox"> 
         <span class="close">&times;</span>
-        <form action="./answerHandler1.php" method="GET">
-            <p class = "answerBoxText"><b>What would you like to replace 0.000000000001 with?</b></p>
-            <input type = "text" id = "answer2" name = "answer2">
+        <form id="question1" method="GET">
+            <p class = "answerBoxText"><b>What would you like to replace false with?</b></p>
+            <input type = "text" id = "answer1" name = "answer1">
             <input type = "submit" value = "Go!" id = "submitButton">
         </form>
     </div>
 
-    <?php
-        // Show the congrats box if the user hasn't made any mistakes.
-        if ($_COOKIE["mistakes"] == "0")
-        echo "<div id = 'congrats'> ";
-        echo "<span class='close'>&times;</span>";
-        echo "<p id = 'answerBoxText'><b>Congratulations, your magic has restored your ability to move left! 
-        But for some reason yooouuu'rrrreeee muuuuuuch slooooooweeeeer. Whaaaaaaaaat diiid theeeeeeey doooooooooo?</b> 
-        </p>";
-        echo "</div>";
-   ?>
-   <?php
-    // Check to see if the user has been to this page before. If they have, then they made a mistake
-    if ($_COOKIE["mistakes"] !== "0") {
-        echo "<div class = 'errorBox' style = 'display: block;'>";
-        //echo "<p1> Mistakes: </p1>".$_COOKIE["mistakes"];
-        echo "<span class='close'>&times;</span>";
-        echo "<h1 class = 'errorBoxHeader'><b>Oops!</b></h1>";
-        echo "<p class = 'answerBoxText'><b>Your magic backfired! Must have been the wrong spell...try again!</b></p>";
-        echo "</div>";
-    }
-    ?>
-   
-   <div class="HintBox"> 
-        <p1 id="HintBoxText"></p1>
+    <div class = "answerBox"> 
+        <span class="close">&times;</span>
+        <form id="question2" method="GET">
+            <p class = "answerBoxText"><b>What would you like to replace 0.000000000001 with?</b></p><br>
+            <input class = "answerBoxText" type = "text" id = "answer2" name = "answer2">
+            <input type = "submit" value = "Go!" id = "submitButton">
+        </form>
     </div>
 
+   
+
+    <div id='errorBox' style = 'display: none;'>
+    <span class='close'>&times;</span>
+    <h1 class = 'errorBoxHeader'><b>Oops!</b></h1>
+    <p class = 'answerBoxText'><b>Your magic backfired! Must have been the wrong spell...try again!</b></p>
+    </div>
+
+    <div id='backdrop' style='display:block;'>
+        <div class = 'introBox'> 
+            <span class='close'>&times;</span>
+            <p class = 'answerBoxText'><b>The Backwood Bears have had it with your schemes and plan their revenge!
+                         Martin uses his dark magic to unleash chaos, and now you can't move! Don't worry, I've marked where
+                         he has been in red, and you can hover over the line numbers for more help! Why didn't I fix it myself? 
+                         We've been over this, I'm not allowed to directly intervene...Now, now, don't be so mopey about it. How
+                         would you like it if I unmarked the code? No? I thought so... </b></p>
+            <img src='codeLevel1Intro.png' style='width: 50%;'>
+        </div>
+    </div>
+
+
+    <div class="HintBox"> 
+        <p1 id="HintBoxText"></p1>
+    </div>
+ 
     <script type = "module">
+        document.cookie = "level=1;expires=;path=./gameplay.html";
         var soundtrack = document.createElement("AUDIO");
         soundtrack.src = "coding.mp3";
         soundtrack.loop = true;
         soundtrack.volume = 0.5;
 
-        window.addEventListener("mouseover", function() {soundtrack.play();});
         // Message for the first error in the code!
-        var answerBox = document.getElementsByClassName("answerBox")[0];
+        var error1 = document.getElementById("error1");
+        var answerBox1 = document.getElementsByClassName("answerBox")[0];
+
+        error1.addEventListener('click', function() {  answerBox1.style.display = "block";
+                                                    });
 
         // Message for the second error in the code!
         var error2 = document.getElementById("error2");
-        error2.addEventListener('click', function() {   
-                                                        answerBox.style.display = "block"; 
+        var answerBox2 = document.getElementsByClassName("answerBox")[1];
+        error2.addEventListener('click', function() {   answerBox2.style.display = "block"; 
                                                     });
 
-
-        // Close the modal if the user clicks on span or out of the answer box.
+        // Close the modal if the user clicks on the 'X'.
         var span = document.getElementsByClassName("close")[0];
         span.onclick = function() {
-        answerBox.style.display = "none";
+            answerBox1.style.display = "none";
         }
 
         var span1 = document.getElementsByClassName("close")[1];
-        var congrats = document.getElementById("congrats");
         span1.onclick = function() {
-            congrats.style.display = "none";
+            answerBox2.style.display = "none";
         }
 
-        var errorBox = document.getElementsByClassName("errorBox")[0];
+        var errorBox = document.getElementById("errorBox");
         var span2 = document.getElementsByClassName("close")[2];
-        if (span2 != undefined) {
             span2.onclick = function() {
                 errorBox.style.display = "none";
             }
-        }
+        
+
+        var intro = document.getElementById("backdrop");
+        var span3 = document.getElementsByClassName("close")[3];
+            span3.onclick = function() {
+                intro.style.display = "none";
+            }
+    
+
+        // Handle soundtrack.
+        var muted = document.getElementById("muted");
+        var sound = document.getElementById("sound");
+
+        // Handle the sound:
+        muted.addEventListener('click', function() {    muted.style.display = "none";
+                                                sound.style.display = "block";
+                                                soundtrack.play();
+                                            });
+        sound.addEventListener('click', function() {    muted.style.display = "block";
+                                                        sound.style.display = "none";
+                                                        soundtrack.pause();
+                                                    });
+
+        // Handle help.
+        let help = document.getElementById("help");
+        help.addEventListener('click', function() { intro.style.display = "block";});
+
+        // Handle the cookies in Javascript?
+        //https://www.w3schools.com/js/js_cookies.asp
+        function getCookie(cname) {
+                var name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for(var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
+        let pointNum = parseInt(getCookie("points"));
+
+        let points = document.getElementById("points");
+        points.innerHTML = "Points: " + pointNum.toString();
+
+        let form1 = document.getElementById("question1");
+        form1.addEventListener('submit', function(event) {
+            let answer1 = document.getElementById("answer1");
+            let answer1Value = answer1.value.toLowerCase();
+            event.preventDefault();
+            if (answer1.value == "") {
+                alert("You must be joking. You're not even going to try? Come on, enter SOMETHING!");
+                pointNum -= 1;
+                points.innerHTML = "Points: " + pointNum.toString();
+                return false;
+            }
+            else if (answer1Value == "true") {
+                pointNum+=100;
+                document.cookie = "newpoints="+pointNum.toString()+";expires=; path=./codeLevel1_1.html";
+                window.location.href = "./codeLevel1_1.html";
+                return true;
+            }
+            else {
+                pointNum-=10;
+                points.innerHTML = "Points: " + pointNum.toString();
+                errorBox.style.display = "block";
+                answerBox1.style.display = "none";
+                return false;
+            }  
+        });
+
+        let form2 = document.getElementById("question2");
+        form2.addEventListener('submit', function(event) {
+            event.preventDefault();
+            let answer2 = document.getElementById("answer2");
+            if (answer2.value == "") {
+                alert("You must be joking. You're not even going to try? Come on, enter SOMETHING!");
+                pointNum -= 1;
+                points.innerHTML = "Points: " + pointNum.toString();
+                return false;
+            }
+            else {
+                let answer2Value = parseInt(answer2.value);
+                if (answer2Value >= 6) {
+                    pointNum+=100;
+                    document.cookie = "newpoints="+pointNum.toString()+";expires=; path=./codeLevel1_2.html";
+                    document.cookie = "answer2="+answer2Value.toString()+";expires=; path= ./codeLevel1_2.html";
+                    window.location.href = "./codeLevel1_2.html";
+                    return true;
+                }
+                else {
+                    pointNum-=10;
+                    points.innerHTML = "Points: " + pointNum.toString();
+                    errorBox.style.display = "block";
+                    answerBox2.style.display = "none";
+                    return false;
+                } 
+            }
+        });
 
         
+
         // All the explanations for the code -- tears :,(
         var codeLine1 = document.getElementsByClassName("codeLine")[0];
         var codeLine2 = document.getElementsByClassName("codeLine")[1];
@@ -191,7 +307,7 @@
                                                                                  were that reliable. I always fear that it's broken, and I'm simply wasting my time.</b>`});
         codeLine5.addEventListener("mouseout", function() {hintBox.style.display = "none";});
         codeLine6.addEventListener("mouseover", function() {hintBox.style.display = "block";
-                                                           hintText.innerHTML = `<b> If the left arrow key is being pressed, movingLeft, what we call a variable, will be set to true. Variables
+                                                           hintText.innerHTML = `<b> If the left arrow key is being pressed, movingLeft, what we call a variable, will be set to false. Variables
                                                                                 can change, are meant to change. But what if I don't want to change, Rose?! </b>`});
         codeLine6.addEventListener("mouseout", function() {hintBox.style.display = "none";});
         codeLine7.addEventListener("mouseover", function() {hintBox.style.display = "block";
@@ -244,7 +360,8 @@
         codeLine17.addEventListener("mouseout", function() {hintBox.style.display = "none";});
         codeLine18.addEventListener("mouseover", function() {hintBox.style.display = "block";
                                                            hintText.innerHTML = `<b> If the condition, that is, that the left arrow key has been lifted, is true, then the variable
-                                                                                     movingLeft will be set to false. You know why, now, if you've gotten this far, so I won't talk your ear off.</b>`});
+                                                                                     movingLeft will be set to false. Yes, false, again...perhaps this is of note for your error...but you
+                                                                                     didn't hear it from me.</b>`});
         codeLine18.addEventListener("mouseout", function() {hintBox.style.display = "none";});
         codeLine19.addEventListener("mouseover", function() {hintBox.style.display = "block";
                                                            hintText.innerHTML = `<b> An ending curly brace for your if statement. Provides some finality, doesn't it? Unlike Rose..."I'll call you
@@ -307,7 +424,7 @@
                                                                                 gaping holes?! It was better before!</b>`});
         codeLine30.addEventListener("mouseout", function() {hintBox.style.display = "none";});
         codeLine31.addEventListener("mouseover", function() {hintBox.style.display = "block";
-                                                           hintText.innerHTML = `<b> Dancing queen, young and sweet, only 17, yeah yeah! You can dance! You can jiiiIIIVE! Having
+                                                           hintText.innerHTML = `<b> Dancing queen, young and sweet, only 17, yeah yeah! You can dance! You can jiiiIVE! Having
                                                                                     the time of your liiiife, OOOOOooo. See that girl! Watch that scene! Digging the dancing queen!
                                                                                     Is that what you wanted? Because my own mortification is the only fathomable purpose I can
                                                                                     see in your insistence on seeking explanations for BLANK LINES!</b>`});
@@ -336,8 +453,6 @@
                                                            hintText.innerHTML = `<b> Here we are, at the end! A final ending curly brace to end the update function. That should be all you need to figure out 
                                                                                 your errors. Huh, what else do you need? A foot massage? Who do you think you are, the Queen of England? Get back to work!`});
         codeLine36.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-
-
     </script>
 </body>
 

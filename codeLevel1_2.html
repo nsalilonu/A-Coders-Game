@@ -15,6 +15,10 @@
 <link href="codeStyle.css" type="text/css" rel="stylesheet" />
 
 <body style="background-color: rgb(0, 0, 0);">
+    <div id="points">Points: </div>
+    <i class="fas fa-volume-up" id="sound"></i>
+    <i class="fas fa-volume-mute" id="muted"></i>
+    <i class="far fa-question-circle" id="help"></i>
     <pre>
         <p class = "codeLine">1:     </p><p class ="keyword">function </p><p class = "functionName">moveObject</p><p class = "symbol">() {</p> 
         <p class = "codeLine">2:     </p>    <p class ="keyword">const </p><p class = "constant">LEFT</p><p class = "symbol"> = </p><p class = "number">37</p><p class = "symbol">;</p>
@@ -44,7 +48,7 @@
         <p class = "codeLine">26:    </p>    <p class = "variable">ctx</p><p class = "symbol">.</p><p class = "functionName">clearRect</p><p class = "symbol">(</p><p class = "number">0</p><p class = "symbol">, </p><p class = "number">0</p><p class = "symbol">, </p><p class = "variable">canvas</p><p class = "symbol">.</p><p class = "variable">width</p><p class = "symbol">, </p><p class = "variable">canvas</p><p class = "symbol">.</p><p class = "variable">height</p><p class = "symbol">);</p>
         <p class = "codeLine">27:    </p>        
         <p class = "codeLine">28:    </p>    <p class = "loop">if </p><p class = "symbol">(</p><p class = "variable">movingLeft</p><p class = "symbol">) { </p>
-        <p class = "codeLine">29:    </p>        <p class = "variable">hero_x</p><p class = "symbol"> -= </p><p class = "number">6</p><p class = "symbol">;</p>
+        <p class = "codeLine">29:    </p>        <p class = "variable">hero_x</p><p class = "symbol"> -= </p><p class = "number">error2</p><p class = "symbol">;</p>
         <p class = "codeLine">30:    </p>    <p class = "symbol">}</p>
         <p class = "codeLine">31:    </p>    
         <p class = "codeLine">32:    </p>    <p class = "loop">if </p><p class = "symbol">(</p><p class = "variable">movingRight</p><p class = "symbol">) {</p>
@@ -56,53 +60,53 @@
 
     <div class = "answerBox"> 
         <span class="close">&times;</span>
-        <form action="./answerHandler1.php" method="GET">
+        <form method="GET" id="question">
             <p class = "answerBoxText"><b>What would you like to replace false with?</b></p>
             <input type = "text" id = "answer1" name = "answer1">
             <input type = "submit" value = "Go!" id = "submitButton">
         </form>
     </div>
 
-    <?php
-        // Show the congrats box if the user hasn't made any mistakes.
-        if ($_COOKIE["mistakes"] == "0")
-        echo "<div id = 'congrats'> ";
-        echo "<span class='close'>&times;</span>";
-        echo "<p id = 'answerBoxText'><b>Congratulations, your magic has restored your speed to normal! But you still can't move! 
+    <div id = 'congrats'> 
+        <span class='close'>&times;</span>
+        <p class = 'answerBoxText'><b>Congratulations, your magic has restored your speed to normal! But you still can't move! 
         And yes, I have tried restarting the page...something is still wrong with your source magic...
         What? You don't believe me? Here, let me restart the page again....<br>....<br> There, satisfied? Now get to work!</b> 
-        </p>";
-        echo "</div>";
-   ?>
-    <?php
-    // Check to see if the user has been to this page before. If they have, then they made a mistake
-    if ($_COOKIE["mistakes"] !== "0") {
-        echo "<div class = 'errorBox' style = 'display: block;'>";
-        //echo "<p1> Mistakes: </p1>".$_COOKIE["mistakes"];
-        echo "<span class='close'>&times;</span>";
-        echo "<h1 class = 'errorBoxHeader'><b>Oops!</b></h1>";
-        echo "<p class = 'answerBoxText'><b>Your magic backfired! Must have been the wrong spell...try again!</b></p>";
-        echo "</div>";
-    }
-    ?>
+        </p>
+    </div>
+
+    <div id = 'errorBox' style = 'display: none;'>
+        <span class='close'>&times;</span>
+        <h1 class = 'errorBoxHeader'><b>Oops!</b></h1>
+        <p class = 'answerBoxText'><b>Your magic backfired! Must have been the wrong spell...try again!</b></p>
+    </div>
+
+    <div id='backdrop' style='display:none;'>
+        <div class = 'introBox'> 
+            <span class='close'>&times;</span>
+            <p class = 'answerBoxText'><b>The Backwood Bears have had it with your schemes and plan their revenge!
+                         Martin uses his dark magic to unleash chaos, and now you can't move! Don't worry, I've marked where
+                         he has been in red, and you can hover over the line numbers for more help! Why didn't I fix it myself? 
+                         We've been over this, I'm not allowed to directly intervene...Now, now, don't be so mopey about it. How
+                         would you like it if I unmarked the code? No? I thought so... </b></p>
+            <img src='codeLevel1Intro.png' style='width: 50%;'>
+        </div>
+    </div>
 
     <div class="HintBox"> 
         <p1 id="HintBoxText"></p1>
     </div>
-   
 
     <script type = "module">
+        document.cookie = "level=1;expires=;path=./gameplay.html";
         var soundtrack = document.createElement("AUDIO");
         soundtrack.src = "coding.mp3";
         soundtrack.loop = true;
         soundtrack.volume = 0.5;
 
-        window.addEventListener("mouseover", function() {soundtrack.play();});
-
         // Message for the first error in the code!
         var answerBox = document.getElementsByClassName("answerBox")[0];
 
-        // Message for the second error in the code!
         var error1 = document.getElementById("error1");
         error1.addEventListener('click', function() {   
                                                         answerBox.style.display = "block"; 
@@ -121,13 +125,97 @@
             congrats.style.display = "none";
         }
 
-        var errorBox = document.getElementsByClassName("errorBox")[0];
+        var errorBox = document.getElementById("errorBox");
         var span2 = document.getElementsByClassName("close")[2];
         if (span2 != undefined) {
             span2.onclick = function() {
                 errorBox.style.display = "none";
             }
         }
+
+        var intro = document.getElementById("backdrop");
+        var span3 = document.getElementsByClassName("close")[3];
+            span3.onclick = function() {
+                intro.style.display = "none";
+            }
+
+        // Handle soundtrack.
+        var muted = document.getElementById("muted");
+        var sound = document.getElementById("sound");
+
+        // Handle the sound:
+        muted.addEventListener('click', function() {    muted.style.display = "none";
+                                                        sound.style.display = "block";
+                                                        soundtrack.play();
+                                            });
+        sound.addEventListener('click', function() {    muted.style.display = "block";
+                                                        sound.style.display = "none";
+                                                        soundtrack.pause();
+                                                    });
+
+        // Handle help.
+        let help = document.getElementById("help");
+        help.addEventListener('click', function() { intro.style.display = "block";});
+
+        // Handle the cookies in Javascript?
+        //https://www.w3schools.com/js/js_cookies.asp
+        function getCookie(cname) {
+                var name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for(var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
+        let pointNum = parseInt(getCookie("newpoints"));
+
+        let points = document.getElementById("points");
+        points.innerHTML = "Points: " + pointNum.toString();
+
+        // Find where error 2 is and replace it with user input.
+        let numbers = document.getElementsByClassName("number");
+        for (let i = 0; i < numbers.length; i++) {
+            if (numbers[i].innerHTML == "error2") {
+                let userAnswer = getCookie("answer2");
+                numbers[i].innerHTML = userAnswer;
+            } 
+        }
+
+        let form = document.getElementById("question");
+        form.addEventListener('submit', function(event) {
+            let answer1 = document.getElementById("answer1");
+            let answer1Value = answer1.value.toLowerCase();
+            event.preventDefault();
+            if (answer1.value == "") {
+                alert("You must be joking. You're not even going to try? Come on, enter SOMETHING!");
+                pointNum -= 1;
+                points.innerHTML = "Points: " + pointNum.toString();
+                return false;
+            }
+            else {
+                if (answer1Value == "true") {
+
+                    pointNum+=100;
+                    document.cookie = "newerpoints="+pointNum.toString()+";expires=; path=./codeLevelEnd.html";
+                    window.location.href = "./codeLevel1End.html";
+                    return true;
+                }
+                else {
+                    pointNum-=10;
+                    points.innerHTML = "Points: " + pointNum.toString();
+                    errorBox.style.display = "block";
+                    answerBox.style.display = "none";
+                    return false;
+                } 
+            }
+        });
 
         // All the explanations for the code -- tears :,(
         var codeLine1 = document.getElementsByClassName("codeLine")[0];

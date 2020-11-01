@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html>
 
+  
+
+
+
 <head>
     <!-- the next three lines try to discourage browser from keeping page in cache -->
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="-1">
     <meta http-equiv="cache-control" content="no-store">
-    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/3f70d76f1c.js" crossorigin="anonymous"></script>
-    <title id="title">  A Coder's Game </title>
+    <title id="title"> Bearly Coding </title>
 </head>
 
 <link href="codeStyle.css" type="text/css" rel="stylesheet" />
 
 <body style="background-color: rgb(113, 14, 126);">
+    <i class="fas fa-volume-up" id="sound"></i>
+    <i class="fas fa-volume-mute" id="muted"></i>
     <div class = "endCode">
         <h1 style= "font-size: 40px; font-family: 'Nanum Myeongjo', serif;">Magnificent! You finished Level 1!</h1>
-        <p1 style= "font-size: 25px; font-family: 'Indie Flower', cursive;">You can move left again! Lucky for you, you are no more damaged than you left off. 
-            The Backwood Bear leader was far too busy giving a dramatic evil villian victory speech, and his henchman too busy pretending 
+        <p1 id="medal" style= "font-size: 25px; font-family: 'Itim', cursive;"></p1><br>
+        <img id = "medalType">
+        <p1 id="pointsFinal" style= "font-size: 35px; font-family: 'Itim', cursive;"></p1><br><br>
+        <p1 style= "font-size: 25px; font-family: 'Itim', cursive;">You can move left again! Lucky for you, you had time to heal!
+            Martin was far too busy giving a dramatic evil villian victory speech to attack you, and his henchman too busy pretending 
             to listen to him. Yes, pretending... I'm all-knowing in this universe after all, and I'm quite sure I saw Jerry playing Candy 
             Crush Saga under his trench coat in the back. We see you, Jerry. 
             <br>
@@ -31,7 +40,93 @@
         <button class ="continue"><b>Continue</b></button>
     </div>
 
+
+    <canvas id="canvas"></canvas>
+
     <script type="module">
+        var soundtrack = document.createElement("AUDIO");
+        soundtrack.src = "coding.mp3";
+        soundtrack.loop = true;
+        soundtrack.volume = 0.5;
+
+        // Handle soundtrack.
+        var muted = document.getElementById("muted");
+        var sound = document.getElementById("sound");
+
+        // Handle the sound:
+        muted.addEventListener('click', function() {    muted.style.display = "none";
+                                                sound.style.display = "block";
+                                                soundtrack.play();
+                                            });
+        sound.addEventListener('click', function() {    muted.style.display = "block";
+                                                        sound.style.display = "none";
+                                                        soundtrack.pause();
+                                                    });
+
+        var canvas = document.getElementById("canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var ctx = canvas.getContext("2d");
+
+        // Initialize the hero.
+        var hero_x = 700;
+        var hero_y = 0;
+        var hero = new Image();
+        var runFrame = 0;
+
+        // Change the level.
+        document.cookie = "level=2;expires=;path=./gameplay.html";
+       
+       // Decide what medal to give the player.
+       function getCookie(cname) {
+                var name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for(var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
+        let pointNum = parseInt(getCookie("newerpoints"))
+        let points = document.getElementById("pointsFinal");
+        points.innerHTML = "Points: " + pointNum.toString();
+        let medal = document.getElementById("medal");
+        let medalType = document.getElementById("medalType");
+        
+        if (pointNum < 200) {
+            medal.innerHTML = "Congratulations! You got a single cookie! You tried...I'm sure you did your best.";
+            medalType.src = "bronze.png";
+        }
+        if (pointNum >= 200 && pointNum < 400) {
+            medal.innerHTML = "Congratulations! You got a stuffed cookie! Not double stuffed, but better than a single cookie. At least you have somebody to look down upon.";
+            medalType.src = "silver.png";
+        }
+        if (pointNum >= 400) {
+            medal.innerHTML = "Congratulations! You got a double stuffed cookie! What a fantastic feat! You're more quick-witted than I thought! Don't go evil on me, now...";
+            medalType.src = "gold.png";
+        }
+
+
+        setInterval(function()  { var imgNum = (runFrame % 4) + 1;
+                                  hero.src = "Running/run"+imgNum.toString()+".png";
+                                  runFrame++;
+                                }, 200);
+
+        setInterval(function() {update();}, 10);
+
+        function update() {
+            // Clear the canvas.
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(hero, hero_x, hero_y, 200, 200);
+        }
+    
+        
         var continueGame = document.getElementsByClassName("continue")[0];
         continueGame.addEventListener("click", function() {window.location.href = "./gameplay.html";}, false);
     </script>
