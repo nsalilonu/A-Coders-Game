@@ -248,7 +248,7 @@ body {
     color: white;
 }
 
-#save {
+#mainMenu {
     font-family: 'Itim', cursive; 
     font-size: 30px;
     text-align: center;
@@ -260,7 +260,7 @@ body {
     padding: 5px; 
 }
 
-#save:hover {
+#mainMenu:hover {
     background-color: rgb(166, 165, 245);
 }
 
@@ -280,21 +280,6 @@ body {
     background-color: rgb(166, 165, 245);
 }
 
-#saveExit {
-    font-family: 'Itim', cursive; 
-    font-size: 30px;
-    text-align: center;
-    color: white;
-    background-color: rgb(76, 87, 192);
-    border-color: black;
-    border-radius: 12px;
-    border-width: 5px;
-    padding: 5px; 
-}
-
-#saveExit:hover {
-    background-color: rgb(166, 165, 245);
-}
 
 #infoBox {
     display: none;
@@ -303,7 +288,6 @@ body {
     font-size: 25px;
     padding: 15px;
     width: 45%;
-    height: 39%;
     margin-top: 15%;
     margin-left: 27%;
     border:5px solid black;

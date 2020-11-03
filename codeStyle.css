@@ -4,49 +4,55 @@ body {
 
 .variable {
     font-family: 'Source Code Pro', monospace;
-    color: rgb(166, 201, 255);
+    color: rgb(156, 220, 254);
     display: inline;
 }
 
 .symbol {
     font-family: 'Source Code Pro', monospace;
-    color: rgb(255, 255, 255);
+    color: rgb(212, 212, 201);
     display: inline;
 }
 
 .keyword {
     font-family: 'Source Code Pro', monospace;
-    color: rgb(88, 124, 224);
+    color: rgb(86, 156, 214);
     display: inline;
 }
 
 .functionName {
     font-family: 'Source Code Pro', monospace;
-    color: rgb(253, 255, 144);
+    color: rgb(220, 205, 121);
     display: inline;
 }
 
 .number {
     font-family: 'Source Code Pro', monospace;
-    color: rgb(196, 248, 216);
+    color: rgb(181, 206, 168);
     display: inline;
 }
 
 .constant {
     font-family: 'Source Code Pro', monospace;
-    color: rgb(20, 145, 177);
+    color: rgb(51, 180, 255);
     display: inline;
 }
 
 .loop {
     font-family: 'Source Code Pro', monospace;
-    color: rgb(168, 73, 245);
+    color: rgb(197, 134, 161);
+    display: inline;
+}
+
+.stringText {
+    font-family: 'Source Code Pro', monospace;
+    color: rgb(206, 145, 120);
     display: inline;
 }
 
 .codeLine {
     font-family: 'Source Code Pro', monospace;
-    color: rgb(163, 163, 163);
+    color: rgb(133, 120, 90);
     display: inline; 
 }
 

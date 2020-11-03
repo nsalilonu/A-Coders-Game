@@ -57,11 +57,10 @@
         it may come to an end if you don't do something about the Backwood Bear gang. I'm sure they'll 
         just tire themselves out as you prioritize your "self-care".
         <br>
-        Well, while you're here, I may as well offer you a few things to do...
-        <br>
-        <button id="save"><b>Save</b></button>
+        Well, while you're here, I may as well offer you somthing to do...
+        <br><br>
         <button id="gameplayIntro"><b>How to Play</b></button>
-        <button id="saveExit"><b>Save and Exit</b></button>
+        <button id="mainMenu"><b>Back to Main Menu</b></button>
     </div>
 
     <div id="infoBox">
@@ -144,6 +143,7 @@
         var pauseBox = document.getElementById("pauseBox");
         var gameplayIntro = document.getElementById("gameplayIntro");
         var infoBox = document.getElementById("infoBox");
+        var backToMain = document.getElementById("mainMenu");
         var spellSelected = 1;
 
                // Handle level cookies.
@@ -199,6 +199,7 @@
                                                                     window.location.href = "./intro.html";
                                                                 }
                                                             });
+        backToMain.addEventListener('click', function() {window.location.href = "./index.html;"})
         // Close the modal if the user clicks on the 'X'.
         var span = document.getElementsByClassName("close")[0];
         span.onclick = function() {
@@ -225,17 +226,24 @@
         var clock = setInterval(function() {    if (!pause) { 
                                                     var points = document.getElementById("time");
                                                     seconds++;
+                                                    time++;
                                                     points.innerHTML = "Points:      " + seconds;
                                                 }     
                                            }, 1000);
 
-        // Switch to the coding HTML page after 10 seconds (will obviously be longer in the actual game).
-        setTimeout(function() {
-            if (level.innerHTML.includes("Level 1")) {
-                window.location.href = "./codeLevel1.html";
-                document.cookie = "points="+seconds+"; expires=; path=./codeLevel1.html";
+        // Switch to the coding HTML page after 45 seconds of gameplay.
+        setInterval(function() {
+            if (time >= 45) {
+                if (level.innerHTML.includes("Level 1")) {
+                    window.location.href = "./codeLevel1.html";
+                    document.cookie = "points="+seconds+"; expires=; path=./codeLevel1.html";
+                }
+                else if (level.innerHTML.includes("Level 2")) {
+                    window.location.href = "./codeLevel2.html";
+                    document.cookie = "points="+seconds+"; expires=; path=./codeLevel2.html";
+                }
             }
-            }, 45000);
+        }, 1000);
         setTimeout(function() { level.style.display = "none";}, 5000);
 
         // Initialize other variables.
@@ -251,6 +259,7 @@
         var firstHit = false;
         var dying = false;
         var pause = false;
+        var time = 0;
 
         var walkingInterval;        
         var jumpInterval; 
