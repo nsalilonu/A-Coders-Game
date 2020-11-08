@@ -16,9 +16,11 @@
 
 <body style="background-color: rgb(30, 30, 30);">
     <div id="points">Points: 100</div>
+    <div id="errorCounter">Errors Solved: 0/3</div>
     <i class="fas fa-volume-up" id="sound"></i>
     <i class="fas fa-volume-mute" id="muted"></i>
     <i class="far fa-question-circle" id="help"></i>
+    <button id="solution">Your Magical Solution!</button>
 
     <pre>
         <p class = "codeLine">1:     </p><p class="variable">window</p><p class="symbol">.</p><p class="functionName">addEventListener</p><p class="symbol">(</p><p class="stringText">'keydown'</p><p class="symbol">, </p><p class="functionName">moveObject</p><p class="symbol">, </p><p class="keyword">false</p><p class="symbol">);</p>
@@ -72,7 +74,7 @@
         <p class = "codeLine">49:    </p>   <p class = "loop">else if </p><p class = "symbol">(</p><p class = "variable">event.keyCode</p><p class = "symbol"> == </p><p class = "constant">RIGHT</p><p class = "symbol">) {</p> 
         <p class = "codeLine">50:    </p>       <p class = "variable">movingRight</p><p class = "symbol"> = </p><p class = "keyword">false</p><p class = "symbol">;</p>
         <p class = "codeLine">51:    </p>       <p class="variable">startWalk</p><p class="symbol"> = </p><p class="keyword">false</p><p class="symbol">;</p> 
-        <p class = "codeLine">52:    </p>       <p class="functionName" id="ierror4">clearInterval</p><p class="symbol">(</p><p class="variable">walkingInterval</p><p class="symbol">);</p> 
+        <p class = "codeLine">52:    </p>       <p class="functionName">clearInterval</p><p class="symbol">(</p><p class="variable">walkingInterval</p><p class="symbol">);</p> 
         <p class = "codeLine">53:    </p>       <p class="variable">walkFrame</p><p class="symbol"> = </p><p class="number">0</p><p class="symbol">;</p>
         <p class = "codeLine">54:    </p>       <p class="variable">hero</p><p class="symbol">.</p><p class="variable">src</p><p class="symbol"> = </p><p class="stringText">"Tiger Walking/tiger6.png"</p><p class="symbol">;</p>
         <p class = "codeLine">55:    </p>   <p class = "symbol">}</p> 
@@ -81,28 +83,20 @@
 
     <div class = "answerBox"> 
         <span class="close">&times;</span>
-        <form id="question1" method="GET">
-            <p class = "answerBoxText"><b>What would you like to replace false with?</b></p>
-            <input type = "text" id = "answer1" name = "answer1">
-            <input type = "submit" value = "Go!" id = "submitButton">
-        </form>
+        <p class = "answerBoxText"></p>
+        <input type = "text" class="answerBoxText" id="attempt"><br><br><br><br>
+        <div><button id = "submitButton">Go!</button></div>
     </div>
-
-    <div class = "answerBox"> 
-        <span class="close">&times;</span>
-        <form id="question2" method="GET">
-            <p class = "answerBoxText"><b>What would you like to replace 0.000000000001 with?</b></p><br>
-            <input class = "answerBoxText" type = "text" id = "answer2" name = "answer2">
-            <input type = "submit" value = "Go!" id = "submitButton">
-        </form>
-    </div>
-
-   
 
     <div id='errorBox' style = 'display: none;'>
-    <span class='close'>&times;</span>
-    <h1 class = 'errorBoxHeader'><b>Oops!</b></h1>
-    <p class = 'answerBoxText'><b>Your magic backfired! Must have been the wrong spell...try again!</b></p>
+        <span class='close'>&times;</span>
+        <h1 class = 'errorBoxHeader'><b>Oops!</b></h1>
+        <p class = 'answerBoxText' id="errorBoxText"></p>
+    </div>
+
+    <div id = 'congrats'>
+        <span class='close'>&times;</span>
+        <p class = 'answerBoxText' id="congratsText"></p>
     </div>
 
     <!-- <div id='backdrop' style='display:block;'>
@@ -121,155 +115,418 @@
     <div class="HintBox"> 
         <p1 id="HintBoxText"></p1>
     </div>
+
+    <div id="interactiveBox">
+        <div class="row">
+            <div class="column">
+                <p class="answerBoxText"><b>You (Normally)</b></p> 
+                <img id="solutionImage" src="Tiger Walking/tiger1.png" style="width:100%;">
+            </div>
+            <div class="column">
+                <p class="answerBoxText"><b>You (Damaged)</b></p> 
+                <img id="interactiveImage"  src="Tiger Walking/tiger1.png" style="width:100%;">
+            </div>
+        </div>
+    </div>
  
     <script type = "module">
+        congrats.style.display = "none";
+        document.cookie = "level=2;expires=;path=./gameplay.html";
+        var soundtrack = document.createElement("AUDIO");
+        soundtrack.src = "coding.mp3";
+        soundtrack.loop = true;
+        soundtrack.volume = 0.5;
 
-        // document.cookie = "level=1;expires=;path=./gameplay.html";
-        // var soundtrack = document.createElement("AUDIO");
-        // soundtrack.src = "coding.mp3";
-        // soundtrack.loop = true;
-        // soundtrack.volume = 0.5;
+         // Handle soundtrack.
+        var muted = document.getElementById("muted");
+        var sound = document.getElementById("sound");
 
-        // // Message for the first error in the code!
-        // var error1 = document.getElementById("error1");
-        // var answerBox1 = document.getElementsByClassName("answerBox")[0];
+        // Handle the sound:
+        muted.addEventListener('click', function() {    muted.style.display = "none";
+                                                sound.style.display = "block";
+                                                soundtrack.play();
+                                            });
+        sound.addEventListener('click', function() {    muted.style.display = "block";
+                                                        sound.style.display = "none";
+                                                        soundtrack.pause();
+                                                    });
 
-        // error1.addEventListener('click', function() {  answerBox1.style.display = "block";
-        //                                             });
-
-        // // Message for the second error in the code!
-        // var error2 = document.getElementById("error2");
-        // var answerBox2 = document.getElementsByClassName("answerBox")[1];
-        // error2.addEventListener('click', function() {   answerBox2.style.display = "block"; 
-        //                                             });
-
-        // // Close the modal if the user clicks on the 'X'.
-        // var span = document.getElementsByClassName("close")[0];
-        // span.onclick = function() {
-        //     answerBox1.style.display = "none";
-        // }
-
-        // var span1 = document.getElementsByClassName("close")[1];
-        // span1.onclick = function() {
-        //     answerBox2.style.display = "none";
-        // }
-
-        // var errorBox = document.getElementById("errorBox");
-        // var span2 = document.getElementsByClassName("close")[2];
-        //     span2.onclick = function() {
-        //         errorBox.style.display = "none";
-        //     }
-        
-
-        // var intro = document.getElementById("backdrop");
-        // var span3 = document.getElementsByClassName("close")[3];
-        //     span3.onclick = function() {
-        //         intro.style.display = "none";
-        //     }
-    
-
-        // // Handle soundtrack.
-        // var muted = document.getElementById("muted");
-        // var sound = document.getElementById("sound");
-
-        // // Handle the sound:
-        // muted.addEventListener('click', function() {    muted.style.display = "none";
-        //                                         sound.style.display = "block";
-        //                                         soundtrack.play();
-        //                                     });
-        // sound.addEventListener('click', function() {    muted.style.display = "block";
-        //                                                 sound.style.display = "none";
-        //                                                 soundtrack.pause();
-        //                                             });
-
-        // // Handle help.
+        // Handle help.
         // let help = document.getElementById("help");
         // help.addEventListener('click', function() { intro.style.display = "block";});
 
-        // // Handle the cookies in Javascript?
-        // //https://www.w3schools.com/js/js_cookies.asp
-        // function getCookie(cname) {
-        //         var name = cname + "=";
-        //         var decodedCookie = decodeURIComponent(document.cookie);
-        //         var ca = decodedCookie.split(';');
-        //         for(var i = 0; i < ca.length; i++) {
-        //             var c = ca[i];
-        //             while (c.charAt(0) == ' ') {
-        //             c = c.substring(1);
-        //             }
-        //             if (c.indexOf(name) == 0) {
-        //             return c.substring(name.length, c.length);
-        //             }
-        //         }
-        //         return "";
-        //     }
-        // let pointNum = parseInt(getCookie("points"));
 
-        // let points = document.getElementById("points");
-        // points.innerHTML = "Points: " + pointNum.toString();
+        // See your solution in action!
+        let solution = document.getElementById("solution"); // Button to see the tiger walking
+        let interactiveBox = document.getElementById("interactiveBox");
+        let solutionClicked = false; 
+        let interactiveInterval;
+        let solutionInterval;
+        let ierror1 = document.getElementById("ierror1");
+        let ierror2 = document.getElementById("ierror2");
+        let ierror3 = document.getElementById("ierror3");
+        let ierror4 = document.getElementById("ierror4");
+                
+        solution.addEventListener("click", function() {
+            if (!solutionClicked) {
+                let interactiveImg = document.getElementById("interactiveImage");
+                let solutionImg = document.getElementById("solutionImage");
+                let walkFrameInteractive = 0;
+                let walkFrameSolution = 0;
 
-        // let form1 = document.getElementById("question1");
-        // form1.addEventListener('submit', function(event) {
-        //     let answer1 = document.getElementById("answer1");
-        //     let answer1Value = answer1.value.toLowerCase();
-        //     event.preventDefault();
-        //     if (answer1.value == "") {
-        //         alert("You must be joking. You're not even going to try? Come on, enter SOMETHING!");
-        //         pointNum -= 1;
-        //         points.innerHTML = "Points: " + pointNum.toString();
-        //         return false;
-        //     }
-        //     else if (answer1Value == "true") {
-        //         pointNum+=100;
-        //         document.cookie = "newpoints="+pointNum.toString()+";expires=; path=./codeLevel1_1.html";
-        //         window.location.href = "./codeLevel1_1.html";
-        //         return true;
-        //     }
-        //     else {
-        //         pointNum-=10;
-        //         points.innerHTML = "Points: " + pointNum.toString();
-        //         errorBox.style.display = "block";
-        //         answerBox1.style.display = "none";
-        //         return false;
-        //     }  
-        // });
+                interactiveBox.style.display = "block";
+                if (solutionInterval != undefined)
+                    clearInterval(solutionInterval)
 
-        // let form2 = document.getElementById("question2");
-        // form2.addEventListener('submit', function(event) {
-        //     event.preventDefault();
-        //     let answer2 = document.getElementById("answer2");
-        //     if (answer2.value == "") {
-        //         alert("You must be joking. You're not even going to try? Come on, enter SOMETHING!");
-        //         pointNum -= 1;
-        //         points.innerHTML = "Points: " + pointNum.toString();
-        //         return false;
-        //     }
-        //     else {
-        //         if (isNaN(answer2.value)) {
-        //             alert("My dear, I'm afraid that this is not algebra. You cannot subtract from something that is not a number.");
-        //             pointNum -= 1;
-        //             points.innerHTML = "Points: " + pointNum.toString();
-        //             return false;
-        //         }
-        //         let answer2Value = parseInt(answer2.value);
-        //         if (answer2Value >= 6) {
-        //             pointNum+=100;
-        //             document.cookie = "newpoints="+pointNum.toString()+";expires=; path=./codeLevel1_2.html";
-        //             document.cookie = "answer2="+answer2Value.toString()+";expires=; path= ./codeLevel1_2.html";
-        //             window.location.href = "./codeLevel1_2.html";
-        //             return true;
-        //         }
-        //         else {
-        //             pointNum-=10;
-        //             points.innerHTML = "Points: " + pointNum.toString();
-        //             errorBox.style.display = "block";
-        //             answerBox2.style.display = "none";
-        //             return false;
-        //         } 
-        //     }
-        // });
+                solutionInterval = setInterval(function() { 
+                    var imgNum = (walkFrameSolution % 4) + 1;
+                    solutionImg.src = "Tiger Walking/tiger" + imgNum.toString() + ".png";
+                    walkFrameSolution++;
+                }, 150);
 
+                if (interactiveInterval != undefined)
+                    clearInterval(interactiveInterval)
+                interactiveInterval = setInterval(function() { 
+                    var imgNum = (walkFrameInteractive % parseInt(ierror1.innerHTML)) + 1;
+                    interactiveImg.src = "Tiger Walking/tiger" + imgNum.toString() + ".png";
+                    walkFrameInteractive++;
+                }, parseInt(ierror2.innerHTML));
+                solutionClicked = true;
+            }    
+        });
+
+        // Stop displaying the interactive box when you click anywhere.
+        window.addEventListener("click", function(event) {
+            if (event.target != solution) {
+                interactiveBox.style.display = "none";
+                solutionClicked = false;
+            }
+        });
+
+        // Coding messages:
+        let answerBox = document.getElementsByClassName("answerBox")[0];
+        let answerBoxText = document.getElementsByClassName("answerBoxText")[0];
+        let ierror1Clicked = false;
+        let ierror2Clicked = false;
+        let ierror3Clicked = false;
+        let ierror4Clicked = false;
+
+        ierror1.addEventListener('click', function() { 
+            if (ierror1.innerHTML !== '4') { 
+                answerBoxText.innerHTML = "What would you like to change <b>'"+ ierror1.innerHTML +"'</b> to?";
+                answerBox.style.display = "block";
+                
+                ierror1Clicked = true;
+                ierror2Clicked = false;
+                ierror3Clicked = false;
+                ierror4Clicked = false;
+            }
+        });
+        ierror2.addEventListener('click', function() {
+            let ierror2Value = parseInt(ierror2.innerHTML);
+            if (ierror2Value > 300 || ierror2Value < 100) {  
+                answerBoxText.innerHTML = "What would you like to change <b>'"+ ierror2.innerHTML +"'</b> to?";
+                answerBox.style.display = "block";
+                ierror2Clicked = true;
+                ierror1Clicked = false;
+                ierror3Clicked = false;
+                ierror4Clicked = false;
+            }
+        });
+        ierror3.addEventListener('click', function() {  
+            let ierror3Value = parseInt(ierror3.innerHTML);
+            if (ierror3Value > 300 || ierror3Value < 100) {  
+            answerBoxText.innerHTML = "What would you like to change <b>'"+ ierror3.innerHTML +"'</b> to?";
+            answerBox.style.display = "block";
+            ierror3Clicked = true;
+            ierror2Clicked = false;
+            ierror1Clicked = false;
+            ierror4Clicked = false;
+            }
+        });
+        ierror4.addEventListener('click', function() {  
+            if (ierror4.innerHTML !== "clearInterval") {  
+            answerBoxText.innerHTML = "What would you like to change <b>'"+ ierror4.innerHTML +"'</b> to?";
+            answerBox.style.display = "block";
+            ierror4Clicked = true;
+            ierror1Clicked = false;
+            ierror2Clicked = false;
+            ierror3Clicked = false;
+            }
+        });
+        //-------------------------------------------------------------------------------------------------
+        // Validate answers.
+         // Handle the cookies in Javascript?
+        //https://www.w3schools.com/js/js_cookies.asp
+        function getCookie(cname) {
+                var name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for(var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+        }
+        let pointNum = parseInt(getCookie("points"));
+
+        let points = document.getElementById("points");
+        points.innerHTML = "Points: " + pointNum.toString();
+
+        let errorCount = 0;
+        let submitButton = document.getElementById("submitButton");
+        submitButton.addEventListener('click', function(event) {
+            answerBox.style.display = "none";
+           if (ierror1Clicked) {
+               // Check for bad input.
+               let attempt = document.getElementById("attempt").value;
+               attempt.trim();
+               if (isNaN(attempt)) {
+                   alert("A modulus gives the remainder of a division. It has to contain numbers. When's the last time you heard 'Do you want any leftover pizza? We have akd;fjl;dkaj pieces left!'?");
+                    pointNum -= 1;
+                    points.innerHTML = "Points: " + pointNum.toString();
+                   return;
+               }
+
+               else if (attempt == "") {
+                    alert("What, did you hope that by giving up I would just give you the answer? Nonsense! Enter in something for your answer!");
+                    pointNum -= 1;
+                    points.innerHTML = "Points: " + pointNum.toString();
+                    return;
+               }
+               attempt = parseInt(attempt);
+               if (attempt == 4) {
+                    let congrats = document.getElementById("congrats");
+                    let congratsText = document.getElementById("congratsText");
+                    let errorCounter = document.getElementById("errorCounter");
+                    congrats.style.display = "block";
+                    congratsText.innerHTML = `Spectacular! Now you are walking correctly, whereas before it was more of
+                    a pitiful amble. Reminded me of my university years...`;
+                    ierror1.innerHTML = attempt.toString();
+                    errorCount++;
+                    errorCounter.innerHTML = "Errors Solved: " + errorCount.toString() + "/3";
+                    pointNum += 100;
+                    points.innerHTML = "Points: " + pointNum.toString();
+               }
+               else if (attempt > 0 && attempt < 4) {
+                    let errorBox = document.getElementById("errorBox");
+                    let errorBoxText = document.getElementById("errorBoxText");
+                    errorBox.style.display = "block";
+                    errorBoxText.innerHTML = "That...isn't quite right. You still look ridiculous. I could keep on talking, but I'll let you see it yourself.";
+                    ierror1.innerHTML = attempt.toString();
+                    pointNum -= 10;
+                    points.innerHTML = "Points: " + pointNum.toString();
+               }
+               else {
+                    let errorBox = document.getElementById("errorBox");
+                    let errorBoxText = document.getElementById("errorBoxText");
+                    errorBox.style.display = "block";
+                    errorBoxText.innerHTML = `WHOA! I'm all about the learning experience, but what you just did could have broken your world. Suffice it to 
+                    say that I encourage you to try again.`;
+                    pointNum -= 15;
+                    points.innerHTML = "Points: " + pointNum.toString();
+               } 
+
+               
+                // Go to the end level page if you complete all the errors.
+                if (errorCount == 3) {
+                    pointNum += 100;
+                    document.cookie = "newerpoints="+pointNum.toString()+";expires=; path=./codeLeve2End.html";
+                    window.location.href = "./codeLevel2End.html";
+                }
+           }
+           else if (ierror2Clicked) {
+               // Check for bad input.
+               let attempt = document.getElementById("attempt").value;
+               attempt.trim();
+
+               if (isNaN(attempt)) {
+                    alert("You hoped to change the interval at which the pictures are switched with something that was not a number? That makes perfect sense! I'll just have supper at 89hdjal8932 o'clock, right after my appointment at eijno92vas PM!");
+                    pointNum -= 1;
+                    points.innerHTML = "Points: " + pointNum.toString();
+                    return;
+               }
+
+               else if (attempt == "") {
+                    alert("What, did you hope that by giving up I would just give you the answer? Nonsense! Enter in something for your answer!");
+                    pointNum -= 1;
+                    points.innerHTML = "Points: " + pointNum.toString();
+                    return;
+               }
+               attempt = parseInt(attempt);
+               if (attempt < 300 && attempt > 100) {
+                    let congrats = document.getElementById("congrats");
+                    let congratsText = document.getElementById("congratsText");
+                    congrats.style.display = "block";
+                    congratsText.innerHTML = `That seems to me to be an even pace. Not too quick, not too slow.`;
+                    ierror2.innerHTML = attempt.toString();
+                    ierror3.innerHTML = attempt.toString();
+                    errorCount++;
+                    errorCounter.innerHTML = "Errors Solved: " + errorCount.toString() + "/3";
+                    pointNum += 300;
+                    points.innerHTML = "Points: " + pointNum.toString();
+               }
+               else if (attempt < 300) {
+                    let errorBox = document.getElementById("errorBox");
+                    let errorBoxText = document.getElementById("errorBoxText");
+                    errorBox.style.display = "block";
+                    errorBoxText.innerHTML = "Dear goodness, you're fast! What, did I give you too many cookies? Are you on a sugar high? I knew I shouldn't spoil you so...slow down!";
+                    ierror2.innerHTML = attempt.toString();
+                    ierror3.innerHTML = attempt.toString();
+                    pointNum -= 5;
+                    points.innerHTML = "Points: " + pointNum.toString();
+               }
+               else {
+                    let errorBox = document.getElementById("errorBox");
+                    let errorBoxText = document.getElementById("errorBoxText");
+                    errorBox.style.display = "block";
+                    errorBoxText.innerHTML = `Come on, you can move a bit faster than that. Here, slow and steady does not win the race--it wins you
+                    a trip to the emergency room from bear-related injuries.`;
+                    ierror2.innerHTML = attempt.toString();
+                    ierror3.innerHTML = attempt.toString();
+                    pointNum -= 5;
+                    points.innerHTML = "Points: " + pointNum.toString();
+
+                    
+                // Go to the end level page if you complete all the errors.
+                if (errorCount == 3) {
+                    pointNum += 100;
+                    document.cookie = "newerpoints="+pointNum.toString()+";expires=; path=./codeLeve2End.html";
+                    window.location.href = "./codeLevel2End.html";
+                }
+               } 
+           }
+
+           else if (ierror3Clicked) {
+                // Check for bad input.
+                let attempt = document.getElementById("attempt").value;
+                attempt.trim();
+
+                if (isNaN(attempt)) {
+                    alert("You hoped to change the interval at which the pictures are switched with something that was not a number? That makes perfect sense! I'll just have supper at 89hdjal8932 o'clock, right after my appointment at eijno92vas PM!");
+                    pointNum -= 1;
+                    points.innerHTML = "Points: " + pointNum.toString();
+                    return;
+                }
+
+                else if (attempt == "") {
+                    alert("What, did you hope that by giving up I would just give you the answer? Nonsense! Enter in something for your answer!");
+                    pointNum -= 1;
+                    points.innerHTML = "Points: " + pointNum.toString();
+                    return;
+                }
+
+               attempt = parseInt(attempt);
+                if (attempt < 300 && attempt > 100) {
+                    let congrats = document.getElementById("congrats");
+                    let congratsText = document.getElementById("congratsText");
+                    congrats.style.display = "block";
+                    congratsText.innerHTML = `That seems to me to be an even pace. Not too quick, not too slow.`;
+                    ierror2.innerHTML = attempt.toString();
+                    ierror3.innerHTML = attempt.toString();
+                    errorCount++;
+                    errorCounter.innerHTML = "Errors Solved: " + errorCount.toString() + "/3";
+                    pointNum += 100;
+                    points.innerHTML = "Points: " + pointNum.toString();
+                }
+               else if (attempt < 300) {
+                    let errorBox = document.getElementById("errorBox");
+                    let errorBoxText = document.getElementById("errorBoxText");
+                    errorBox.style.display = "block";
+                    errorBoxText.innerHTML = "Dear goodness, you're fast! What, did I give you too many cookies? Are you on a sugar high? I knew I shouldn't spoil you so...slow down!";
+                    ierror2.innerHTML = attempt.toString();
+                    ierror3.innerHTML = attempt.toString();
+                    pointNum -= 5;
+                    points.innerHTML = "Points: " + pointNum.toString();
+               }
+               else {
+                    let errorBox = document.getElementById("errorBox");
+                    let errorBoxText = document.getElementById("errorBoxText");
+                    errorBox.style.display = "block";
+                    errorBoxText.innerHTML = `Come on, you can move a bit faster than that. Here, slow and steady does not win the race--it wins you
+                    a trip to the emergency room from bear-related injuries.`;
+                    ierror2.innerHTML = attempt.toString();
+                    ierror3.innerHTML = attempt.toString();
+                    pointNum -= 5;
+                    points.innerHTML = "Points: " + pointNum.toString();
+               } 
+
+               
+                // Go to the end level page if you complete all the errors.
+                if (errorCount == 3) {
+                    pointNum += 100;
+                    document.cookie = "newerpoints="+pointNum.toString()+";expires=; path=./codeLeve2End.html";
+                    window.location.href = "./codeLevel2End.html";
+                }
+           }
+           else if (ierror4Clicked) {
+               // Check for bad input.
+               let attempt = document.getElementById("attempt").value;
+               attempt.trim();
+
+                if (attempt == "") {
+                    alert("What, did you hope that by giving up I would just give you the answer? Nonsense! Enter in something for your answer!");
+                    pointNum -= 1;
+                    points.innerHTML = "Points: " + pointNum.toString();
+                    return;
+                }
+
+               else if (attempt == "clearInterval") {
+                    let congrats = document.getElementById("congrats");
+                    let congratsText = document.getElementById("congratsText");
+                    congrats.style.display = "block";
+                    congratsText.innerHTML = `Excellent! You stop walking when you lift the right arrow key, so you must clear
+                    the walking interval! Otherwise, you'd never stop moving. That would be a rather severe case of restless leg syndrome.`;
+                    ierror4.innerHTML = attempt;
+                    errorCount++;
+                    errorCounter.innerHTML = "Errors Solved: " + errorCount.toString() + "/3";
+                    pointNum += 100;
+                    points.innerHTML = "Points: " + pointNum.toString();
+                }
+               
+               else {
+                   let errorBox = document.getElementById("errorBox");
+                   let errorBoxText = document.getElementById("errorBoxText");
+                   errorBox.style.display = "block";
+                   errorBoxText.innerHTML = `That wasn't the right move. Think....if you stop pressing the arrow key, what happens to the 
+                   walking interval that you started when you pressed the right arrow key?`;
+                   ierror4.innerHTML = attempt;
+                } 
+
+                
+                // Go to the end level page if you complete all the errors.
+                if (errorCount == 3) {
+                    pointNum += 100;
+                    document.cookie = "newerpoints="+pointNum.toString()+";expires=; path=./codeLeve2End.html";
+                    window.location.href = "./codeLevel2End.html";
+                }
+            }
+        });
+
+        // Close the modal if the user clicks on the 'X'.
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            answerBox.style.display = "none";
+        }
+
+        var span = document.getElementsByClassName("close")[1];
+        span.onclick = function() {
+            let errorBox = document.getElementById("errorBox");
+            errorBox.style.display = "none";
+        }
+
+        var span = document.getElementsByClassName("close")[2];
+        span.onclick = function() {
+            congrats.style.display = "none";
+        }
         
+        // Show the end game screen if you go past.
+        //-------------------------------------------------------------------------------------------------------------------------------
 
         // // All the explanations for the code -- tears :,(
         // var codeLine1 = document.getElementsByClassName("codeLine")[0];

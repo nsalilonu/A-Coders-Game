@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- the next three lines try to discourage browser from keeping page in cache -->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="cache-control" content="no-store">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/3f70d76f1c.js" crossorigin="anonymous"></script>
+    <title id="title"> Bearly Coding </title>
+</head>
+
+<link href="codeStyle.css" type="text/css" rel="stylesheet" />
+
+<body style="background-color: rgb(113, 14, 126);">
+    <i class="fas fa-volume-up" id="sound"></i>
+    <i class="fas fa-volume-mute" id="muted"></i>
+    <div class = "endCode">
+        <h1 style= "font-size: 40px; font-family: 'Nanum Myeongjo', serif;">Extraordinary! You finished Level 2!</h1>
+        <p1 id="medal" style= "font-size: 25px; font-family: 'Itim', cursive;"></p1><br>
+        <img id = "medalType">
+        <p1 id="pointsFinal" style= "font-size: 35px; font-family: 'Itim', cursive;"></p1><br><br>
+        <p1 style= "font-size: 25px; font-family: 'Itim', cursive;">You managed to get past level 2! I was getting a 
+            little worried, to be honest. I wanted to mark the errors, but I knew I had to push you a little bit. And 
+            you managed swimmingly!
+            <br>
+            You had enough time to heal as well! Martin was too busy practicing his evil laugh. His gang had to watch. No
+            proper criticism, of course. The last guy who criticized Martin ended up...well, let's just say that he makes a 
+            remarkably pretty potted plant. Martin is quite good at transformations, too. He just prefers brute violence.
+            <br>
+            Back to the wood, now! Yes, yes...your reward will be in the spells box.
+            <br>
+        </p1>
+        <button class ="continue"><b>Continue</b></button>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <script type="module">
+        var soundtrack = document.createElement("AUDIO");
+        soundtrack.src = "coding.mp3";
+        soundtrack.loop = true;
+        soundtrack.volume = 0.5;
+
+        // Handle soundtrack.
+        var muted = document.getElementById("muted");
+        var sound = document.getElementById("sound");
+
+        // Handle the sound:
+        muted.addEventListener('click', function() {    
+            muted.style.display = "none";
+            sound.style.display = "block";
+            soundtrack.play();
+        });
+        sound.addEventListener('click', function() {    
+            muted.style.display = "block";
+            sound.style.display = "none";
+            soundtrack.pause();
+        });
+
+        var canvas = document.getElementById("canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var ctx = canvas.getContext("2d");
+
+        // Initialize the hero.
+        var hero_x = 700;
+        var hero_y = 0;
+        var hero = new Image();
+        var runFrame = 0;
+
+        // Change the level.
+        document.cookie = "level=3;expires=;path=./gameplay.html";
+       
+       // Decide what medal to give the player.
+       function getCookie(cname) {
+                var name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for(var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
+        let pointNum = parseInt(getCookie("newerpoints"));
+        let points = document.getElementById("pointsFinal");
+        points.innerHTML = "Points: " + pointNum.toString();
+        let medal = document.getElementById("medal");
+        let medalType = document.getElementById("medalType");
+        
+        if (pointNum < 400) {
+            medal.innerHTML = "Congratulations! You got a single cookie! You tried...I'm sure you did your best.";
+            medalType.src = "bronze.png";
+        }
+        if (pointNum >= 400 && pointNum < 800) {
+            medal.innerHTML = "Congratulations! You got a stuffed cookie! Not double stuffed, but better than a single cookie. At least you have somebody to look down upon.";
+            medalType.src = "silver.png";
+        }
+        if (pointNum >= 800) {
+            medal.innerHTML = "Congratulations! You got a double stuffed cookie! What a fantastic feat! You're more quick-witted than I thought! Don't go evil on me, now...";
+            medalType.src = "gold.png";
+        }
+
+
+        setInterval(function()  { var imgNum = (runFrame % 4) + 1;
+                                  hero.src = "Running/run"+imgNum.toString()+".png";
+                                  runFrame++;
+                                }, 200);
+
+        setInterval(function() {update();}, 10);
+
+        function update() {
+            // Clear the canvas.
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(hero, hero_x, hero_y, 200, 200);
+        }
+    
+        
+        var continueGame = document.getElementsByClassName("continue")[0];
+        continueGame.addEventListener("click", function() {window.location.href = "./gameplay.html";}, false);
+    </script>
+
+</body>
+</html>

@@ -123,6 +123,10 @@ body {
     color: white;
     margin-top: 5%;
     margin-left: 1%; 
+    animation-name: colorAttention;
+    animation-duration: 0.75s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate; 
 }
 
 #sound {
@@ -358,6 +362,11 @@ body {
 @keyframes fade {
     from {color: rgb(255, 255, 255);}
     to {color: rgba(78, 78, 78, 0.2);}
+}
+
+@keyframes colorAttention {
+    from {color: white;}
+    to {color: rgb(173, 173, 173);}
 }
 
 

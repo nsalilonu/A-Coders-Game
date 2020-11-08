@@ -2,6 +2,10 @@ body {
     overflow: scroll;
 }
 
+*{
+    box-sizing: border-box;
+}
+
 .variable {
     font-family: 'Source Code Pro', monospace;
     color: rgb(156, 220, 254);
@@ -222,8 +226,8 @@ body {
     background-color: rgb(53, 173, 99);
     font-size: 25px;
     position: absolute;
-    right: 30px;
-    bottom: 12px;
+    right: 5%;
+    bottom: 15px;
     color: white;
 }
 
@@ -261,7 +265,7 @@ body {
     position: fixed;
     font-family: 'Itim', cursive;
     display: block;
-    margin-left: 70%;
+    margin-left: 60%;
     margin-top: 0%;
     color: white;
     padding: 5px;
@@ -274,7 +278,11 @@ body {
     position: fixed;
     color: white;
     margin-top: 1%;
-    margin-left: 90%; 
+    margin-left: 88%;
+    animation-name: colorAttention;
+    animation-duration: 0.75s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate; 
 }
 
 #sound {
@@ -291,9 +299,80 @@ body {
     font-size: 35px;
     position: fixed;
     margin-top: 1%;
-    margin-left: 94%;
+    margin-left: 92%;
 }
 
 #help:hover {
     color: rgb(120, 175, 238);
+}
+
+#interactiveBox {
+    display: none;
+    position: fixed;
+    background-color: rgb(255, 255, 255);
+    top: 40px;
+    left: 380px;
+    padding: 20px;
+    border: 6px solid rgb(0, 0, 0);
+    border-radius: 6px;
+    width: 50%;
+    z-index: 10;
+    text-align: center;;
+}
+
+.column {
+    float: left;
+    width: 50%;
+    padding: 5px;
+}
+
+.row::after {
+    content:"";
+    clear: both;
+    display:table;
+}
+
+#solution {
+    font-family: 'Itim', cursive; 
+    font-size: 20px;
+    width: 200px;
+    text-align: center;
+    color: black;
+    position: fixed;
+    margin-left: 85%;
+    margin-top: 5%;
+    background-color: rgb(76, 87, 192);
+    border-color: black;
+    border-radius: 12px;
+    border-width: 5px;
+    padding: 5px; 
+    animation-name: attention;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#solution:hover {
+    background-color: rgb(166, 165, 245);
+}
+
+@keyframes attention {
+    from {background-color: rgb(76, 87, 192);}
+    to {background-color: rgb(166, 165, 245);}
+}
+
+@keyframes colorAttention {
+    from {color: white;}
+    to {color: rgb(173, 173, 173);}
+}
+
+#errorCounter {
+    position: fixed;
+    font-family: 'Itim', cursive;
+    display: block;
+    margin-left: 60%;
+    margin-top: 5%;
+    color: white;
+    padding: 5px;
+    font-size: 40px;
 }
