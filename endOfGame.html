@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html>
 
-  
-
-
-
 <head>
     <!-- the next three lines try to discourage browser from keeping page in cache -->
     <meta http-equiv="Pragma" content="no-cache">
@@ -23,26 +19,28 @@
     <i class="fas fa-volume-up" id="sound"></i>
     <i class="fas fa-volume-mute" id="muted"></i>
     <div class = "endCode">
-        <h1 style= "font-size: 40px; font-family: 'Nanum Myeongjo', serif;">Magnificent! You finished Level 1!</h1>
-        <p1 id="medal" style= "font-size: 25px; font-family: 'Itim', cursive;"></p1><br>
-        <img id = "medalType">
-        <p1 id="pointsFinal" style= "font-size: 35px; font-family: 'Itim', cursive;"></p1><br><br>
-        <p1 style= "font-size: 25px; font-family: 'Itim', cursive;">You can move left again! Lucky for you, you had time to heal!
-            Martin was far too busy giving a dramatic evil villian victory speech to attack you, and his henchman too busy pretending 
-            to listen to him. Yes, pretending... I'm all-knowing in this universe after all, and I'm quite sure I saw Jerry playing Candy 
-            Crush Saga under his trench coat in the back. We see you, Jerry. 
-            <br>
-            <br>
-            Anyway, you must go back into the wood. I know, I know, I suppose you want a reward for all your trouble. Look at your "Spells"
-            once you're back. You might find something interesting.
-            <br>
+        <h1 style= "font-size: 40px; font-family: 'Nanum Myeongjo', serif;">You Did It!</h1>
+        <p1 id="medal1" style= "font-size: 25px; font-family: 'Itim', cursive;"></p1><br>
+        <img id = "medalType1">
+        <p1 id="pointsFinal1" style= "font-size: 35px; font-family: 'Itim', cursive;"></p1><br><br>
+
+        <p1 id="medal2" style= "font-size: 25px; font-family: 'Itim', cursive;"></p1><br>
+        <img id = "medalType2">
+        <p1 id="pointsFinal2" style= "font-size: 35px; font-family: 'Itim', cursive;"></p1><br><br>
+
+        <p1 style= "font-size: 25px; font-family: 'Itim', cursive;">
+            It appears that Martin has given up. He's decided that he can no longer defeat you by destroying your code...you are
+            simply too good at foiling his plans. <br>
+            But he is still willing to use brute force...<br>
+            I gave you a new spell, you are still free to continue to defeat Martin's gang as long as you are able.<br>
+            But your efforts were not wasted. If Martin stops messing with code...then perhaps things will be alright.<br><br> 
+            You have done well, little tiger.<br>
         </p1>
-        <button class ="continue"><b>Continue</b></button>
+        <button class ="continue"><b>Continue</b></button> 
     </div>
 
-
     <canvas id="canvas"></canvas>
-
+    
     <script type="module">
         var soundtrack = document.createElement("AUDIO");
         soundtrack.src = "coding.mp3";
@@ -54,14 +52,16 @@
         var sound = document.getElementById("sound");
 
         // Handle the sound:
-        muted.addEventListener('click', function() {    muted.style.display = "none";
-                                                sound.style.display = "block";
-                                                soundtrack.play();
-                                            });
-        sound.addEventListener('click', function() {    muted.style.display = "block";
-                                                        sound.style.display = "none";
-                                                        soundtrack.pause();
-                                                    });
+        muted.addEventListener('click', function() {    
+            muted.style.display = "none";
+            sound.style.display = "block";
+            soundtrack.play();
+        });
+        sound.addEventListener('click', function() {    
+            muted.style.display = "block";
+            sound.style.display = "none";
+            soundtrack.pause();
+        });
 
         var canvas = document.getElementById("canvas");
         canvas.width = window.innerWidth;
@@ -75,7 +75,7 @@
         var runFrame = 0;
 
         // Change the level.
-        document.cookie = "level=2;expires=;path=./gameplay.html";
+        document.cookie = "level=Freeplay;expires=;path=./gameplay.html";
        
        // Decide what medal to give the player.
        function getCookie(cname) {
@@ -93,26 +93,41 @@
                 }
                 return "";
             }
-        let pointNum = parseInt(getCookie("newerpoints"))
+        let pointNum1 = parseInt(getCookie("level1End"));
+        let pointNum2 = parseInt(getCookie("level2End"));
+        let points1 = document.getElementById("pointsFinal1");
+        let points2 = document.getElementById("pointsFinal2");
+        points1.innerHTML = "Points: " + pointNum1.toString();
+        points2.innerHTML = "Points: " + pointNum2.toString();
+        let medal1 = document.getElementById("medal1");
+        let medalType1 = document.getElementById("medalType1");
+        let medal2 = document.getElementById("medal2");
+        let medalType2 = document.getElementById("medalType2");
         
-        // Store your final points in each level in a cookie to be displayed at the end.
-        document.cookie = "level1End=" + pointNum + ";expires=;path=./endOfGame.html";
-        let points = document.getElementById("pointsFinal");
-        points.innerHTML = "Points: " + pointNum.toString();
-        let medal = document.getElementById("medal");
-        let medalType = document.getElementById("medalType");
-        
-        if (pointNum < 200) {
-            medal.innerHTML = "Congratulations! You got a single cookie! You tried...I'm sure you did your best.";
-            medalType.src = "bronze.png";
+        if (pointNum1 < 200) {
+            medal1.innerHTML = "Level 1: Cookie";
+            medalType1.src = "bronze.png";
         }
-        if (pointNum >= 200 && pointNum < 400) {
-            medal.innerHTML = "Congratulations! You got a stuffed cookie! Not double stuffed, but better than a single cookie. At least you have somebody to look down upon.";
-            medalType.src = "silver.png";
+        if (pointNum1 >= 200 && pointNum1 < 400) {
+            medal1.innerHTML = "Level 1: Stuffed Cookie";
+            medalType1.src = "silver.png";
         }
-        if (pointNum >= 400) {
-            medal.innerHTML = "Congratulations! You got a double stuffed cookie! What a fantastic feat! You're more quick-witted than I thought! Don't go evil on me, now...";
-            medalType.src = "gold.png";
+        if (pointNum1 >= 400) {
+            medal1.innerHTML = "Level 1: Double Stuffed Cookie";
+            medalType1.src = "gold.png";
+        }
+
+        if (pointNum2 < 400) {
+            medal2.innerHTML = "Level 2: Cookie";
+            medalType2.src = "bronze.png";
+        }
+        if (pointNum2 >= 400 && pointNum2 < 800) {
+            medal2.innerHTML = "Level 2: Stuffed Cookie";
+            medalType2.src = "silver.png";
+        }
+        if (pointNum2 >= 800) {
+            medal2.innerHTML = "Level 2: Double Stuffed Cookie";
+            medalType2.src = "gold.png";
         }
 
 

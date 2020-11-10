@@ -247,11 +247,11 @@ body {
     position: fixed;
     background-color: rgb(120, 175, 238);
     top: 250px;
-    left: 650px;
+    left: 500px;
     padding: 20px;
+    width: 40%;
     border: 6px solid rgb(0, 0, 0);
     border-radius: 6px;
-    width: 20%;
     z-index: 10;
     text-align: center; 
 }
@@ -291,7 +291,7 @@ body {
     position: fixed;
     color: white;
     margin-top: 1%;
-    margin-left: 90%; 
+    margin-left: 88%; 
 }
 
 #help {
@@ -308,6 +308,7 @@ body {
 
 #interactiveBox {
     display: none;
+    font-family: 'Itim', cursive;
     position: fixed;
     background-color: rgb(255, 255, 255);
     top: 40px;
@@ -375,4 +376,77 @@ body {
     color: white;
     padding: 5px;
     font-size: 40px;
+}
+
+#solutionHints {
+    font-family: 'Itim', cursive;
+    display: none;
+    position: fixed;
+    background-color: rgb(219, 145, 241);
+    top: 170px;
+    left: 37%;
+    padding: 20px;
+    border: 6px solid rgb(84, 23, 99);
+    border-radius: 6px;
+    z-index: 10;
+    text-align: left;
+    font-size: 22px;
+    height: 400px;
+    width: 400px;
+    overflow: scroll;
+}
+
+#hintButton {
+    font-family: 'Itim', cursive; 
+    font-size: 20px;
+    width: 200px;
+    text-align: center;
+    color: black;
+    background-color: rgb(76, 87, 192);
+    border-color: black;
+    border-radius: 12px;
+    border-width: 5px;
+    padding: 5px; 
+}
+
+#hintButton:hover {
+    background-color: rgb(166, 165, 245);
+}
+
+#showHints {
+    display: block;
+    font-family: 'Itim', cursive; 
+    font-size: 20px;
+    text-align: center;
+    width: 150px;
+    color: black;
+    position: fixed;
+    margin-left: 75%;
+    margin-top: 0%;
+    background-color: rgb(76, 87, 192);
+    border-color: black;
+    border-radius: 12px;
+    border-width: 5px;
+    padding: 5px; 
+}
+
+#showHints:hover {
+    background-color: rgb(166, 165, 245);
+}
+
+#switchScreens {
+    font-family: 'Itim', cursive; 
+    font-size: 20px;
+    width: 200px;
+    text-align: center;
+    color: black;
+    background-color: rgb(76, 87, 192);
+    border-color: black;
+    border-radius: 12px;
+    border-width: 5px;
+    padding: 5px;   
+}
+
+#switchScreens:hover {
+    background-color: rgb(166, 165, 245);
 }

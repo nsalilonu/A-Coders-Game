@@ -21,6 +21,7 @@
     <i class="fas fa-volume-mute" id="muted"></i>
     <i class="far fa-question-circle" id="help"></i>
     <button id="solution">Your Magical Solution!</button>
+    <button id="showHints">Stuck? Take a Hint!</button>
 
     <pre>
         <p class = "codeLine">1:     </p><p class="variable">window</p><p class="symbol">.</p><p class="functionName">addEventListener</p><p class="symbol">(</p><p class="stringText">'keydown'</p><p class="symbol">, </p><p class="functionName">moveObject</p><p class="symbol">, </p><p class="keyword">false</p><p class="symbol">);</p>
@@ -94,22 +95,63 @@
         <p class = 'answerBoxText' id="errorBoxText"></p>
     </div>
 
-    <div id = 'congrats'>
+    <div id = 'congrats' style="display: none;">
         <span class='close'>&times;</span>
         <p class = 'answerBoxText' id="congratsText"></p>
     </div>
-
-    <!-- <div id='backdrop' style='display:block;'>
-        <div class = 'introBox'> 
-            <span class='close'>&times;</span>
-            <p class = 'answerBoxText'><b>The Backwood Bears have had it with your schemes and plan their revenge!
-                         Martin uses his dark magic to unleash chaos, and now you can't move! Don't worry, I've marked where
-                         he has been in red, and you can hover over the line numbers for more help! Why didn't I fix it myself? 
-                         We've been over this, I'm not allowed to directly intervene...Now, now, don't be so mopey about it. How
-                         would you like it if I unmarked the code? No? I thought so... </b></p>
-            <img src='codeLevel1Intro.png' style='width: 50%;'>
+    <div id = "solutionHints">
+        <h2 style="text-align: center;">Hints</h2>
+        <div id = "hint1" style="display: none;">
+            <h3>Hint 1:</h3>
+            Ahhh...having trouble? You must be rather desperate if you're willing to lose this many points...<br>
+            One error has to do with switching the errors with '%'. Another, the interval. And another, what to do when you stop pressing the left arrow key.<br>
         </div>
-    </div> -->
+        <div id = "hint2" style="display:none;">
+            <h3>Hint 2:</h3>
+            Another hint? You do realize that you're losing 40 points, right? OK...if you say so...<br><br>
+            <b>Error 1: </b>The first error has something to do with the variable imgNum. You need to oscillate through the pictures tiger1, tiger2, tiger3, and tiger4, like
+            an animation. The way it's currently set up, imgNum will oscillate through the range of numbers after the '%'. For example, let imgNum = (walkFrame % 2) + 1 will oscillate
+            between the pictures 1 and 2. <br><br>
+            <b>Error 2: </b>The second  has something to do with the interval. You need to go through the images of yourself at a certain pace to appear
+            like you're walking at all. Make sure to click on the Magic Solution button to compare your speed to the speed of yourself normally, and remember: error 1 appears before this, so if you
+            haven't tried changing that, you won't appear to be moving at all no matter what you do!<br><br>
+            <b>Error 3: </b>The third has something to do with what happens to the interval you set when you lift the key. What should happen?<br><br>
+            Hope that clears things up!<br>
+        </div>
+        <div id = "hint3" style="display:none;">
+            <h3>Hint 3:</h3>
+            End of the rope, huh, buddy? Ahh well, I suppose you tried. This doesn't change my opinion of you at all. I will just give
+            you the hint in a way that I believe is appropriate to your understanding of the subject matter...<br>
+            <b>Error 1: </b> You have 4 pretty pictures! To walk, the pretty pictures go 1,2,3,4, then 1,2,3,4 again until the interval goes bye-bye! The number after '%' is the range, and the range 
+            of the pretty pictures you want is 4!<br>
+            <b>Error 2: </b> You want to switch between the pretty pictures not too fast or too slow! Pick a number that makes you match yourself on the left!<br>
+            <b>Error 3: </b> If you stop walking, you want to stop switching the pretty pictures! runRight() does something like this! You have to remove the interval...what's another
+            word for 'remove'? It rhymes with 'cheer'!
+        </div><br>
+ 
+        <button style="text-align: center;" id = "hintButton">Another Hint? (-20 pts)</button>
+    </div>
+
+    <div id='backdrop' style='display:block;'>
+        <div class = 'introBox' style="width: 80%; left:150px; top: 1px;"> 
+            <span class='close'>&times;</span>
+            <p class = 'answerBoxText'>
+                <b>Seeing his threatening henchman reduced to nothing but blushing bear-bottomed buffoons has sent Martin in a fury like no other.
+                He has ruined your source magic again, freezing you in his world so he can do as he pleases. <br>
+                Ahh, yes, at first it does seem like it's just like the last 
+                problem. But Martin knew how you fixed the problem before, and threw a new one at you! <br>
+                Don't worry, I will help you sort it out. How will I do that if none 
+                of the code is red this time? Well, I was flipping through pages of magazines at the dentist's office to take my mind off of the fact I was 
+                paying far too much money for someone to put me in a great deal of pain, and I stumbled across an article on 'kinesthetic learning'. Don't worry,
+                I know it's reliable. Right next to the article were pictures of very cute smiling children and a person who looked very professional teaching them. 
+                I gave you a little button to show you how you looked before, and how you look now according to what you've changed in the code! 
+                "Neat-o", huh? Try clicking on "Your Magical Solution"! <br>
+                Oh, you don't think it's "neat-o"? Well, you'll have to use it, because I'm tired of answering 
+                repetitive questions. I'll only help you on major coding explanations or if you get stuck, and that's that!        
+            </b></p>
+            <img src='codeLevel1Intro.png' style="width: 30%; height:30%;">
+        </div>
+    </div>
 
 
     <div class="HintBox"> 
@@ -117,6 +159,7 @@
     </div>
 
     <div id="interactiveBox">
+        <h1 id="switchScreensHeader">Left Arrow Key Pressed Down</h1>
         <div class="row">
             <div class="column">
                 <p class="answerBoxText"><b>You (Normally)</b></p> 
@@ -127,10 +170,11 @@
                 <img id="interactiveImage"  src="Tiger Walking/tiger1.png" style="width:100%;">
             </div>
         </div>
+        <button id="switchScreens">Left Key Up</button>
     </div>
  
     <script type = "module">
-        congrats.style.display = "none";
+        // congrats.style.display = "none";
         document.cookie = "level=2;expires=;path=./gameplay.html";
         var soundtrack = document.createElement("AUDIO");
         soundtrack.src = "coding.mp3";
@@ -151,30 +195,80 @@
                                                         soundtrack.pause();
                                                     });
 
-        // Handle help.
-        // let help = document.getElementById("help");
-        // help.addEventListener('click', function() { intro.style.display = "block";});
+        //Handle help.
+        let help = document.getElementById("help");
+        help.addEventListener('click', function() { 
+            introBox.style.display = "block";
+            backdrop.style.display = "block";
+        });
 
+        // Handle the cookies in Javascript?
+        //https://www.w3schools.com/js/js_cookies.asp
+        function getCookie(cname) {
+                var name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for(var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+        }
+        let pointNum = parseInt(getCookie("points"));
+
+        let points = document.getElementById("points");
+        points.innerHTML = "Points: " + pointNum.toString();
 
         // See your solution in action!
         let solution = document.getElementById("solution"); // Button to see the tiger walking
         let interactiveBox = document.getElementById("interactiveBox");
-        let solutionClicked = false; 
         let interactiveInterval;
         let solutionInterval;
         let ierror1 = document.getElementById("ierror1");
         let ierror2 = document.getElementById("ierror2");
         let ierror3 = document.getElementById("ierror3");
         let ierror4 = document.getElementById("ierror4");
-                
-        solution.addEventListener("click", function() {
-            if (!solutionClicked) {
+        let showHints = document.getElementById("showHints");
+        let solutionHints = document.getElementById("solutionHints");
+        let hintButton = document.getElementById("hintButton");
+        let switchScreensHeader = document.getElementById("switchScreensHeader");
+        let switchScreens = document.getElementById("switchScreens");
+        let errorBox = document.getElementById("errorBox");
+        let congrats = document.getElementById("congrats");
+        let introBox = document.getElementsByClassName("introBox")[0];
+        let backdrop = document.getElementById("backdrop");
+
+        function switchScreensFunction() {
+            let interactiveImg = document.getElementById("interactiveImage");
+            let solutionImg = document.getElementById("solutionImage");
+            let walkFrameInteractive = 0;
+            let walkFrameSolution = 0;
+
+            interactiveBox.style.display = "block";
+            if (switchScreens.innerHTML == "Left Key Up") {
+                if (solutionInterval != undefined) 
+                    clearInterval(solutionInterval);
+                solutionImg.src = "Tiger Walking/tiger5.png";
+                if (ierror4.innerHTML == "clearInterval") {
+                    if (interactiveInterval != undefined) 
+                        clearInterval(interactiveInterval);
+
+                    interactiveImg.src = "Tiger Walking/tiger5.png";
+                }
+                switchScreens.innerHTML = "Left Key Down";
+                switchScreensHeader.innerHTML = "Left Arrow Key Not Pressed";
+            }
+            else {
                 let interactiveImg = document.getElementById("interactiveImage");
                 let solutionImg = document.getElementById("solutionImage");
                 let walkFrameInteractive = 0;
                 let walkFrameSolution = 0;
 
-                interactiveBox.style.display = "block";
                 if (solutionInterval != undefined)
                     clearInterval(solutionInterval)
 
@@ -186,26 +280,39 @@
 
                 if (interactiveInterval != undefined)
                     clearInterval(interactiveInterval)
+                
+                interactiveImg.src = "Tiger Walking/tiger1.png";
+                walkFrameInteractive = 1;
                 interactiveInterval = setInterval(function() { 
                     var imgNum = (walkFrameInteractive % parseInt(ierror1.innerHTML)) + 1;
                     interactiveImg.src = "Tiger Walking/tiger" + imgNum.toString() + ".png";
                     walkFrameInteractive++;
-                }, parseInt(ierror2.innerHTML));
-                solutionClicked = true;
-            }    
-        });
+            }, parseInt(ierror2.innerHTML));
+
+            switchScreens.innerHTML = "Left Key Up";
+            switchScreensHeader.innerHTML = "Left Arrow Key Pressed Down";
+            }
+        }        
+        solution.addEventListener("click", function() {switchScreensFunction();});
+
+        switchScreens.addEventListener("click", function() {switchScreensFunction();});
+
+
 
         // Stop displaying the interactive box when you click anywhere.
         window.addEventListener("click", function(event) {
-            if (event.target != solution) {
+            if (event.target != solution && event.target != switchScreens) {
                 interactiveBox.style.display = "none";
-                solutionClicked = false;
+            }
+            if (event.target != showHints && event.target != hintButton) {
+                solutionHints.style.display = "none";
             }
         });
 
         // Coding messages:
         let answerBox = document.getElementsByClassName("answerBox")[0];
         let answerBoxText = document.getElementsByClassName("answerBoxText")[0];
+        
         let ierror1Clicked = false;
         let ierror2Clicked = false;
         let ierror3Clicked = false;
@@ -254,29 +361,42 @@
             ierror3Clicked = false;
             }
         });
+
+        showHints.addEventListener("click", function() {
+            solutionHints.style.display = "block";
+        });
+
+        // Show a hint on the errors.
+        let hintCount = 0; 
+        let hint1 = document.getElementById("hint1");
+        let hint2 = document.getElementById("hint2");
+        let hint3 = document.getElementById("hint3");
+        hintButton.addEventListener("click", function() {
+            pointNum -= 20;
+            points.innerHTML = "Points: " + pointNum.toString();
+            hintCount++;
+
+            if (hintCount == 1) {
+                hint1.style.display = "block";
+                hint2.style.display = "none";
+                hint3.style.display = "none";
+            }
+            else if (hintCount == 2) {
+                hint2.style.display = "block";
+                hint1.style.display = "block";
+                hint3.style.display = "none";
+            }
+            else if (hintCount == 3) {
+                hint1.style.display = "block";
+                hint2.style.display = "block";
+                hint3.style.display = "block";
+                hintButton.style.display = "none";
+            }
+        });
+
+        
         //-------------------------------------------------------------------------------------------------
         // Validate answers.
-         // Handle the cookies in Javascript?
-        //https://www.w3schools.com/js/js_cookies.asp
-        function getCookie(cname) {
-                var name = cname + "=";
-                var decodedCookie = decodeURIComponent(document.cookie);
-                var ca = decodedCookie.split(';');
-                for(var i = 0; i < ca.length; i++) {
-                    var c = ca[i];
-                    while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                    }
-                    if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
-                    }
-                }
-                return "";
-        }
-        let pointNum = parseInt(getCookie("points"));
-
-        let points = document.getElementById("points");
-        points.innerHTML = "Points: " + pointNum.toString();
 
         let errorCount = 0;
         let submitButton = document.getElementById("submitButton");
@@ -359,11 +479,12 @@
                     return;
                }
                attempt = parseInt(attempt);
-               if (attempt < 300 && attempt > 100) {
+               if (attempt <= 300 && attempt >= 100) {
                     let congrats = document.getElementById("congrats");
                     let congratsText = document.getElementById("congratsText");
                     congrats.style.display = "block";
-                    congratsText.innerHTML = `That seems to me to be an even pace. Not too quick, not too slow.`;
+                    congratsText.innerHTML = `That seems to me to be an even pace. Not too quick, not too slow, but just right! I suppose you are quite like
+                    Goldilocks, except there are more than three bears and they are quite intent on seeing your magic put to an end whether you eat their porridge or not...`;
                     ierror2.innerHTML = attempt.toString();
                     ierror3.innerHTML = attempt.toString();
                     errorCount++;
@@ -371,7 +492,7 @@
                     pointNum += 300;
                     points.innerHTML = "Points: " + pointNum.toString();
                }
-               else if (attempt < 300) {
+               else if (attempt < 100) {
                     let errorBox = document.getElementById("errorBox");
                     let errorBoxText = document.getElementById("errorBoxText");
                     errorBox.style.display = "block";
@@ -422,11 +543,12 @@
                 }
 
                attempt = parseInt(attempt);
-                if (attempt < 300 && attempt > 100) {
+                if (attempt <= 300 && attempt >= 100) {
                     let congrats = document.getElementById("congrats");
                     let congratsText = document.getElementById("congratsText");
                     congrats.style.display = "block";
-                    congratsText.innerHTML = `That seems to me to be an even pace. Not too quick, not too slow.`;
+                    congratsText.innerHTML = `That seems to me to be an even pace. Not too quick, not too slow, but just right! I suppose you are quite like
+                    Goldilocks, except there are more than three bears and they are quite intent on seeing your magic put to an end whether you eat their porridge or not...`;
                     ierror2.innerHTML = attempt.toString();
                     ierror3.innerHTML = attempt.toString();
                     errorCount++;
@@ -434,7 +556,7 @@
                     pointNum += 100;
                     points.innerHTML = "Points: " + pointNum.toString();
                 }
-               else if (attempt < 300) {
+               else if (attempt < 100) {
                     let errorBox = document.getElementById("errorBox");
                     let errorBoxText = document.getElementById("errorBoxText");
                     errorBox.style.display = "block";
@@ -493,8 +615,8 @@
                    let errorBox = document.getElementById("errorBox");
                    let errorBoxText = document.getElementById("errorBoxText");
                    errorBox.style.display = "block";
-                   errorBoxText.innerHTML = `That wasn't the right move. Think....if you stop pressing the arrow key, what happens to the 
-                   walking interval that you started when you pressed the right arrow key?`;
+                   errorBoxText.innerHTML = `Hmmm...I would check the magic solution box if I were you. You still seem to have a bad case of the jitterbug...
+                   Normally it would be hilarious, but I imagine you must be getting tired.`;
                    ierror4.innerHTML = attempt;
                 } 
 
@@ -508,236 +630,133 @@
             }
         });
 
+
         // Close the modal if the user clicks on the 'X'.
-        var span = document.getElementsByClassName("close")[0];
-        span.onclick = function() {
+        let span0 = document.getElementsByClassName("close")[0];
+        span0.onclick = function() {
             answerBox.style.display = "none";
         }
 
-        var span = document.getElementsByClassName("close")[1];
-        span.onclick = function() {
+        let span1 = document.getElementsByClassName("close")[1];
+        span1.onclick = function() {
             let errorBox = document.getElementById("errorBox");
             errorBox.style.display = "none";
         }
 
-        var span = document.getElementsByClassName("close")[2];
-        span.onclick = function() {
+        let span2 = document.getElementsByClassName("close")[2];
+        span2.onclick = function() {
             congrats.style.display = "none";
         }
+
+        let span3 = document.getElementsByClassName("close")[3];
+        span3.onclick = function() {
+            introBox.style.display = "none";
+            backdrop.style.display = "none";
+        }
         
-        // Show the end game screen if you go past.
+        
         //-------------------------------------------------------------------------------------------------------------------------------
 
-        // // All the explanations for the code -- tears :,(
-        // var codeLine1 = document.getElementsByClassName("codeLine")[0];
-        // var codeLine2 = document.getElementsByClassName("codeLine")[1];
-        // var codeLine3 = document.getElementsByClassName("codeLine")[2];
-        // var codeLine4 = document.getElementsByClassName("codeLine")[3];
-        // var codeLine5 = document.getElementsByClassName("codeLine")[4];
-        // var codeLine6 = document.getElementsByClassName("codeLine")[5];
-        // var codeLine7 = document.getElementsByClassName("codeLine")[6];
-        // var codeLine8 = document.getElementsByClassName("codeLine")[7];
-        // var codeLine9 = document.getElementsByClassName("codeLine")[8];
-        // var codeLine10 = document.getElementsByClassName("codeLine")[9];
-        // var codeLine11 = document.getElementsByClassName("codeLine")[10];
-        // var codeLine12 = document.getElementsByClassName("codeLine")[11];
-        // var codeLine13 = document.getElementsByClassName("codeLine")[12];
-        // var codeLine14 = document.getElementsByClassName("codeLine")[13];
-        // var codeLine15 = document.getElementsByClassName("codeLine")[14];
-        // var codeLine16 = document.getElementsByClassName("codeLine")[15];
-        // var codeLine17 = document.getElementsByClassName("codeLine")[16];
-        // var codeLine18 = document.getElementsByClassName("codeLine")[17];
-        // var codeLine19 = document.getElementsByClassName("codeLine")[18];
-        // var codeLine20 = document.getElementsByClassName("codeLine")[19];
-        // var codeLine21 = document.getElementsByClassName("codeLine")[20];
-        // var codeLine22 = document.getElementsByClassName("codeLine")[21];
-        // var codeLine23 = document.getElementsByClassName("codeLine")[22];
-        // var codeLine24 = document.getElementsByClassName("codeLine")[23];
-        // var codeLine25 = document.getElementsByClassName("codeLine")[24];
-        // var codeLine26 = document.getElementsByClassName("codeLine")[25];
-        // var codeLine27 = document.getElementsByClassName("codeLine")[26];
-        // var codeLine28 = document.getElementsByClassName("codeLine")[27];
-        // var codeLine29 = document.getElementsByClassName("codeLine")[28];
-        // var codeLine30 = document.getElementsByClassName("codeLine")[29];
-        // var codeLine31 = document.getElementsByClassName("codeLine")[30];
-        // var codeLine32 = document.getElementsByClassName("codeLine")[31];
-        // var codeLine33 = document.getElementsByClassName("codeLine")[32];
-        // var codeLine34 = document.getElementsByClassName("codeLine")[33];
-        // var codeLine35 = document.getElementsByClassName("codeLine")[34];
-        // var codeLine36 = document.getElementsByClassName("codeLine")[35];
+        // All the explanations for the code -- tears :,(
+        let codeLine1 = document.getElementsByClassName("codeLine")[0];
+        let codeLine2 = document.getElementsByClassName("codeLine")[1];
+        let codeLine5 = document.getElementsByClassName("codeLine")[4];
+        let codeLine8 = document.getElementsByClassName("codeLine")[7];
+        let codeLine19 = document.getElementsByClassName("codeLine")[18];
+        let codeLine20 = document.getElementsByClassName("codeLine")[19];
+        let codeLine21 = document.getElementsByClassName("codeLine")[20];
+        let codeLine22 = document.getElementsByClassName("codeLine")[21];
+        let codeLine23 = document.getElementsByClassName("codeLine")[22];
+        let codeLine24 = document.getElementsByClassName("codeLine")[23];
+        let codeLine42 = document.getElementsByClassName("codeLine")[41];
+        let codeLine43 = document.getElementsByClassName("codeLine")[42];
+        let codeLine44 = document.getElementsByClassName("codeLine")[43];
+        let codeLine45 = document.getElementsByClassName("codeLine")[44];
+        let codeLine46 = document.getElementsByClassName("codeLine")[45];
+        let codeLine47 = document.getElementsByClassName("codeLine")[46];
+        
 
         
-        // var hintBox = document.getElementsByClassName("HintBox")[0];
-        // var hintText = document.getElementById("HintBoxText");
-        // codeLine1.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This is how you begin a function with the name 'moveObject'. Functions perform the 
-        //                                                    commands in the curly braces once you call them. This is the function that makes you move! 
-        //                                                    If only I had something like this for my old roommate...<br>Larry liked to play heavy metal at 12 AM...</b>`});
-        // codeLine1.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine2.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This line assigns the value '37' to the constant LEFT. 37 is the key code for the left arrow key.
-        //                                                                         And a constant is a value that never changes, unlike my ex-girlfriend, Rose. We grew apart... I'd 
-        //                                                                         rather not talk about it...</b>`});
-        // codeLine2.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine3.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This line assigns the value '39' to the constant RIGHT. 39 is the key code for the right arrow key.
-        //                                                                         And a constant is, still, a value that never changes...why did she leave me? Was it I who changed?</b>`});
-        // codeLine3.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine4.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This... is just...a blank line. Seriously? You needed me to tell you that?</b>`});
-        // codeLine4.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine5.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This is an if statement. If the event.keyCode is LEFT, meaning the left arrow key
-        //                                                                          is being pressed, whatever is in between the curly braces will happen. If only crosswalk signals
-        //                                                                          were that reliable. I always fear that it's broken, and I'm simply wasting my time.</b>`});
-        // codeLine5.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine6.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> If the left arrow key is being pressed, movingLeft, what we call a variable, will be set to false. Variables
-        //                                                                         can change, are meant to change. But what if I don't want to change, Rose?! </b>`});
-        // codeLine6.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine7.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This is an closing curly brace. It encloses what is in the if statement. Pretty obvious, but anything is better
-        //                                                                          than a blank space. I mean, come on? I thought I created intelligent life...</b>`});
-        // codeLine7.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine8.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b>This is an else if statement. If the if statement is false, meaning event.keyCode is not LEFT, then 
-        //                                                                          this is checked next. It checks, you guessed it, if the right arrow key is being pressed. It's always
-        //                                                                          good to have a fallback plan. For example, if you can't fix this...wait...I don't actually have 
-        //                                                                          a plan for that...no pressure! You're doing swimmingly!`});
-        // codeLine8.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine9.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> If the right arrow key is being pressed, movingRight, another variable, will be set to true. See how this 
-        //                                                                         else if statement picks up on your signals? Larry would never do that, he'd just chatter on and on and on...
-        //                                                                         what if I want to talk, Larry?! </b>`});
-        // codeLine9.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine10.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This is a closing curly brace for the else if statement. It's not hard...we've been over this... </b>`});
-        // codeLine10.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine11.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This is the closing curly brace for the function moveObject. And thus ends our function! It's called every time you 
-        //                                                                         press a key. But Rose never calls...</b>`});
-        // codeLine11.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine12.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> You can't be serious...again? We're doing this again?! It's blank! Blank space makes the code...pardon, "magic", easier on the 
-        //                                                                         eyes! Stop obsessing over this!</b>`});
-        // codeLine12.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine13.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This is the beginning of a function called stopMoveObject. As I said before, when called, it will perform
-        //                                                                         whatever is in between the curly braces. It's called whenever a key goes up. Obviously, for this to work you 
-        //                                                                         must first press the key...you cannot activate this function by ripping the keys off your keyboard..</b>`});
-        // codeLine13.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine14.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> Same as before. Saves the keycode for the left arrow key, '37', in a constant called LEFT. Yes, left...
-        //                                                                         just like Rose did...</b>`});
-        // codeLine14.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine15.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> Same as before. Saves the keycode for the right arrow key, '39', in a constant called RIGHT. This is meant
-        //                                                                         to represent the direction, not the moral, or else RIGHT would equal me, your beloved narrator, who is always right.
-        //                                                                         Rose didn't seem to think so? Why, you little...</b>`});
-        // codeLine15.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine16.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> Oh, you must think yourself so clever. "Let's hover over another blank line and see what the narrator will do."
-        //                                                                         Try it again...just try it...</b>`});
-        // codeLine16.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine17.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This is another if statement that checks whether the left arrow key has been lifted. Checking things is important,
-        //                                                                         like checking if we've run out of toilet paper. Larry never seemed to notice...ughhhhh...</b>`});
-        // codeLine17.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine18.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> If the condition, that is, that the left arrow key has been lifted, is true, then the variable
-        //                                                                              movingLeft will be set to false. Yes, false, again...perhaps this is of note for your error...but you
-        //                                                                              didn't hear it from me.</b>`});
-        // codeLine18.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine19.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> An ending curly brace for your if statement. Provides some finality, doesn't it? Unlike Rose..."I'll call you
-        //                                                                         sometime"?! What does that even mean?!</b>`});
-        // codeLine19.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine20.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This is another else if statement. If the left key hasn't been lifted, it checks whether the right arrow key has been lifted.
-        //                                                                         Because maybe something happened, maybe there's hope, maybe she'll call again...</b>`});
-        // codeLine20.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine21.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> If the condition is true, that is, the right arrow key has been lifted, then movingRight will be set
-        //                                                                         to false. Then you can stand there with that blank stare as you always do...</b>`});
-        // codeLine21.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine22.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> An ending curly brace to the end of the else if statement. Are you just paranoid that you'll miss something?
-        //                                                                         You can relax a bit, it's really not that terribly hard to figure out.</b>`});
-        // codeLine22.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine23.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> An ending curly brace to the end our function. Simple. The curly braces outline what the function has to do 
-        //                                                                         when called, and the function does it! The function doesn't get drunk with his friends and feed the fish
-        //                                                                         Goldfish crackers when his only job was to watch it during my one weekend off. Rest in peace, Marvin.</b>`});
-        // codeLine23.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine24.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> Stop it! Just stop it! It's blank, for crying out loud! There is literally nothing there! Find something
-        //                                                                         better to do with your time besides driving me insane!</b>`});
-        // codeLine24.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine25.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This is the beginning of a function by the name of update. There's a bit of magic not shown
-        //                                                                         here that calls it every 10 milliseconds. Quite a lot of updates, huh? Well, far better than none 
-        //                                                                         at all. The pizza delivery man never comes when he says he will, but as soon as I go to the 
-        //                                                                         toilet he manages to appear out of thin air! So much for modernity...</b>`});
-        // codeLine25.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine26.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This clears the canvas, which is the world that you're in. This may sound alarming.
-        //                                                                         But don't worry, in a few lines you are magicked back into existence 
-        //                                                                         again. I have to clear the world so you can be put in a new position if you moved. Without this, 
-        //                                                                         there would be a still version of you in every position that you've ever been. 
-        //                                                                         Far more alarming, isn't it? I still get nightmares...</b>`});
-        // codeLine26.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine27.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> What do you want? Are you hoping for some sort of treasure? A jackpot, of
-        //                                                                         sorts? You accomplish nothing by doing this! A blank line is a blank line!</b>`});
-        // codeLine27.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine28.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This is an if statement. If movingLeft is true, then it will run the commands
-        //                                                                         in between the curly braces. You could also have if(movingLeft == true), which
-        //                                                                         accomplishes the same thing, but that's a waste of space. Just like Larry's 
-        //                                                                         drumset. The man had no rhythm, and one night the cat must have upset it, because
-        //                                                                         the cymbal crashed in the middle of the night. I nearly had a stroke...</b>`});
-        // codeLine28.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine29.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> If the condition in the if statement is true, then your horizontal position, hero_x,
-        //                                                                         will be subtracted by...a...very small number. Ahhh...I know the feeling. The alarm goes
-        //                                                                         off, but the bed is so warm...</b>`});
-        // codeLine29.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine30.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> An ending curly brace for an ending if statement. You should always finish what you 
-        //                                                                         started. For example, Mr. Handyman, you should not start to make renovations on my
-        //                                                                         front porch and reschedule for 3 months in a row! What am I supposed to do with these
-        //                                                                         gaping holes?! It was better before!</b>`});
-        // codeLine30.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine31.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> Dancing queen, young and sweet, only 17, yeah yeah! You can dance! You can jiiiIVE! Having
-        //                                                                             the time of your liiiife, OOOOOooo. See that girl! Watch that scene! Digging the dancing queen!
-        //                                                                             Is that what you wanted? Because my own mortification is the only fathomable purpose I can
-        //                                                                             see in your insistence on seeking explanations for BLANK LINES!</b>`});
-        // codeLine31.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine32.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> Another if statement. If movingRight is true, it runs the commands in the curly braces. A police
-        //                                                                         officer would perform given commands in the opposite case, where you're moving in the wrong
-        //                                                                         direction. But sometimes one-way signs aren't terribly obvious, OK? I'm a good driver!</b>`});
-        // codeLine32.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine33.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This line will run if movingRight is true. It moves you in the right direction at a healthy
-        //                                                                         6 paces! And...straight into the bear's grasp. This might be desirable in some situations, to 
-        //                                                                         meet danger head-on, but the retreat to the left is comparably small, isn't it? Seems
-        //                                                                         a little fishy to me...</b>`});
-        // codeLine33.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine34.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> You end an if statement with a curly brace. Nothing new. But sometimes things don't always go as expected.
-        //                                                                         You think you've closed a chapter, but then your mother won't stop going on about how you need to get married;
-        //                                                                         get back on the saddle. I have my own life! Stay out of it!`});
-        // codeLine34.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine35.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> This draws you in the world at your new position. It's a fresh start, a new chance. But what if you liked
-        //                                                                         the way things were? Dating is so hard to get into again. Rose was perfect, how could I ever love anyone else?`});
-        // codeLine35.addEventListener("mouseout", function() {hintBox.style.display = "none";});
-        // codeLine36.addEventListener("mouseover", function() {hintBox.style.display = "block";
-        //                                                    hintText.innerHTML = `<b> Here we are, at the end! A final ending curly brace to end the update function. That should be all you need to figure out 
-        //                                                                         your errors. Huh, what else do you need? A foot massage? Who do you think you are, the Queen of England? Get back to work!`});
-        // codeLine36.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        let hintBox = document.getElementsByClassName("HintBox")[0];
+        let hintText = document.getElementById("HintBoxText");
+        codeLine1.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b>This is an event listener. It waits for the event where a key on the keyboard is pressed down, and when it
+                                                           happens, it calls the function moveObject on line 4. But Rose never calls me...no matter how many phone call events I execute...</b>`});
+        codeLine1.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine2.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> This is another event listener. It calls the function stopMoveObject on line 38 when no buttons are being pushed.
+                                                           Although this event is common on a computer, it's rather uncommon in my apartment. Yes...I couldn't make rent and let Larry move back in. And now
+                                                           my buttons are always being pushed.</b>`});
+        codeLine2.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine5.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> This line assigns the number 37, which is the key code for the left arrow key, to the constant LEFT, and the latter line does the
+                                                                                    same, except for the right arrow key. Since the key codes for the left and right arrow keys are always the same, we name them with the 
+                                                                                    'constant' keyword. If only we did that for things in real life. If they had done that at my local grocers, I would never have let myself
+                                                                                    fall in love with Organic Frosted Flakes only to have it discontinued. Now I'm being driven mad looking for it in stores far too far away.</b>`});
+        codeLine5.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine8.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> This is an if statement. When you are pressing the left arrow key, it will perform what is in the function, which includes setting movingLeft to true to
+                                                                                    move you, as we saw before, and calling a function called runLeft, which we didn't see before! The next if statement does the same when the right arrow key
+                                                                                    is being pushed, calling the runRight function. If only running were as simple as pushing a button. I tried getting back into shape today, but I couldn't stand
+                                                                                    running. It's so boring! You are just moving at a slightly more rapid pace and trying to avoid making eye contact with strangers!</b>`});
+        codeLine8.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine19.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> The commands between the curly braces only execute when startWalk is false? Why? Well you don't want to start walking every time you check if you are pressing 
+                                                                                    the left or right arrow key, only the first time. It's like a car alarm. You jump up when it begins, but just stew in annoyance until Mr. White Toyota parked in
+                                                                                    lane 2B manages to looks up from his hors d'oeuvres long enough to realize that the polite announcer is talking about him.</b>`});
+        codeLine19.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine20.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> This is the setInterval function. It does whatever is in between the curly braces again and again every 3 seconds until it's stopped. Just like Nix, my cat.
+                                                                                    I called her that because she will never stop what she's doing unless she wants to or you force her to. I keep her away from the couches when I'm gone.<br>
+                                                                                    WalkFrame % any number is the remainder of walkFrame divided by that number. For example, 0 % 1 + 1 is 1, because 0/1 is 0 remainder 0, and 0 + 1 is 1.</b>`});
+        codeLine20.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine21.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> This line sets the image of the hero (that's you!) to the image at the following directory. There are 4 of them, Tiger Walking/tiger1.png, Tiger Walking/tiger2.png, 
+                                                                                    Tiger Walking/tiger3.png, and Tiger Walking/tiger4.png. tiger1 to tiger4 is a full walk cycle, which starts again at tiger1. So to move between these images we use the imgNum variable above!
+                                                                                    It's nice to cycle through things, but cycling is still a rather dreary exercise. It's the same problem as running, but now you have to worry about your bicycle being stolen. You could buy
+                                                                                    a lock, but then someone could just break it, so then you will have lost your bike and your lock! What an unfortunate dilemma...</b>`});
+        codeLine21.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine22.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> This line adds 1 to the walkFrame variable. WalkFrame starts at 0, and keeps on going up every time the walkingInterval is called. But as walkFrame goes up, imgNum stays
+                                                           between a certain range of values. For example, say we do imgNum = (walkFrame % 10) + 1. When walkFrame is 0, imgNum is 1. When walkFrame is 5, imgNum is 6. And when walkFrame is 10, imgNum is 1. That's
+                                                           perfect if you only want to oscillate between a certain set of images! Could you imagine having to make a new image every single time you called this function? I care for you dearly, but I do have a life.</b>`});
+        codeLine22.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine23.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> Here we set how often we want this function to be called in milliseconds. After this amount of milliseconds, everything between the curly braces will run again, and then again after that amount of 
+                                                                                milliseconds. You get the 'picture'...eh...eh? OK, OK, stop groaning, it wasn't that bad...</b>`});
+        codeLine23.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine24.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> This line sets startWalk to true, so we don't get that nasty "setting the interval every time we check the key is pressed" problem. It's like a signal to say that you've already done something, so
+                                                                                don't bother doing it again. Easy, right? It shouldn't be so hard to check that we already have bread before putting it on the list, huh, Larry? Now we've been eating sandwiches non-stop. I never thought I'd say this, but I'm
+                                                                                getting tired of the taste of bread.</b>`});
+        codeLine24.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine42.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> Now this checks if we have stopped pressing the left arrow key. If that's the case, then it does what's in between the curly braces. For example, I have to wait for my boss to stop
+                                                                                watching me so I can check Facebook on my phone. He wants us working all the time. And he doesn't know about this whole "intelligent life I created corrupting my universe" thing yet. We must keep it that way...</b>`});
+        codeLine42.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine43.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> This line prevents you from moving, as we saw before, once you've lifted the left arrow key. Obviously, when you stop pressing the left arrow key you want to start moving. But my new
+                                                                                personal trainer thinks I should never stop moving. My goodness, 15 minutes of jogging at 5.6 mph?! I'm not Usain Bolt, give me a break! I fired HER after the first day...hmph.</b>`});
+        codeLine43.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine44.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> This sets startWalk to false, so you can start walking again when you press the left arrow key. You know, whenever you're ready. If you feel like eating 3 bags of Doritos instead of working out,
+                                                                                you shouldn't have to! If only my doctor knew that, but she won't leave me alone about it! My cholesterol is high, but I feel great! Except for the constant sweating, weakness, and shirts
+                                                                                that don't quite fit...</b>`});
+        codeLine44.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine45.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> This uses the function setInterval to set walkingInterval. This looks quite different from the function above. I would say that's suspicious, but I thought Larry was in a cult only to 
+                                                                                find that he just had terrible taste in music.</b>`});
+        codeLine45.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine46.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> This sets the walkFrame to 0. This way, it doesn't keep on increasing forever. That's why it's important to CHECK THAT EVERYTHING'S OFF IN THE APARTMENT BEFORE YOU LEAVE, LARRY! We're still 
+                                                                                trying to pay off the utility bill from that week...</b>`});
+        codeLine46.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+        codeLine47.addEventListener("mouseover", function() {hintBox.style.display = "block";
+                                                           hintText.innerHTML = `<b> Finally, this line sets your image to your docile self standing and turned left. You can see what that looks like by going to the magical solution button and making sure the header
+                                                                                shows "Left Arrow Key Pressed Down". The same happens in the if statement below, but it's you standing and turned right. You're not particularly expressive, are you? I suppose that's a bit 
+                                                                                of my fault, but I was in a hurry...I didn't have time to make your default image an animation of you juggling flaming bowling pins, alright?!</b>`});
+        codeLine47.addEventListener("mouseout", function() {hintBox.style.display = "none";});
+            
     </script>
 </body>
 

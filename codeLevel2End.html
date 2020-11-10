@@ -31,13 +31,13 @@
             proper criticism, of course. The last guy who criticized Martin ended up...well, let's just say that he makes a 
             remarkably pretty potted plant. Martin is quite good at transformations, too. He just prefers brute violence.
             <br>
-            Back to the wood, now! Yes, yes...your reward will be in the spells box.
-            <br>
+
         </p1>
         <button class ="continue"><b>Continue</b></button>
     </div>
 
     <canvas id="canvas"></canvas>
+
 
     <script type="module">
         var soundtrack = document.createElement("AUDIO");
@@ -72,8 +72,7 @@
         var hero = new Image();
         var runFrame = 0;
 
-        // Change the level.
-        document.cookie = "level=3;expires=;path=./gameplay.html";
+        
        
        // Decide what medal to give the player.
        function getCookie(cname) {
@@ -92,10 +91,14 @@
                 return "";
             }
         let pointNum = parseInt(getCookie("newerpoints"));
+        // Store your final points in each level in a cookie to be displayed at the end.
+        document.cookie = "level2End=" + pointNum + ";expires=;path=./endOfGame.html";
         let points = document.getElementById("pointsFinal");
         points.innerHTML = "Points: " + pointNum.toString();
         let medal = document.getElementById("medal");
         let medalType = document.getElementById("medalType");
+
+       
         
         if (pointNum < 400) {
             medal.innerHTML = "Congratulations! You got a single cookie! You tried...I'm sure you did your best.";
@@ -126,8 +129,9 @@
     
         
         var continueGame = document.getElementsByClassName("continue")[0];
-        continueGame.addEventListener("click", function() {window.location.href = "./gameplay.html";}, false);
+        continueGame.addEventListener("click", function() {window.location.href = "./endOfGame.html";}, false);
     </script>
 
 </body>
 </html>
+
