@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+  
+
+
+
+<head>
+    <!-- the next three lines try to discourage browser from keeping page in cache -->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="cache-control" content="no-store">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/3f70d76f1c.js" crossorigin="anonymous"></script>
+    <title id="title"> Bearly Coding </title>
+</head>
+
+<link href="codeStyle.css" type="text/css" rel="stylesheet" />
+
+<body style="background-color: rgb(113, 14, 126);">
+    <i class="fas fa-volume-up" id="sound"></i>
+    <i class="fas fa-volume-mute" id="muted"></i>
+    <div class = "endCode">
+        <h1 style= "font-size: 40px; font-family: 'Nanum Myeongjo', serif;">Magnificent! You finished Level 1!</h1>
+        
+        <p1 style= "font-size: 25px; font-family: 'Itim', cursive;">
+            You did a spectacular job! I hope you had a lot of fun learning Javascript to play games!
+            <br>
+            I have a little confession to make...this isn't the way I originally meant the lesson to be taught. My boss said
+            something about the need to have a "control", whatever that means...and I wasn't allowed to say anything until you
+            finished. I disagreed but she can be quite scary sometimes...<br><br>
+            Thusly, I must ask that you finish the survey that you started! It should only take 1 minute. <br><br>
+            However, if you want the true experience afterwards, you can visit <a href="https://nsalilonu.github.io/BearlyCoding/">here</a>. <br>
+            Best of luck in your future endeavours! I'm going to tell my boss that my grandma fell down and can't get up so I have
+            to leave work early...don't tell anyone :)
+            <br>
+        </p1>
+    </div>
+
+
+    <canvas id="canvas"></canvas>
+
+    <script type="module">
+        var soundtrack = document.createElement("AUDIO");
+        soundtrack.src = "coding.mp3";
+        soundtrack.loop = true;
+        soundtrack.volume = 0.5;
+
+        // Handle soundtrack.
+        var muted = document.getElementById("muted");
+        var sound = document.getElementById("sound");
+
+        // Handle the sound:
+        muted.addEventListener('click', function() {    muted.style.display = "none";
+                                                sound.style.display = "block";
+                                                soundtrack.play();
+                                            });
+        sound.addEventListener('click', function() {    muted.style.display = "block";
+                                                        sound.style.display = "none";
+                                                        soundtrack.pause();
+                                                    });
+    </script>
+
+</body>
+</html>
