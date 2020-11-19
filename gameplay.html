@@ -49,6 +49,10 @@
                 <img src="icon2.png" id = "spell2" style="height:100px; width: 100px; border-radius: 6px; display: none;">
                 <img src="icon2.png" id = "spell2Select" style="height:100px; width: 100px; border-radius: 6px; border: 3px solid black; display: none;">
             </td>
+            <td>
+                <img src="icon3.png" id = "spell3" style="height:100px; width: 100px; border-radius: 6px; display: none;">
+                <img src="icon3.png" id = "spell3Select" style="height:100px; width: 100px; border-radius: 6px; border: 3px solid black; display: none;">
+            </td>
         </table>
     </div>
 
@@ -97,9 +101,10 @@
         hero.src = "Tiger Walking/tiger5.png";
 
         
-        var magic = []; // An array of magic fireballs.
-        var collidedBalls = []; // An array of the indices of fireballs that have collided with the bear.
+        var magic = []; // An array of magic fireballs
 
+        // var cookieList = []; // An array of cookies.
+        
         var background = new Image();
         background.src = "Background1.png";
         var background_x = -700;
@@ -139,6 +144,8 @@
         var spell1Select = document.getElementById("spell1Select");
         var spell2 = document.getElementById("spell2");
         var spell2Select = document.getElementById("spell2Select");
+        var spell3 = document.getElementById("spell3");
+        var spell3Select = document.getElementById("spell3Select");
         var level = document.getElementById("level");
         var pauseBox = document.getElementById("pauseBox");
         var gameplayIntro = document.getElementById("gameplayIntro");
@@ -199,7 +206,7 @@
                                                                     window.location.href = "./intro.html";
                                                                 }
                                                             });
-        backToMain.addEventListener('click', function() {window.location.href = "./index.html;"})
+        backToMain.addEventListener('click', function() {window.location.href = "./index.html";})
         // Close the modal if the user clicks on the 'X'.
         var span = document.getElementsByClassName("close")[0];
         span.onclick = function() {
@@ -208,18 +215,40 @@
         }
 
         // Handle the spells.
-        if (level.innerHTML.includes("Level 2")) spell2.style.display = "block";
+        if (level.innerHTML.includes("Freeplay")) {
+            spell2.style.display = "block";
+            spell3.style.display = "block";
+        }
+        else if (level.innerHTML.includes("Level 2")) 
+            spell2.style.display = "block";
+
         spell1.addEventListener('click', function() {   spell1Select.style.display = "block";
                                                         spell1.style.display = "none";
                                                         spell2Select.style.display = "none";
                                                         spell2.style.display = "block";
+                                                        if (level.innerHTML.includes("Freeplay")){
+                                                            spell3Select.style.display = "none";
+                                                            spell3.style.display = "block";
+                                                        }
                                                         spellSelected = 1;
                                                     });
         spell2.addEventListener('click', function() {   spell2Select.style.display = "block";
                                                         spell2.style.display = "none";
                                                         spell1Select.style.display = "none";
                                                         spell1.style.display = "block";
+                                                        if (level.innerHTML.includes("Freeplay")){
+                                                            spell3Select.style.display = "none";
+                                                            spell3.style.display = "block";
+                                                        }
                                                         spellSelected = 2;
+                                                    });
+        spell3.addEventListener('click', function() {   spell3Select.style.display = "block";
+                                                        spell3.style.display = "none";
+                                                        spell1Select.style.display = "none";
+                                                        spell1.style.display = "block";
+                                                        spell2Select.style.display = "none";
+                                                        spell2.style.display = "block";
+                                                        spellSelected = 3;
                                                     });
 
         // The amount of time that the user has survived.
@@ -271,8 +300,31 @@
 
         // Update the canvas every 10 milliseconds.
         var interval = setInterval(function () {update(); }, 10);
-        // Add an enemy every 5 seconds.
-        var enemyClock = setInterval(function() {if (!pause) enemyInit(canvas);}, 10000);
+        
+        // Add an enemy incrementally depending on several factors.
+        let enemyGenerate = 8000;
+        if (level.innerHTML.includes("Level 1"))
+            enemyGenerate = 8000;
+        else if (level.innerHTML.includes("Level 2")) 
+            enemyGenerate = 7000;
+        else if (level.innerHTML.includes("Freeplay"))
+            enemyGenerate = 6000;
+        
+       
+        enemyInit(canvas);
+        var enemyClock = setInterval(function() {
+            if (!pause) {
+                enemyInit(canvas);
+                enemyGenerate -= 50;
+            }
+        }, enemyGenerate);
+
+        // Generate a cookie in a random place every 5 seconds.
+        setInterval(function() {
+            if(!pause) {
+                cookieInit();
+            }
+        }, 5000);
 
         function enemyInit(canvas) {
             // Only have 10 images in the array at a time.
@@ -307,6 +359,7 @@
             else {
                 for (let i = 0; i < enemyList.length; i++) {
                     if (enemyList[i].enemyDown > 50) {
+                        console.log("Regenerating defeated enemy ", i);
                         clearInterval(enemyList[i].bearInterval);
                         enemyList[i].enemy.src = "Enemy Walking/enemy5.png";
                         var enemyFrame = 1;
@@ -328,6 +381,31 @@
                 }
             }
         }
+
+        // function cookieInit() {
+        //     if (cookieList.length < 10) {
+        //         let cookie = new Image();
+                
+        //         cookie.src = "cookie.png";
+        //         let cookie_x = Math.random()*(canvas.width-200) + 100;
+        //         let cookie_y = Math.random()*(canvas.height-400) + 200;
+        //         console.log("Generated cookie at " + cookie_x + ", " + cookie_y);
+        //         let collided = false;
+        //         cookieList.push({cookie: cookie, x: cookie_x, y: cookie_y, collided:collided});
+        //     }
+
+        //     else {
+        //         for (let i = 0; i < cookieList.length; i++) {
+        //             if (cookieList[i].collided && !pause && !dead) {
+        //                 console.log("Renewed collided cookie");
+        //                 cookieList[i].cookie.src = "cookie.png";
+        //                 cookieList[i].x = Math.random()*(canvas.width-200) + 100;
+        //                 cookieList[i].y = Math.random()*(canvas.height-500) + 50;
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
 
         function moveObject() {
             const LEFT = 37;
@@ -570,6 +648,31 @@
             }
         }
 
+        // var crunch = document.createElement("AUDIO");
+        // crunch.src = "crunch.mp3";
+        // crunch.volume = 0.5;
+        // crunch.playbackRate = 2.0;
+
+        // function handleCookies() {
+        //     for (let i = 0; i < cookieList.length; i++) {
+        //         // Check if collided.
+        //         let wiggleRoom = 300;
+        //         if (Math.abs(hero_x - cookieList[i].x) <= wiggleRoom && Math.abs(hero_y - cookieList[i].y) <= wiggleRoom && !cookieList[i].collided) {
+        //             // If collided, make the cookie disappear.
+        //             cookieList[i].collided = true;
+        //             cookieList[i].cookie.src = "blankCookie.png";
+        //             console.log("Collided cookie source: ", cookieList[i].cookie.src);
+        //             console.log("Collided with cookie, made it disappear.");
+        //             // Add health if you've collided with a cookie.
+        //             bar_width += 10;
+        //             health.style.width = bar_width.toString()+"px";
+                    
+        //             // Eat cookie sound.
+        //             crunch.play();
+        //         }   
+        //     }
+        // }
+
         function update() {
             // Clear the canvas.
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -616,6 +719,20 @@
                                                                             }
                                                                         }, 200);
                     }
+                    else if (spellSelected == 3) {
+                        enemyList[i].bearInterval = setInterval(function(){ if (!pause) {
+                                                                                var imgNum = (enemyFrame % 8) + 1;
+                                                                                enemyList[i].enemy.src = "Spell 3/transform" + imgNum.toString() + ".png";
+                                                                                enemyFrame++;
+                                                                                if (enemyFrame == 8) {
+                                                                                    enemyFrame = 4; // Loop the baby walking animation.
+                                                                                }
+                                                                                enemyList[i].enemyDown++;
+                                                                                if (enemyFrame >= 4)
+                                                                                enemyList[i].enemy_x-=50; // Start walking left!
+                                                                            }
+                                                                        }, 200);
+                    }
                 }
                 if (!enemyList[i].enemy.src.includes("transform")) {
                     if (enemyList[i].enemy_hit == 0 && !pause) 
@@ -634,10 +751,12 @@
                                                                         }, 200);
                     }
                     var random = Math.random()*1000;
-                    if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
-                    if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;        
+                    if (enemyList[i].enemy_x < -600 && !enemyList[i].enemy.src.includes("transform")) enemyList[i].enemy_x = canvas.width + random;
+                    if (enemyList[i].enemy_x > 2500 && !enemyList[i].enemy.src.includes("transform")) enemyList[i].enemy_x = canvas.width + random;        
                 }
             }
+
+
 
             if (movingLeft && !dying && !pause) {
                 hero_x-=4;
@@ -647,8 +766,8 @@
                 for (let i = 0; i < enemyList.length; i++) {
                         enemyList[i].enemy_x+=4;
                         var random = Math.random()*1000;
-                        if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
-                        if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;
+                        if (enemyList[i].enemy_x < -600 && !enemyList[i].enemy.src.includes("transform")) enemyList[i].enemy_x = canvas.width + random;
+                        if (enemyList[i].enemy_x > 2500 && !enemyList[i].enemy.src.includes("transform")) enemyList[i].enemy_x = canvas.width + random;
                     
                 }
             }
@@ -660,8 +779,8 @@
                 for (let i = 0; i < enemyList.length; i++) {
                         enemyList[i].enemy_x-=4;
                         var random = Math.random()*1000;
-                        if (enemyList[i].enemy_x < -600) enemyList[i].enemy_x = canvas.width + random;
-                        if (enemyList[i].enemy_x > 2500) enemyList[i].enemy_x = canvas.width + random;
+                        if (enemyList[i].enemy_x < -600 && !enemyList[i].enemy.src.includes("transform")) enemyList[i].enemy_x = canvas.width + random;
+                        if (enemyList[i].enemy_x > 2500 && !enemyList[i].enemy.src.includes("transform")) enemyList[i].enemy_x = canvas.width + random;
                 }
             }
 
@@ -749,6 +868,9 @@
 
             handleMagic();
 
+            // handleCookies();
+
+
             ctx.drawImage(back_background, 0, 0);
 
             ctx.drawImage(clouds, clouds_x, 0);
@@ -763,6 +885,13 @@
             for (let i = 0; i < magic.length; i++) {
                 ctx.drawImage(magic[i].magicBall, magic[i].x, magic[i].y, 80, 80);
             }
+
+            // Handle cookies (the food).
+            // for (let i = 0; i < cookieList.length; i++) {
+            //     ctx.drawImage(cookieList[i].cookie, cookieList[i].x + background_x - 400, cookieList[i].y);
+            //     console.log("Drew cookie");
+            // }
+
             ctx.drawImage(foreground, background_x, background_y);     
         }
 
